@@ -1,0 +1,13 @@
+{
+  "name": "openjs-foundation",
+  "version": "1.0.0",
+  "description": "Secure Dashboard for the OpenJS Foundation",
+  "main": "index.js",
+  "scripts": {
+    "infra:start": "docker-compose up -d",
+    "infra:stop": "docker-compose down"
+  },
+  "keywords": [],
+  "author": "Ulises Gascón",
+  "license": "MIT"
+}

@@ -4,6 +4,8 @@
   "description": "Secure Dashboard for the OpenJS Foundation",
   "main": "index.js",
   "scripts": {
+    "lint": "standard",
+    "lint:fix": "standard --fix",
     "infra:start": "docker-compose up -d",
     "infra:stop": "docker-compose down",
     "db:migrate": "knex migrate:latest",
@@ -17,5 +19,8 @@
     "@ulisesgascon/normalize-boolean": "2.0.0",
     "knex": "3.1.0",
     "pg": "8.13.1"
+  },
+  "devDependencies": {
+    "standard": "17.1.2"
   }
 }

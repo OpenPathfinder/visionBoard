@@ -52,6 +52,18 @@ To seed the database with initial data, use the following command:
 
 ```bash
 npm run db:seed
+## Running Tests
+
+To run the tests, use the following command:
+
+```bash
+npm test
+```
+
+To run the tests with coverage, use the following command:
+
+```bash
+npm run test:coverage
 ```
 
 ## License

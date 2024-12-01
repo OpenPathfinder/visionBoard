@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17.2
+        env:
+          POSTGRES_DB: dashboard
+          POSTGRES_USER: openjs
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U openjs"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '22'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Lint files
+      run: npm run lint
+
+    - name: Run migrations
+      run: npm run db:migrate
+
+    - name: Seed database
+      run: npm run db:seed
+
+    - name: Run tests
+      run: npm test
+
+    - name: Stop infrastructure
+      run: npm run infra:stop

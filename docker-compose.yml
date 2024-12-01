@@ -6,6 +6,8 @@ services:
       POSTGRES_DB: dashboard
       POSTGRES_USER: openjs
       POSTGRES_PASSWORD: password
+    ports:
+      - 5432:5432
     volumes:
       - openjs_dashboard_data:/var/lib/postgresql/data
 

@@ -28,6 +28,32 @@ To stop the infrastructure, run the following command:
 npm run infra:stop
 ```
 
+## Database Management
+
+### Running Migrations
+
+To run the latest database migrations, use the following command:
+
+```bash
+npm run db:migrate
+```
+
+### Rolling Back Migrations
+
+To rollback the last batch of migrations, use the following command:
+
+```bash
+npm run db:rollback
+```
+
+### Seeding the Database
+
+To seed the database with initial data, use the following command:
+
+```bash
+npm run db:seed
+```
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](/LICENSE) file for details.

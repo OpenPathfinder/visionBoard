@@ -50,6 +50,3 @@ jobs:
 
     - name: Run tests
       run: npm test
-
-    - name: Stop infrastructure
-      run: npm run infra:stop

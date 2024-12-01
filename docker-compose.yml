@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:17.2
+    restart: always
+    environment:
+      POSTGRES_DB: dashboard
+      POSTGRES_USER: openjs
+      POSTGRES_PASSWORD: password
+    volumes:
+      - openjs_dashboard_data:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 8080:8080
+
+volumes:
+  openjs_dashboard_data:

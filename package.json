@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "infra:start": "docker-compose up -d",
-    "infra:stop": "docker-compose down"
+    "infra:stop": "docker-compose down",
+    "db:migrate": "knex migrate:latest",
+    "db:rollback": "knex migrate:rollback",
+    "db:seed": "knex seed:run"
   },
   "keywords": [],
   "author": "Ulises Gascón",

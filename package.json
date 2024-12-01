@@ -5,9 +5,17 @@
   "main": "index.js",
   "scripts": {
     "infra:start": "docker-compose up -d",
-    "infra:stop": "docker-compose down"
+    "infra:stop": "docker-compose down",
+    "db:migrate": "knex migrate:latest",
+    "db:rollback": "knex migrate:rollback",
+    "db:seed": "knex seed:run"
   },
   "keywords": [],
   "author": "Ulises Gascón",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@ulisesgascon/normalize-boolean": "2.0.0",
+    "knex": "3.1.0",
+    "pg": "8.13.1"
+  }
 }

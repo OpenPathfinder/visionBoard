@@ -54,6 +54,34 @@ To seed the database with initial data, use the following command:
 npm run db:seed
 ```
 
+## Linting
+
+To lint the files, use the following command:
+
+```bash
+npm run lint
+```
+
+To automatically fix linting issues, use the following command:
+
+```bash
+npm run lint:fix
+```
+
+## Running Tests
+
+To run the tests, use the following command:
+
+```bash
+npm test
+```
+
+To run the tests with coverage, use the following command:
+
+```bash
+npm run test:coverage
+```
+
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](/LICENSE) file for details.

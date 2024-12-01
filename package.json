@@ -4,6 +4,10 @@
   "description": "Secure Dashboard for the OpenJS Foundation",
   "main": "index.js",
   "scripts": {
+    "lint": "standard",
+    "lint:fix": "standard --fix",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
     "infra:start": "docker-compose up -d",
     "infra:stop": "docker-compose down",
     "db:migrate": "knex migrate:latest",
@@ -13,9 +17,18 @@
   "keywords": [],
   "author": "Ulises Gascón",
   "license": "MIT",
+  "standard": {
+    "env": [
+      "jest"
+    ]
+  },
   "dependencies": {
     "@ulisesgascon/normalize-boolean": "2.0.0",
     "knex": "3.1.0",
     "pg": "8.13.1"
+  },
+  "devDependencies": {
+    "jest": "29.7.0",
+    "standard": "17.1.2"
   }
 }

@@ -6,6 +6,8 @@
   "scripts": {
     "lint": "standard",
     "lint:fix": "standard --fix",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
     "infra:start": "docker-compose up -d",
     "infra:stop": "docker-compose down",
     "db:migrate": "knex migrate:latest",

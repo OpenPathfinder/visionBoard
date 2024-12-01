@@ -52,6 +52,22 @@ To seed the database with initial data, use the following command:
 
 ```bash
 npm run db:seed
+```
+
+## Linting
+
+To lint the files, use the following command:
+
+```bash
+npm run lint
+```
+
+To automatically fix linting issues, use the following command:
+
+```bash
+npm run lint:fix
+```
+
 ## Running Tests
 
 To run the tests, use the following command:

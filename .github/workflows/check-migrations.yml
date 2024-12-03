@@ -1,0 +1,31 @@
+name: Check Migrations
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  check-migrations:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Check for migration changes
+      id: check_migrations
+      run: |
+        git diff --name-only origin/main...HEAD | grep '^src/database/migrations/' || echo "no-changes" > no_changes
+
+    - name: Add comment to PR
+      if: steps.check_migrations.outputs.changes != 'no-changes'
+      uses: actions/github-script@v4
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: "It looks like you've made changes to the migrations. Have you run `npm run db:generate-schema` to ensure the updated schemas are included in your PR?"
+          })

@@ -12,6 +12,7 @@
     "infra:stop": "docker-compose down",
     "db:migrate": "knex migrate:latest",
     "db:rollback": "knex migrate:rollback",
+    "db:generate-schema": "docker-compose run schema-dump",
     "db:seed": "knex seed:run"
   },
   "keywords": [],

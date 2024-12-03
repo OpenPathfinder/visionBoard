@@ -19,5 +19,24 @@ services:
     ports:
       - 8080:8080
 
+  schema-dump:
+    image: postgres:17.2
+    depends_on:
+      - db
+    environment:
+      POSTGRES_DB: dashboard
+      POSTGRES_USER: openjs
+      POSTGRES_PASSWORD: password
+      PGPASSWORD: password  # bypass the password prompt
+    volumes:
+      - openjs_dashboard_data:/var/lib/postgresql/data
+      - ./src/database/schema:/schema
+    entrypoint: >
+      bash -c "
+      pg_dump --host=db --username=openjs --schema-only --no-owner --dbname=dashboard > /schema/schema.sql &&
+      chmod 644 /schema/schema.sql
+      "
+
+
 volumes:
   openjs_dashboard_data:

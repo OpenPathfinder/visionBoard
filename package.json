@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@ulisesgascon/normalize-boolean": "2.0.0",
+    "@ulisesgascon/string-to-array": "2.0.0",
     "commander": "12.1.0",
     "inquirer": "12.1.0",
     "knex": "3.1.0",

@@ -54,6 +54,10 @@ To seed the database with initial data, use the following command:
 npm run db:seed
 ```
 
+## Debug mode
+
+This project uses the [debug library](https://www.npmjs.com/package/debug), so you can always use the environmental variable `DEBUG=*` to print more detailed information of the execution.
+
 ## Linting
 
 To lint the files, use the following command:

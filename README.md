@@ -54,6 +54,18 @@ To seed the database with initial data, use the following command:
 npm run db:seed
 ```
 
+### Examine the database schema
+
+You can find an updated version of the schemas in [/src/database/schema/schema.sql](src/database/schema/schema.sql) so you don't have to start the infra and run the migrations if you just want to know about the database structure.
+
+### Update the database schema
+
+To update the schema, use the following command:
+
+```bash
+npm run db:generate-schema
+```
+
 ## Linting
 
 To lint the files, use the following command:

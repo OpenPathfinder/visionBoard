@@ -11,7 +11,7 @@ const validCommandNames = commandList.map(({ name }) => name)
 function listWorkflowCommand (options = {}) {
   console.log('Available workflows:')
   console.log(commandList.map(({ name, description }) => `- ${name}: ${description}`).join('\n'))
-  return {}
+  return commandList
 }
 
 async function runWorkflowCommand (knex, options = {}) {

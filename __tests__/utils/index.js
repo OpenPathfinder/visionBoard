@@ -1,6 +1,6 @@
 const resetDatabase = async (knex) => {
-  await knex('github_organizations').del()
-  await knex('projects').del()
+  await knex.raw('TRUNCATE TABLE github_organizations RESTART IDENTITY CASCADE')
+  await knex.raw('TRUNCATE TABLE projects RESTART IDENTITY CASCADE')
 }
 
 const getAllProjects = (knex) => knex('projects').select('*')

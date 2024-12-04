@@ -8,6 +8,7 @@
     "lint:fix": "standard --fix",
     "test": "jest",
     "test:coverage": "jest --coverage",
+    "test:ci": "jest --runInBand --verbose --coverage",
     "infra:start": "docker-compose up -d",
     "infra:stop": "docker-compose down",
     "db:migrate": "knex migrate:latest",

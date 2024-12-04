@@ -24,7 +24,9 @@ let knex
 beforeAll(() => {
   knex = knexInit(dbSettings)
 })
-beforeEach(() => resetDatabase(knex))
+beforeEach(async () => {
+  await resetDatabase(knex)
+})
 afterEach(jest.clearAllMocks)
 afterAll(async () => {
   await resetDatabase(knex)

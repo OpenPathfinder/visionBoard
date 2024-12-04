@@ -8,6 +8,7 @@
     "lint:fix": "standard --fix",
     "test": "jest",
     "test:coverage": "jest --coverage",
+    "test:ci": "jest --runInBand --verbose --coverage",
     "infra:start": "docker-compose up -d",
     "infra:stop": "docker-compose down",
     "db:migrate": "knex migrate:latest",
@@ -25,6 +26,7 @@
   },
   "dependencies": {
     "@ulisesgascon/normalize-boolean": "2.0.0",
+    "@ulisesgascon/simplify-object": "2.0.0",
     "@ulisesgascon/string-to-array": "2.0.0",
     "ajv": "8.17.1",
     "ajv-formats": "3.0.1",
@@ -32,6 +34,7 @@
     "debug": "4.3.7",
     "inquirer": "12.1.0",
     "knex": "3.1.0",
+    "octokit": "3.2.1",
     "pg": "8.13.1",
     "validator": "13.12.0"
   },

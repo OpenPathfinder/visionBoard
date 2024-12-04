@@ -1,5 +1,16 @@
 const debug = require('debug')('store')
 
+const getAllGithubOrganizations = knex => async () => {
+  debug('Getting all GitHub organizations...')
+  return knex('github_organizations').select()
+}
+
+const updateGithubOrganization = knex => async (organization) => {
+  const { login } = organization
+  debug(`Updating organization (${login})...`)
+  return knex('github_organizations').where({ login }).update(organization)
+}
+
 const addGithubOrganization = knex => async (organization) => {
   const organizationExists = await knex('github_organizations').where({ html_url: organization.html_url }).first()
   debug(`Checking if organization (${organization.login}) exists...`)
@@ -31,7 +42,9 @@ const initializeStore = (knex) => {
   debug('Initializing store...')
   return {
     addProject: addProject(knex),
-    addGithubOrganization: addGithubOrganization(knex)
+    addGithubOrganization: addGithubOrganization(knex),
+    getAllGithubOrganizations: getAllGithubOrganizations(knex),
+    updateGithubOrganization: updateGithubOrganization(knex)
   }
 }
 

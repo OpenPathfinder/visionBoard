@@ -49,4 +49,4 @@ jobs:
       run: npm run db:seed
 
     - name: Run tests
-      run: npm test
+      run: npm run test:ci

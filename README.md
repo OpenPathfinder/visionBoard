@@ -100,6 +100,21 @@ For example, to add a project named "express" with GitHub URLs:
 node index.js project add --name express --github-urls https://github.com/expressjs https://github.com/pillarjs https://github.com/jshttp --category impact
 ```
 
+### Workflows
+
+To run a workflow, use the following command:
+
+```bash
+node index.js workflow run [--name <name>]
+```
+
+To list all available workflows, use the following command:
+
+```bash
+node index.js workflow list
+```
+
+
 ## Debug mode
 
 This project uses the [debug library](https://www.npmjs.com/package/debug), so you can always use the environmental variable `DEBUG=*` to print more detailed information of the execution.

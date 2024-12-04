@@ -11,6 +11,8 @@ export default {
     '/node_modules/(?!octokit).+\\.js$'
   ],
   modulePathIgnorePatterns: [
-    '<rootDir>/__tests__/utils/'
+    '<rootDir>/__tests__/utils/',
+    '<rootDir>/__tests__/fixtures/'
+
   ]
 }

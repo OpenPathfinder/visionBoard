@@ -9,7 +9,7 @@ const { initializeStore } = require('../store')
 const { projectCategories } = getConfig()
 
 async function runAddProjectCommand (knex, options = {}) {
-  const { addProject } = initializeStore(knex)
+  const { addProject, addGithubOrganization } = initializeStore(knex)
 
   if (Object.keys(options).length > 0) {
     if (!options.name) {
@@ -90,16 +90,15 @@ async function runAddProjectCommand (knex, options = {}) {
 
   await addProject({
     name: answers.name.toLowerCase(),
-    category: answers.category,
-    githubOrgs: answers.githubUrls.map((url) => ({
-      url,
-      name: url.split('https://github.com/')[1]
-    }))
+    category: answers.category
   })
 
   debug(`Project (${answers.name}) added successfully!`)
 
-  // @TODO: Add Organizations to the database
+  await Promise.all(answers.githubUrls.map((url) => addGithubOrganization({
+    html_url: url,
+    login: url.split('https://github.com/')[1]
+  })))
 
   return answers
 }

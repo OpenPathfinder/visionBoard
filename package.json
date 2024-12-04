@@ -27,6 +27,7 @@
     "@ulisesgascon/normalize-boolean": "2.0.0",
     "@ulisesgascon/string-to-array": "2.0.0",
     "ajv": "8.17.1",
+    "ajv-formats": "3.0.1",
     "commander": "12.1.0",
     "debug": "4.3.7",
     "inquirer": "12.1.0",

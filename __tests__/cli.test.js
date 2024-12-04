@@ -40,7 +40,7 @@ describe('Interactive Mode', () => {
     expect(projects.length).toBe(1)
     expect(projects[0].name).toBe('eslint')
     expect(projects[0].category).toBe('impact')
-    //@TODO: Add test for githubUrls when it is implemented
+    // @TODO: Add test for githubUrls when it is implemented
   })
 
   test('Prevent to add a project that already exists', async () => {
@@ -66,7 +66,7 @@ describe('Non-Interactive Mode', () => {
     expect(projects.length).toBe(1)
     expect(projects[0].name).toBe('eslint')
     expect(projects[0].category).toBe('impact')
-    //@TODO: Add test for githubUrls when it is implemented
+    // @TODO: Add test for githubUrls when it is implemented
   })
 
   test('Prevent to add a project that already exists', async () => {

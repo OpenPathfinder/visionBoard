@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`list - Non-Interactive Mode Should provide a list of available workflows 1`] = `
+[
+  {
+    "description": "Check the organizations stored and update the information with the GitHub API.",
+    "name": "update-github-orgs",
+  },
+]
+`;

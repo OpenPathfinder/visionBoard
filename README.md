@@ -6,6 +6,7 @@ This is an evolution of [this proof of concept (POC)](https://github.com/UlisesG
 
 - Node.js 22 and npm
 - Docker and Docker Compose
+- Github token with repo:read level access.
 
 ## Infrastructure
 
@@ -27,6 +28,23 @@ To stop the infrastructure, run the following command:
 ```bash
 npm run infra:stop
 ```
+
+## Configuration
+
+### Environment Variables
+
+This project requires a GitHub token to access the GitHub API. You need to set the `GITHUB_TOKEN` environment variable. 
+
+#### Optional: use .env file
+
+Create a `.env` file and add your GitHub token:
+
+```sh
+GITHUB_TOKEN=your_github_token_here
+```
+
+then use `--env-file` flag to load it, like `node --env-file=.env index.js workflow run --name populate-repos-list`
+
 
 ## Database Management
 

@@ -66,6 +66,27 @@ To update the schema, use the following command:
 npm run db:generate-schema
 ```
 
+## Usage
+
+### Projects
+
+To add a new project, use the following command:
+
+```bash
+node index.js project add [--name <name>] [--github-urls <urls...>] [--category <category>]
+```
+
+For example, to add a project named "express" with GitHub URLs:
+
+```bash
+node index.js project add --name express --github-urls https://github.com/expressjs https://github.com/pillarjs https://github.com/jshttp --category impact
+```
+
+## Debug mode
+
+This project uses the [debug library](https://www.npmjs.com/package/debug), so you can always use the environmental variable `DEBUG=*` to print more detailed information of the execution.
+
+
 ## Linting
 
 To lint the files, use the following command:

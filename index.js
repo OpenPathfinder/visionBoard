@@ -1,7 +1,7 @@
 const { Command } = require('commander')
 const { getConfig } = require('./src/config')
 const { projectCategories, dbSettings } = getConfig()
-const { runAddProjectCommand } = require('./src/cli')
+const { runAddProjectCommand, runWorkflowCommand, listWorkflowCommand } = require('./src/cli')
 const knex = require('knex')(dbSettings)
 
 const program = new Command()
@@ -26,4 +26,28 @@ project
     }
   })
 
+// Workflow commands
+const workflow = program.command('workflow').description('Manage workflows')
+
+workflow
+  .command('run')
+  .description('Run a workflow')
+  .option('--name <name>', 'Name of the workflow')
+  .action(async (options) => {
+    try {
+      await runWorkflowCommand(knex, options)
+    } catch (error) {
+      console.error('Error running workflow:', error.message)
+      process.exit(1)
+    } finally {
+      await knex.destroy()
+    }
+  })
+
+workflow
+  .command('list')
+  .description('List all available workflows')
+  .action((options) => {
+    listWorkflowCommand(options)
+  })
 program.parse(process.argv)

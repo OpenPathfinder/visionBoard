@@ -1,3 +1,7 @@
 const project = require('./project')
+const workflows = require('./workflows')
 
-module.exports = project
+module.exports = {
+  ...project,
+  ...workflows
+}

@@ -32,7 +32,21 @@ describe('list - Non-Interactive Mode', () => {
   })
 })
 
-describe('run update-github-orgs - Interactive Mode', () => {
+describe('run GENERIC - Non-Interactive Mode', () => {
+  test('Should throw an error when invalid name is provided', async () => {
+    await expect(runWorkflowCommand(knex, { name: 'invented' }))
+      .rejects
+      .toThrow('Invalid workflow name. Please enter a valid workflow name.')
+  })
+
+  test('Should throw an error when no name is provided', async () => {
+    await expect(runWorkflowCommand(knex, { name: undefined }))
+      .rejects
+      .toThrow('Invalid workflow name. Please enter a valid workflow name.')
+  })
+})
+
+describe('run update-github-orgs', () => {
   // Mock inquirer for testing
   jest.spyOn(inquirer, 'prompt').mockImplementation(async (questions) => {
     const questionMap = {
@@ -75,40 +89,5 @@ describe('run update-github-orgs - Interactive Mode', () => {
   test.todo('Should throw an error when the Github API is not available')
 })
 
-describe('run update-github-orgs - Non-Interactive Mode', () => {
-  // Mock inquirer for testing
-  jest.spyOn(inquirer, 'prompt').mockImplementation(async (questions) => {
-    const questionMap = {
-      'What is the name of the workflow?': 'update-github-orgs'
-    }
-    return questions.reduce((acc, question) => {
-      acc[question.name] = questionMap[question.message]
-      return acc
-    }, {})
-  })
 
-  test('Should throw an error when invalid name is provided', async () => {
-    await expect(runWorkflowCommand(knex, { name: 'invented' }))
-      .rejects
-      .toThrow('Invalid workflow name. Please enter a valid workflow name.')
-  })
 
-  test('Should throw an error when no name is provided', async () => {
-    await expect(runWorkflowCommand(knex, { name: undefined }))
-      .rejects
-      .toThrow('Invalid workflow name. Please enter a valid workflow name.')
-  })
-
-  test('Should throw an error when no Github orgs are stored in the database', async () => {
-    const projects = await getAllProjects(knex)
-    expect(projects.length).toBe(0)
-    const githubOrgs = await getAllGithubOrgs(knex)
-    expect(githubOrgs.length).toBe(0)
-    await expect(runWorkflowCommand(knex, { name: 'update-github-orgs' }))
-      .rejects
-      .toThrow('No organizations found. Please add organizations/projects before running this workflow.')
-  })
-
-  test.todo('Should update the project with new information available')
-  test.todo('Should throw an error when the Github API is not available')
-})

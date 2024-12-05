@@ -88,6 +88,3 @@ describe('run update-github-orgs', () => {
 
   test.todo('Should throw an error when the Github API is not available')
 })
-
-
-

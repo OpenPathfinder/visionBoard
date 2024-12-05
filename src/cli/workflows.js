@@ -1,5 +1,6 @@
-const { updateGithubOrgs } = require('../workflows')
 const inquirer = require('inquirer').default
+const { updateGithubOrgs } = require('../workflows')
+const { logger } = require('../utils')
 
 const commandList = [{
   name: 'update-github-orgs',
@@ -9,8 +10,8 @@ const commandList = [{
 const validCommandNames = commandList.map(({ name }) => name)
 
 function listWorkflowCommand (options = {}) {
-  console.log('Available workflows:')
-  console.log(commandList.map(({ name, description }) => `- ${name}: ${description}`).join('\n'))
+  logger.log('Available workflows:')
+  logger.log(commandList.map(({ name, description }) => `- ${name}: ${description}`).join('\n'))
   return commandList
 }
 

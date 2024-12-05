@@ -2,6 +2,7 @@ const debug = require('debug')('workflows')
 const { simplifyObject } = require('@ulisesgascon/simplify-object')
 const { github } = require('../providers')
 const { initializeStore } = require('../store')
+const { logger } = require('../utils')
 
 const mapOrgData = (data) => {
   const mappedData = simplifyObject(data, {
@@ -51,7 +52,7 @@ const updateGithubOrgs = async (knex) => {
     debug('Updating organization in database')
     await updateGithubOrganization(mappedData)
   }))
-  console.log('GitHub organizations updated successfully')
+  logger.log('GitHub organizations updated successfully')
 }
 
 module.exports = {

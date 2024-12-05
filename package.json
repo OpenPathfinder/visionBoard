@@ -6,9 +6,9 @@
   "scripts": {
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "test": "jest",
-    "test:coverage": "jest --coverage",
-    "test:ci": "jest --runInBand --verbose --coverage",
+    "test": "NODE_ENV=test jest",
+    "test:coverage": "NODE_ENV=test jest --coverage",
+    "test:ci": "NODE_ENV=test jest --runInBand --verbose --coverage",
     "infra:start": "docker-compose up -d",
     "infra:stop": "docker-compose down",
     "db:migrate": "knex migrate:latest",

@@ -1,5 +1,16 @@
 const debug = require('debug')('store')
 
+const upsertGithubRepository = knex => async (repository, orgId) => {
+  debug(`Upserting repository (${repository.full_name})...`)
+
+  const existingRepository = await knex('github_repositories').where({ full_name: repository.full_name }).first()
+  if (existingRepository) {
+    return knex('github_repositories').where({ full_name: repository.full_name, github_organization_id: orgId }).update(repository).returning('*')
+  } else {
+    return knex('github_repositories').insert({ ...repository, github_organization_id: orgId }).returning('*')
+  }
+}
+
 const getAllGithubOrganizations = knex => async () => {
   debug('Getting all GitHub organizations...')
   return knex('github_organizations').select()
@@ -41,7 +52,8 @@ const initializeStore = (knex) => {
     addProject: addProject(knex),
     addGithubOrganization: addGithubOrganization(knex),
     getAllGithubOrganizations: getAllGithubOrganizations(knex),
-    updateGithubOrganization: updateGithubOrganization(knex)
+    updateGithubOrganization: updateGithubOrganization(knex),
+    upsertGithubRepository: upsertGithubRepository(knex)
   }
 }
 

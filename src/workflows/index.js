@@ -3,6 +3,7 @@ const { simplifyObject } = require('@ulisesgascon/simplify-object')
 const { github } = require('../providers')
 const { initializeStore } = require('../store')
 const { logger } = require('../utils')
+const { validateGithubOrg } = require('../schemas')
 
 const mapOrgData = (data) => {
   const mappedData = simplifyObject(data, {
@@ -47,6 +48,8 @@ const updateGithubOrgs = async (knex) => {
   await Promise.all(organizations.map(async (org) => {
     debug(`Fetching details for org (${org.login})`)
     const data = await github.fetchOrgByLogin(org.login)
+    debug('Validating data')
+    validateGithubOrg(data)
     debug('Transforming data')
     const mappedData = mapOrgData(data)
     debug('Updating organization in database')

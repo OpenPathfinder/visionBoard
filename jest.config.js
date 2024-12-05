@@ -3,6 +3,7 @@ export default {
     'src/**/*.js'
   ],
   coveragePathIgnorePatterns: [
+    '<rootDir>/__fixtures__/',
     '<rootDir>/__tests__/',
     '<rootDir>/__utils__/',
     '<rootDir>/src/database/migrations/',
@@ -10,8 +11,5 @@ export default {
   ],
   transformIgnorePatterns: [
     '/node_modules/(?!octokit).+\\.js$'
-  ],
-  modulePathIgnorePatterns: [
-    '<rootDir>/__tests__/fixtures/'
   ]
 }

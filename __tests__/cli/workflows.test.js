@@ -4,7 +4,7 @@ const { getConfig } = require('../../src/config')
 const { runWorkflowCommand, listWorkflowCommand } = require('../../src/cli')
 const { resetDatabase, getAllProjects, getAllGithubOrgs, addGithubOrg, addProject } = require('../../__utils__')
 const { github } = require('../../src/providers')
-const { sampleGithubOrg } = require('../fixtures')
+const { sampleGithubOrg } = require('../../__fixtures__')
 
 const { dbSettings } = getConfig('test')
 

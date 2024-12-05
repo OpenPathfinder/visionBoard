@@ -1,4 +1,4 @@
-const { sampleGithubOrg } = require('./fixtures')
+const { sampleGithubOrg } = require('../__fixtures__')
 const { validateGithubOrg } = require('../src/schemas')
 
 describe('schemas', () => {

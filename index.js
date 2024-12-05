@@ -1,6 +1,7 @@
 const { Command } = require('commander')
 const { getConfig } = require('./src/config')
 const { projectCategories, dbSettings } = getConfig()
+const { logger } = require('./src/utils')
 const { runAddProjectCommand, runWorkflowCommand, listWorkflowCommand } = require('./src/cli')
 const knex = require('knex')(dbSettings)
 
@@ -19,7 +20,7 @@ project
     try {
       await runAddProjectCommand(knex, options)
     } catch (error) {
-      console.error('Error adding project:', error.message)
+      logger.error('Error adding project:', error.message)
       process.exit(1)
     } finally {
       await knex.destroy()
@@ -37,7 +38,7 @@ workflow
     try {
       await runWorkflowCommand(knex, options)
     } catch (error) {
-      console.error('Error running workflow:', error.message)
+      logger.error('Error running workflow:', error.message)
       process.exit(1)
     } finally {
       await knex.destroy()

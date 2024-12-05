@@ -77,6 +77,4 @@ exports.down = async (knex) => {
   await knex.raw('DROP TRIGGER IF EXISTS set_updated_at_github_organizations ON github_organizations;')
   // Drop table
   await knex.schema.dropTableIfExists('github_organizations')
-  // Drop the reusable function
-  await knex.raw('DROP FUNCTION IF EXISTS update_updated_at_column;')
 }

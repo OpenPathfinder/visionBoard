@@ -5,6 +5,12 @@ exports[`list - Non-Interactive Mode Should provide a list of available workflow
   {
     "description": "Check the organizations stored and update the information with the GitHub API.",
     "name": "update-github-orgs",
+    "workflow": [Function],
+  },
+  {
+    "description": "Check the organizations stored and update/create the information related to the repositories with the GitHub API.",
+    "name": "upsert-github-repositories",
+    "workflow": [Function],
   },
 ]
 `;

@@ -88,7 +88,7 @@ async function runAddProjectCommand (knex, options = {}) {
 
   answers.githubUrls = Array.isArray(answers.githubUrls) ? answers.githubUrls : stringToArray(answers.githubUrls)
 
-  await addProject({
+  const [project] = await addProject({
     name: answers.name.toLowerCase(),
     category: answers.category
   })
@@ -97,8 +97,11 @@ async function runAddProjectCommand (knex, options = {}) {
 
   await Promise.all(answers.githubUrls.map((url) => addGithubOrganization({
     html_url: url,
-    login: url.split('https://github.com/')[1]
+    login: url.split('https://github.com/')[1],
+    project_id: project.id
   })))
+
+  debug(`All orgs were stored and linked to (${answers.name}) added successfully!`)
 
   return answers
 }

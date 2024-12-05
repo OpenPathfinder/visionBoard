@@ -56,8 +56,8 @@ describe('run update-github-orgs - Interactive Mode', () => {
 
   test('Should update the project with new information available', async () => {
     // Prepare the database
-    await addProject(knex, { name: sampleGithubOrg.login, category: 'impact' })
-    await addGithubOrg(knex, { login: sampleGithubOrg.login, html_url: sampleGithubOrg.html_url })
+    const project = await addProject(knex, { name: sampleGithubOrg.login, category: 'impact' })
+    await addGithubOrg(knex, { login: sampleGithubOrg.login, html_url: sampleGithubOrg.html_url, project_id: project.id })
     const projects = await getAllProjects(knex)
     expect(projects.length).toBe(1)
     let githubOrgs = await getAllGithubOrgs(knex)

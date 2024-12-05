@@ -8,7 +8,7 @@ const getAllGithubOrganizations = knex => async () => {
 const updateGithubOrganization = knex => async (organization) => {
   const { login } = organization
   debug(`Updating organization (${login})...`)
-  return knex('github_organizations').where({ login }).update(organization)
+  return knex('github_organizations').where({ login }).update(organization).returning('*')
 }
 
 const addGithubOrganization = knex => async (organization) => {
@@ -18,10 +18,7 @@ const addGithubOrganization = knex => async (organization) => {
     throw new Error(`Organization with login (${organization.login}) already exists`)
   }
   debug(`Inserting organization (${organization.login})...`)
-  return knex('github_organizations').insert({
-    html_url: organization.html_url,
-    login: organization.login
-  })
+  return knex('github_organizations').insert(organization).returning('*')
 }
 
 const addProject = knex => async (project) => {
@@ -35,7 +32,7 @@ const addProject = knex => async (project) => {
   return knex('projects').insert({
     name,
     category
-  })
+  }).returning('*')
 }
 
 const initializeStore = (knex) => {

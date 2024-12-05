@@ -1,10 +1,16 @@
 const inquirer = require('inquirer').default
-const { updateGithubOrgs } = require('../workflows')
+const debug = require('debug')('cli:workflows')
+const { updateGithubOrgs, upsertGithubRepositories } = require('../workflows')
 const { logger } = require('../utils')
 
 const commandList = [{
   name: 'update-github-orgs',
-  description: 'Check the organizations stored and update the information with the GitHub API.'
+  description: 'Check the organizations stored and update the information with the GitHub API.',
+  workflow: updateGithubOrgs
+}, {
+  name: 'upsert-github-repositories',
+  description: 'Check the organizations stored and update/create the information related to the repositories with the GitHub API.',
+  workflow: upsertGithubRepositories
 }]
 
 const validCommandNames = commandList.map(({ name }) => name)
@@ -32,9 +38,9 @@ async function runWorkflowCommand (knex, options = {}) {
       }
     ])
 
-  if (answers.name === 'update-github-orgs') {
-    await updateGithubOrgs(knex)
-  }
+  const command = commandList.find(({ name }) => name === answers.name)
+  debug(`Running workflow: ${command.name}`)
+  await command.workflow(knex)
 
   return answers
 }

@@ -6,14 +6,12 @@ exports.up = async (knex) => {
     table.integer('github_org_id').unique()
     table.string('node_id')
     table.string('url')
-    table.string('repos_url')
     table.string('avatar_url')
     table.text('description')
     table.string('name')
     table.string('company')
     table.string('blog')
     table.string('location')
-    table.string('email')
     table.string('twitter_username')
     table.boolean('is_verified')
     table.boolean('has_organization_projects')
@@ -57,6 +55,7 @@ exports.up = async (knex) => {
 
     // Foreign key to 'projects' table
     table.integer('project_id')
+      .notNullable()
       .unsigned()
       .references('id')
       .inTable('projects')
@@ -78,6 +77,4 @@ exports.down = async (knex) => {
   await knex.raw('DROP TRIGGER IF EXISTS set_updated_at_github_organizations ON github_organizations;')
   // Drop table
   await knex.schema.dropTableIfExists('github_organizations')
-  // Drop the reusable function
-  await knex.raw('DROP FUNCTION IF EXISTS update_updated_at_column;')
 }

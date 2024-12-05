@@ -45,14 +45,12 @@ CREATE TABLE public.github_organizations (
     github_org_id integer,
     node_id character varying(255),
     url character varying(255),
-    repos_url character varying(255),
     avatar_url character varying(255),
     description text,
     name character varying(255),
     company character varying(255),
     blog character varying(255),
     location character varying(255),
-    email character varying(255),
     twitter_username character varying(255),
     is_verified boolean,
     has_organization_projects boolean,
@@ -93,7 +91,7 @@ CREATE TABLE public.github_organizations (
     github_archived_at timestamp with time zone,
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    project_id integer
+    project_id integer NOT NULL
 );
 
 

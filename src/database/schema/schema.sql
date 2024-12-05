@@ -91,7 +91,7 @@ CREATE TABLE public.github_organizations (
     github_archived_at timestamp with time zone,
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    project_id integer
+    project_id integer NOT NULL
 );
 
 

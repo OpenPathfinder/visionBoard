@@ -55,6 +55,7 @@ exports.up = async (knex) => {
 
     // Foreign key to 'projects' table
     table.integer('project_id')
+      .notNullable()
       .unsigned()
       .references('id')
       .inTable('projects')

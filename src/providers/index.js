@@ -42,9 +42,21 @@ const fetchOrgReposListByLogin = async (login) => {
   return repoList
 }
 
+const fetchRepoByFullName = async (fullName) => {
+  debug(`Fetching repository (${fullName})...`)
+  ensureGithubToken()
+  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
+  const { data } = await octokit.request('GET /repos/{owner}/{repo}', {
+    owner: fullName.split('/')[0],
+    repo: fullName.split('/')[1]
+  })
+  return data
+}
+
 const github = {
   fetchOrgByLogin,
   fetchOrgReposListByLogin,
+  fetchRepoByFullName
 }
 
 module.exports = {

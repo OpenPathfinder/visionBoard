@@ -116,6 +116,104 @@ ALTER SEQUENCE public.github_organizations_id_seq OWNED BY public.github_organiz
 
 
 --
+-- Name: github_repositories; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.github_repositories (
+    id integer NOT NULL,
+    node_id character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    full_name character varying(255) NOT NULL,
+    html_url character varying(255) NOT NULL,
+    description text,
+    fork boolean,
+    url character varying(255) NOT NULL,
+    git_url character varying(255) NOT NULL,
+    ssh_url character varying(255) NOT NULL,
+    clone_url character varying(255) NOT NULL,
+    svn_url character varying(255),
+    homepage character varying(255),
+    size integer,
+    stargazers_count integer,
+    watchers_count integer,
+    language character varying(255),
+    has_issues boolean,
+    has_projects boolean,
+    has_downloads boolean,
+    has_wiki boolean,
+    has_pages boolean,
+    has_discussions boolean,
+    forks_count integer,
+    mirror_url character varying(255),
+    archived boolean,
+    disabled boolean,
+    open_issues_count integer,
+    allow_forking boolean,
+    is_template boolean,
+    web_commit_signoff_required boolean,
+    topics text[],
+    visibility text NOT NULL,
+    default_branch character varying(255) NOT NULL,
+    allow_squash_merge boolean,
+    allow_merge_commit boolean,
+    allow_rebase_merge boolean,
+    allow_auto_merge boolean,
+    delete_branch_on_merge boolean,
+    allow_update_branch boolean,
+    use_squash_pr_title_as_default boolean,
+    squash_merge_commit_message character varying(255),
+    squash_merge_commit_title character varying(255),
+    merge_commit_message character varying(255),
+    merge_commit_title character varying(255),
+    network_count integer,
+    subscribers_count integer,
+    github_repo_id integer,
+    github_created_at timestamp with time zone,
+    github_updated_at timestamp with time zone,
+    github_archived_at timestamp with time zone,
+    license_key character varying(255),
+    license_name character varying(255),
+    license_spdx_id character varying(255),
+    license_url character varying(255),
+    license_node_id character varying(255),
+    secret_scanning_status text DEFAULT 'disabled'::text,
+    secret_scanning_push_protection_status text DEFAULT 'disabled'::text,
+    dependabot_security_updates_status text DEFAULT 'disabled'::text,
+    secret_scanning_non_provider_patterns_status text DEFAULT 'disabled'::text,
+    secret_scanning_validity_checks_status text DEFAULT 'disabled'::text,
+    github_organization_id integer,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT github_repositories_dependabot_security_updates_status_check CHECK ((dependabot_security_updates_status = ANY (ARRAY['enabled'::text, 'disabled'::text]))),
+    CONSTRAINT github_repositories_secret_scanning_non_provider_patterns_check CHECK ((secret_scanning_non_provider_patterns_status = ANY (ARRAY['enabled'::text, 'disabled'::text]))),
+    CONSTRAINT github_repositories_secret_scanning_push_protection_statu_check CHECK ((secret_scanning_push_protection_status = ANY (ARRAY['enabled'::text, 'disabled'::text]))),
+    CONSTRAINT github_repositories_secret_scanning_status_check CHECK ((secret_scanning_status = ANY (ARRAY['enabled'::text, 'disabled'::text]))),
+    CONSTRAINT github_repositories_secret_scanning_validity_checks_statu_check CHECK ((secret_scanning_validity_checks_status = ANY (ARRAY['enabled'::text, 'disabled'::text]))),
+    CONSTRAINT github_repositories_visibility_check CHECK ((visibility = ANY (ARRAY['public'::text, 'private'::text, 'internal'::text])))
+);
+
+
+--
+-- Name: github_repositories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.github_repositories_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: github_repositories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.github_repositories_id_seq OWNED BY public.github_repositories.id;
+
+
+--
 -- Name: knex_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -219,6 +317,13 @@ ALTER TABLE ONLY public.github_organizations ALTER COLUMN id SET DEFAULT nextval
 
 
 --
+-- Name: github_repositories id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.github_repositories ALTER COLUMN id SET DEFAULT nextval('public.github_repositories_id_seq'::regclass);
+
+
+--
 -- Name: knex_migrations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -264,6 +369,30 @@ ALTER TABLE ONLY public.github_organizations
 
 
 --
+-- Name: github_repositories github_repositories_github_repo_id_unique; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.github_repositories
+    ADD CONSTRAINT github_repositories_github_repo_id_unique UNIQUE (github_repo_id);
+
+
+--
+-- Name: github_repositories github_repositories_node_id_unique; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.github_repositories
+    ADD CONSTRAINT github_repositories_node_id_unique UNIQUE (node_id);
+
+
+--
+-- Name: github_repositories github_repositories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.github_repositories
+    ADD CONSTRAINT github_repositories_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: knex_migrations_lock knex_migrations_lock_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -295,6 +424,13 @@ CREATE TRIGGER set_updated_at_github_organizations BEFORE UPDATE ON public.githu
 
 
 --
+-- Name: github_repositories set_updated_at_github_repositories; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER set_updated_at_github_repositories BEFORE UPDATE ON public.github_repositories FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+
+--
 -- Name: projects set_updated_at_projects; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -307,6 +443,14 @@ CREATE TRIGGER set_updated_at_projects BEFORE UPDATE ON public.projects FOR EACH
 
 ALTER TABLE ONLY public.github_organizations
     ADD CONSTRAINT github_organizations_project_id_foreign FOREIGN KEY (project_id) REFERENCES public.projects(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: github_repositories github_repositories_github_organization_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.github_repositories
+    ADD CONSTRAINT github_repositories_github_organization_id_foreign FOREIGN KEY (github_organization_id) REFERENCES public.github_organizations(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

@@ -82,13 +82,19 @@
         ]
       },
       "name": {
-        "type": "string",
+        "type": [
+          "string", 
+          "null"
+        ],
         "examples": [
           "github"
         ]
       },
       "company": {
-        "type": "string",
+        "type": [
+          "string",
+          "null"
+        ],
         "examples": [
           "GitHub"
         ]
@@ -101,13 +107,19 @@
         ]
       },
       "location": {
-        "type": "string",
+        "type": [
+          "string",
+          "null"
+        ],
         "examples": [
           "San Francisco"
         ]
       },
       "email": {
-        "type": "string",
+        "type": [
+          "string",
+          "null"
+        ],
         "format": "email",
         "examples": [
           "octocat@github.com"

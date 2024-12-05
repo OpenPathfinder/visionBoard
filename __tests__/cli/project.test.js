@@ -2,7 +2,7 @@ const inquirer = require('inquirer').default
 const knexInit = require('knex')
 const { getConfig } = require('../../src/config')
 const { runAddProjectCommand } = require('../../src/cli')
-const { resetDatabase, getAllProjects, getAllGithubOrgs } = require('../utils')
+const { resetDatabase, getAllProjects, getAllGithubOrgs } = require('../../__utils__')
 
 const { dbSettings } = getConfig('test')
 

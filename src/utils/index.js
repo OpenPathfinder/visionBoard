@@ -8,7 +8,22 @@ const ensureGithubToken = () => {
   }
 }
 
+const defineLog = (type) => function () {
+  if (process.env.NODE_ENV === 'test') {
+    return () => {}
+  }
+  return console[type](...arguments)
+}
+
+const logger = {
+  info: defineLog('info'),
+  error: defineLog('error'),
+  warn: defineLog('warn'),
+  log: defineLog('log')
+}
+
 module.exports = {
   validateGithubUrl,
-  ensureGithubToken
+  ensureGithubToken,
+  logger
 }

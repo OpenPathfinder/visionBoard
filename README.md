@@ -114,6 +114,13 @@ To list all available workflows, use the following command:
 node index.js workflow list
 ```
 
+### Checks
+
+You can list all the implemented checks, use the following command:
+
+```bash
+node index.js check list
+```
 
 ## Debug mode
 

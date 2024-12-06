@@ -48,17 +48,6 @@ describe('run GENERIC - Non-Interactive Mode', () => {
 })
 
 describe('run update-github-orgs', () => {
-  // // Mock inquirer for testing
-  // jest.spyOn(inquirer, 'prompt').mockImplementation(async (questions) => {
-  //   const questionMap = {
-  //     'What is the name of the workflow?': 'update-github-orgs'
-  //   }
-  //   return questions.reduce((acc, question) => {
-  //     acc[question.name] = questionMap[question.message]
-  //     return acc
-  //   }, {})
-  // })
-
   test('Should throw an error when no Github orgs are stored in the database', async () => {
     const projects = await getAllProjects(knex)
     expect(projects.length).toBe(0)

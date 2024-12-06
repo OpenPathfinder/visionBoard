@@ -122,6 +122,13 @@ You can list all the implemented checks, use the following command:
 node index.js check list
 ```
 
+You can any implemented check at any time by running the following command:
+
+```bash
+node index.js check run [--name <name>]
+```
+
+
 ## Debug mode
 
 This project uses the [debug library](https://www.npmjs.com/package/debug), so you can always use the environmental variable `DEBUG=*` to print more detailed information of the execution.

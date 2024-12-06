@@ -34,3 +34,13 @@ describe('list - Non-Interactive Mode', () => {
     await expect(availableChecksList).toEqual(relevantChecks)
   })
 })
+
+describe('run - Interactive Mode', () => {
+  test.todo('Should run the check when a valid name is provided')
+})
+describe('run - Non-Interactive Mode', () => {
+  test.todo('Should throw an error when invalid name is provided')
+  test.todo('Should throw an error when no name is provided')
+  test.todo('Should throw an error when the check is not implemented')
+  test.todo('Should run the check when a valid name is provided')
+})

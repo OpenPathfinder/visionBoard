@@ -2,7 +2,7 @@ const { Command } = require('commander')
 const { getConfig } = require('./src/config')
 const { projectCategories, dbSettings } = getConfig()
 const { logger } = require('./src/utils')
-const { runAddProjectCommand, runWorkflowCommand, listWorkflowCommand, listCheckCommand } = require('./src/cli')
+const { runAddProjectCommand, runWorkflowCommand, listWorkflowCommand, listCheckCommand, runCheckCommand } = require('./src/cli')
 const knex = require('knex')(dbSettings)
 
 const program = new Command()
@@ -61,6 +61,21 @@ check
   .action(async (options) => {
     try {
       await listCheckCommand(knex, options)
+    } catch (error) {
+      logger.error('Error running check:', error.message)
+      process.exit(1)
+    } finally {
+      await knex.destroy()
+    }
+  })
+
+check
+  .command('run')
+  .description('Run a check')
+  .option('--name <name>', 'Name of the check')
+  .action(async (options) => {
+    try {
+      await runCheckCommand(knex, options)
     } catch (error) {
       logger.error('Error running check:', error.message)
       process.exit(1)

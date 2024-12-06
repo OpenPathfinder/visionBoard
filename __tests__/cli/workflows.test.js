@@ -136,3 +136,7 @@ describe('run upsert-github-repositories', () => {
   })
   test.todo('Should throw an error when the Github API is not available')
 })
+
+describe('run run-all-checks', () => {
+  test.todo('Should run all the compliance checks for the stored data')
+})

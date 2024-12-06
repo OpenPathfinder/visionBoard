@@ -3,6 +3,7 @@ const { github } = require('../providers')
 const { initializeStore } = require('../store')
 const { logger } = require('../utils')
 const { validateGithubOrg, validateGithubListOrgRepos, validateGithubRepository } = require('../schemas')
+const checks = require('../checks')
 
 const updateGithubOrgs = async (knex) => {
   const { getAllGithubOrganizations, updateGithubOrganization } = initializeStore(knex)
@@ -57,7 +58,21 @@ const upsertGithubRepositories = async (knex) => {
   }))
 }
 
+const runAllTheComplianceChecks = async (knex) => {
+  const { getAllComplianceChecks } = initializeStore(knex)
+  debug('Fetching all compliance checks')
+  const complianceChecks = await getAllComplianceChecks()
+  const implementedChecks = complianceChecks.filter(check => check.implementation_status === 'completed')
+  logger.log('Running all implemented checks sequentially')
+  for (const check of implementedChecks) {
+    logger.log(`Running check (${check.code_name})`)
+    await checks[check.code_name](knex)
+  }
+  logger.log('All checks ran successfully')
+}
+
 module.exports = {
   updateGithubOrgs,
-  upsertGithubRepositories
+  upsertGithubRepositories,
+  runAllTheComplianceChecks
 }

@@ -36,6 +36,62 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: compliance_checks; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.compliance_checks (
+    id integer NOT NULL,
+    title character varying(255) NOT NULL,
+    description text NOT NULL,
+    section_number character varying(255) NOT NULL,
+    section_name character varying(255) NOT NULL,
+    code_name character varying(255) NOT NULL,
+    priority_group character varying(255) NOT NULL,
+    is_c_scrm boolean DEFAULT false NOT NULL,
+    level_incubating_status text NOT NULL,
+    level_active_status text NOT NULL,
+    level_retiring_status text NOT NULL,
+    mitre_url character varying(255),
+    mitre_description character varying(255),
+    how_to_url character varying(255),
+    how_to_description text,
+    sources_url character varying(255),
+    sources_description text,
+    implementation_status text DEFAULT 'pending'::text NOT NULL,
+    implementation_type text,
+    implementation_details_reference text,
+    details_url text NOT NULL,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT compliance_checks_implementation_status_check CHECK ((implementation_status = ANY (ARRAY['pending'::text, 'completed'::text]))),
+    CONSTRAINT compliance_checks_implementation_type_check CHECK ((implementation_type = ANY (ARRAY['manual'::text, 'computed'::text]))),
+    CONSTRAINT compliance_checks_level_active_status_check CHECK ((level_active_status = ANY (ARRAY['n/a'::text, 'deferrable'::text, 'expected'::text, 'recommended'::text]))),
+    CONSTRAINT compliance_checks_level_incubating_status_check CHECK ((level_incubating_status = ANY (ARRAY['n/a'::text, 'deferrable'::text, 'expected'::text, 'recommended'::text]))),
+    CONSTRAINT compliance_checks_level_retiring_status_check CHECK ((level_retiring_status = ANY (ARRAY['n/a'::text, 'deferrable'::text, 'expected'::text, 'recommended'::text])))
+);
+
+
+--
+-- Name: compliance_checks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.compliance_checks_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: compliance_checks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.compliance_checks_id_seq OWNED BY public.compliance_checks.id;
+
+
+--
 -- Name: github_organizations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -310,6 +366,13 @@ ALTER SEQUENCE public.projects_id_seq OWNED BY public.projects.id;
 
 
 --
+-- Name: compliance_checks id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.compliance_checks ALTER COLUMN id SET DEFAULT nextval('public.compliance_checks_id_seq'::regclass);
+
+
+--
 -- Name: github_organizations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -342,6 +405,22 @@ ALTER TABLE ONLY public.knex_migrations_lock ALTER COLUMN index SET DEFAULT next
 --
 
 ALTER TABLE ONLY public.projects ALTER COLUMN id SET DEFAULT nextval('public.projects_id_seq'::regclass);
+
+
+--
+-- Name: compliance_checks compliance_checks_code_name_unique; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.compliance_checks
+    ADD CONSTRAINT compliance_checks_code_name_unique UNIQUE (code_name);
+
+
+--
+-- Name: compliance_checks compliance_checks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.compliance_checks
+    ADD CONSTRAINT compliance_checks_pkey PRIMARY KEY (id);
 
 
 --
@@ -414,6 +493,13 @@ ALTER TABLE ONLY public.knex_migrations
 
 ALTER TABLE ONLY public.projects
     ADD CONSTRAINT projects_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: compliance_checks set_updated_at_compliance_checks; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER set_updated_at_compliance_checks BEFORE UPDATE ON public.compliance_checks FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 
 --

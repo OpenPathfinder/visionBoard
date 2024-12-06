@@ -7,6 +7,7 @@ export default {
     '<rootDir>/__tests__/',
     '<rootDir>/__utils__/',
     '<rootDir>/src/database/migrations/',
+    '<rootDir>/src/database/seeds/',
     '<rootDir>/src/config/'
   ],
   transformIgnorePatterns: [

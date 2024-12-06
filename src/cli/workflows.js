@@ -1,6 +1,6 @@
 const inquirer = require('inquirer').default
 const debug = require('debug')('cli:workflows')
-const { updateGithubOrgs, upsertGithubRepositories } = require('../workflows')
+const { updateGithubOrgs, upsertGithubRepositories, runAllTheComplianceChecks } = require('../workflows')
 const { logger } = require('../utils')
 
 const commandList = [{
@@ -11,6 +11,10 @@ const commandList = [{
   name: 'upsert-github-repositories',
   description: 'Check the organizations stored and update/create the information related to the repositories with the GitHub API.',
   workflow: upsertGithubRepositories
+}, {
+  name: 'run-all-checks',
+  description: 'Run all the compliance checks for the stored data.',
+  workflow: runAllTheComplianceChecks
 }]
 
 const validCommandNames = commandList.map(({ name }) => name)

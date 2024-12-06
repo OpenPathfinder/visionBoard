@@ -12,5 +12,10 @@ exports[`list - Non-Interactive Mode Should provide a list of available workflow
     "name": "upsert-github-repositories",
     "workflow": [Function],
   },
+  {
+    "description": "Run all the compliance checks for the stored data.",
+    "name": "run-all-checks",
+    "workflow": [Function],
+  },
 ]
 `;

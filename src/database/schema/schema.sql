@@ -72,6 +72,43 @@ CREATE TABLE public.compliance_checks (
 
 
 --
+-- Name: compliance_checks_alerts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.compliance_checks_alerts (
+    id integer NOT NULL,
+    title text NOT NULL,
+    description text NOT NULL,
+    severity text NOT NULL,
+    compliance_check_id integer NOT NULL,
+    project_id integer NOT NULL,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT compliance_checks_alerts_severity_check CHECK ((severity = ANY (ARRAY['critical'::text, 'high'::text, 'medium'::text, 'low'::text, 'info'::text])))
+);
+
+
+--
+-- Name: compliance_checks_alerts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.compliance_checks_alerts_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: compliance_checks_alerts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.compliance_checks_alerts_id_seq OWNED BY public.compliance_checks_alerts.id;
+
+
+--
 -- Name: compliance_checks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -373,6 +410,13 @@ ALTER TABLE ONLY public.compliance_checks ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
+-- Name: compliance_checks_alerts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.compliance_checks_alerts ALTER COLUMN id SET DEFAULT nextval('public.compliance_checks_alerts_id_seq'::regclass);
+
+
+--
 -- Name: github_organizations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -405,6 +449,14 @@ ALTER TABLE ONLY public.knex_migrations_lock ALTER COLUMN index SET DEFAULT next
 --
 
 ALTER TABLE ONLY public.projects ALTER COLUMN id SET DEFAULT nextval('public.projects_id_seq'::regclass);
+
+
+--
+-- Name: compliance_checks_alerts compliance_checks_alerts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.compliance_checks_alerts
+    ADD CONSTRAINT compliance_checks_alerts_pkey PRIMARY KEY (id);
 
 
 --
@@ -503,6 +555,13 @@ CREATE TRIGGER set_updated_at_compliance_checks BEFORE UPDATE ON public.complian
 
 
 --
+-- Name: compliance_checks_alerts set_updated_at_compliance_checks_alerts; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER set_updated_at_compliance_checks_alerts BEFORE UPDATE ON public.compliance_checks_alerts FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+
+--
 -- Name: github_organizations set_updated_at_github_organizations; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -521,6 +580,22 @@ CREATE TRIGGER set_updated_at_github_repositories BEFORE UPDATE ON public.github
 --
 
 CREATE TRIGGER set_updated_at_projects BEFORE UPDATE ON public.projects FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+
+--
+-- Name: compliance_checks_alerts compliance_checks_alerts_compliance_check_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.compliance_checks_alerts
+    ADD CONSTRAINT compliance_checks_alerts_compliance_check_id_foreign FOREIGN KEY (compliance_check_id) REFERENCES public.compliance_checks(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: compliance_checks_alerts compliance_checks_alerts_project_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.compliance_checks_alerts
+    ADD CONSTRAINT compliance_checks_alerts_project_id_foreign FOREIGN KEY (project_id) REFERENCES public.projects(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

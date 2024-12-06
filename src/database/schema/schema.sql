@@ -129,6 +129,44 @@ ALTER SEQUENCE public.compliance_checks_id_seq OWNED BY public.compliance_checks
 
 
 --
+-- Name: compliance_checks_results; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.compliance_checks_results (
+    id integer NOT NULL,
+    severity text NOT NULL,
+    status text NOT NULL,
+    rationale text NOT NULL,
+    compliance_check_id integer NOT NULL,
+    project_id integer NOT NULL,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT compliance_checks_results_severity_check CHECK ((severity = ANY (ARRAY['critical'::text, 'high'::text, 'medium'::text, 'low'::text, 'info'::text]))),
+    CONSTRAINT compliance_checks_results_status_check CHECK ((status = ANY (ARRAY['unknown'::text, 'passed'::text, 'failed'::text])))
+);
+
+
+--
+-- Name: compliance_checks_results_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.compliance_checks_results_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: compliance_checks_results_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.compliance_checks_results_id_seq OWNED BY public.compliance_checks_results.id;
+
+
+--
 -- Name: compliance_checks_tasks; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -454,6 +492,13 @@ ALTER TABLE ONLY public.compliance_checks_alerts ALTER COLUMN id SET DEFAULT nex
 
 
 --
+-- Name: compliance_checks_results id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.compliance_checks_results ALTER COLUMN id SET DEFAULT nextval('public.compliance_checks_results_id_seq'::regclass);
+
+
+--
 -- Name: compliance_checks_tasks id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -517,6 +562,14 @@ ALTER TABLE ONLY public.compliance_checks
 
 ALTER TABLE ONLY public.compliance_checks
     ADD CONSTRAINT compliance_checks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: compliance_checks_results compliance_checks_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.compliance_checks_results
+    ADD CONSTRAINT compliance_checks_results_pkey PRIMARY KEY (id);
 
 
 --
@@ -614,6 +667,13 @@ CREATE TRIGGER set_updated_at_compliance_checks_alerts BEFORE UPDATE ON public.c
 
 
 --
+-- Name: compliance_checks_results set_updated_at_compliance_checks_results; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER set_updated_at_compliance_checks_results BEFORE UPDATE ON public.compliance_checks_results FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+
+--
 -- Name: compliance_checks_tasks set_updated_at_compliance_checks_tasks; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -655,6 +715,22 @@ ALTER TABLE ONLY public.compliance_checks_alerts
 
 ALTER TABLE ONLY public.compliance_checks_alerts
     ADD CONSTRAINT compliance_checks_alerts_project_id_foreign FOREIGN KEY (project_id) REFERENCES public.projects(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: compliance_checks_results compliance_checks_results_compliance_check_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.compliance_checks_results
+    ADD CONSTRAINT compliance_checks_results_compliance_check_id_foreign FOREIGN KEY (compliance_check_id) REFERENCES public.compliance_checks(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: compliance_checks_results compliance_checks_results_project_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.compliance_checks_results
+    ADD CONSTRAINT compliance_checks_results_project_id_foreign FOREIGN KEY (project_id) REFERENCES public.projects(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

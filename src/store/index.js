@@ -46,6 +46,11 @@ const addProject = knex => async (project) => {
   }).returning('*')
 }
 
+const getAllComplianceChecks = knex => async () => {
+  debug('Getting all checks...')
+  return knex('compliance_checks').select().returning('*')
+}
+
 const initializeStore = (knex) => {
   debug('Initializing store...')
   return {
@@ -53,7 +58,8 @@ const initializeStore = (knex) => {
     addGithubOrganization: addGithubOrganization(knex),
     getAllGithubOrganizations: getAllGithubOrganizations(knex),
     updateGithubOrganization: updateGithubOrganization(knex),
-    upsertGithubRepository: upsertGithubRepository(knex)
+    upsertGithubRepository: upsertGithubRepository(knex),
+    getAllComplianceChecks: getAllComplianceChecks(knex)
   }
 }
 

@@ -23,7 +23,10 @@ const addGithubRepo = async (knex, data) => {
   return githubRepo
 }
 
+const getAllComplianceChecks = (knex) => knex('compliance_checks').select('*')
+
 module.exports = {
+  getAllComplianceChecks,
   resetDatabase,
   getAllProjects,
   getAllGithubOrgs,

@@ -2,14 +2,14 @@ const { Command } = require('commander')
 const { getConfig } = require('./src/config')
 const { projectCategories, dbSettings } = getConfig()
 const { logger } = require('./src/utils')
-const { runAddProjectCommand, runWorkflowCommand, listWorkflowCommand } = require('./src/cli')
+const { runAddProjectCommand, runWorkflowCommand, listWorkflowCommand, listCheckCommand } = require('./src/cli')
 const knex = require('knex')(dbSettings)
 
 const program = new Command()
 
 const project = program.command('project').description('Manage projects')
 
-// Project commands
+// Project related commands
 project
   .command('add')
   .description('Add a new project')
@@ -27,7 +27,7 @@ project
     }
   })
 
-// Workflow commands
+// Workflows related commands
 const workflow = program.command('workflow').description('Manage workflows')
 
 workflow
@@ -51,4 +51,22 @@ workflow
   .action((options) => {
     listWorkflowCommand(options)
   })
+
+// Checks related commands
+const check = program.command('check').description('Manage checks')
+
+check
+  .command('list')
+  .description('List all available checks')
+  .action(async (options) => {
+    try {
+      await listCheckCommand(knex, options)
+    } catch (error) {
+      logger.error('Error running check:', error.message)
+      process.exit(1)
+    } finally {
+      await knex.destroy()
+    }
+  })
+
 program.parse(process.argv)

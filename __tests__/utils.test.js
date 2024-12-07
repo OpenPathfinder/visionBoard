@@ -1,4 +1,4 @@
-const { validateGithubUrl, ensureGithubToken, getSeverityFromPriorityGroup } = require('../src/utils/index')
+const { validateGithubUrl, ensureGithubToken, groupArrayItemsByCriteria, getSeverityFromPriorityGroup } = require('../src/utils/index')
 
 describe('ensureGithubToken', () => {
   let originalGithubToken
@@ -41,6 +41,28 @@ describe('validateGithubUrl', () => {
   it('should return false for an invalid URL', () => {
     const url = 'not-a-valid-url'
     expect(validateGithubUrl(url)).toBe(false)
+  })
+})
+
+describe('groupArrayItemsByCriteria', () => {
+  const groupByProject = groupArrayItemsByCriteria('project_id')
+
+  it('should group array items by criteria', () => {
+    const items = [
+      { project_id: 1, name: 'item1' },
+      { project_id: 1, name: 'item2' },
+      { project_id: 2, name: 'item3' }
+    ]
+    const expected = [
+      [
+        { project_id: 1, name: 'item1' },
+        { project_id: 1, name: 'item2' }
+      ],
+      [
+        { project_id: 2, name: 'item3' }
+      ]
+    ]
+    expect(groupByProject(items)).toEqual(expected)
   })
 })
 

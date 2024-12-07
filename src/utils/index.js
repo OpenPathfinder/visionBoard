@@ -41,9 +41,20 @@ const getSeverityFromPriorityGroup = (priorityGroup) => {
   }
 }
 
+const groupArrayItemsByCriteria = criteria => items => Object.values(
+  items.reduce((acc, item) => {
+    if (!acc[item[criteria]]) {
+      acc[item[criteria]] = []
+    }
+    acc[item[criteria]].push(item)
+    return acc
+  }, {})
+)
+
 module.exports = {
   validateGithubUrl,
   ensureGithubToken,
   getSeverityFromPriorityGroup,
+  groupArrayItemsByCriteria,
   logger
 }

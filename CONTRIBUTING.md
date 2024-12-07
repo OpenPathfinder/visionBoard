@@ -27,7 +27,7 @@ You have several templates available:
 * [Report a Bug](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=%5BBUG%5D)
 * [Other](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues/new?assignees=&labels=&projects=&template=other.md&title=)
 
-## [Pull Requests](./doc/contributing/pull-requests.md)
+## Pull Requests
 
 Here are some recommendations for creating PRs in this project.
 
@@ -90,7 +90,7 @@ Here you can find the best ways to make meaningful contributions to the project.
 
 We are looking for contributors to implement compliance checks in the Dashboard. Here is a process to achieve this:
 
-1. Check the open issues related to [compliance checks](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aclosed+label%3Acompliance-checks). Focus on issues with a title following this pattern: `Add Compliance check: *`, such as [Add Compliance check: githubOrgMFA](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues/43).
+1. Check the open issues related to [compliance checks](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues?q=sort%3Aupdated-desc+is%3Aissue+label%3Acompliance-checks+is%3Aopen). Focus on issues with a title following this pattern: `Add Compliance check: *`, such as [Add Compliance check: githubOrgMFA](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues/43).
 
 2. Engage in the conversation and request to lead or contribute to the implementation. A key part of this process is defining a way to implement the compliance check (e.g., data usage, alerting criteria, etc.).
 

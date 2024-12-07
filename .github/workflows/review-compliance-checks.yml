@@ -1,0 +1,58 @@
+name: Check Migrations
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'src/checks/**'
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  check-migrations:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check and add comment to PR
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: comments } = await github.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const commentExists = comments.some(comment =>
+              comment.body.includes("It looks like you've made changes to the compliance checks.")
+            );
+
+            if (!commentExists) {
+              await github.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: "It looks like you've made changes to the compliance checks. Thanks for your contribution!\n" +
+                "Here are some questions to ensure your changes are complete. Please feel free to ignore the ones that are not relevant:\n" +
+                "- [ ] Have you run `npm run db:generate-schema` to ensure the updated schemas are included in your PR?\n" +
+                "- [ ] Have you run `npm run db:migrate` and then `npm run db:rollback` to confirm that rollbacks are working as expected?\n" +
+                "- [ ] Have you updated the compliance check in the `compliance_checks` table?\n" +
+                "- [ ] Have you included a specific validator (`src/checks/validators/`) for this check with unit tests (`__tests__/checks/`)?\n" +
+                "- [ ] Have you included a specific file in `src/checks/complianceChecks` with the integration tests (`__tests__/checks/`)?\n" +
+                "- [ ] Have you included severity validation (`getSeverityFromPriorityGroup`) and checked applicability (`isCheckApplicableToProjectCategory`)?\n" +
+                "- [ ] Have you included the tasks, alerts, and results in the database tables?\n" +
+                "- [ ] Have you tested the check with `check run --name {check_code_name}` using the seeded database (`npm run db:seed`)?\n" +
+                "- [ ] Have you created a PR in [the website](https://github.com/secure-dashboards/openjs-security-program-standards) with the calculation details?\n" +
+                "\n" +
+                "You can find more information in [the contributing guide](/CONTRIBUTING.md#add-compliance-checks).\n"
+              });
+              console.log("Comment added");
+            } else {
+              console.log("Comment already exists");
+            }

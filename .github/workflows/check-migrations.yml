@@ -42,7 +42,7 @@ jobs:
                 "- [ ] Have you run `npm run db:generate-schema` to ensure the updated schemas are included in your PR?\n" +
                 "- [ ] Have you run \`npm run db:migrate\` and then \`npm run db:rollback\` to confirm that rollbacks are working as expected?\n" +
                 "\n" +
-                "Note: Please avoid making changes to existing migration files, as this will alter the file hash and could break migrations in production environments.\n"
+                "Note: Please avoid making changes to existing migration files, as they won't be executed again in deployed environments.\n"
               });
               console.log("Comment added");
             } else {

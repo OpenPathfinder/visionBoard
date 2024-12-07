@@ -1,4 +1,4 @@
-const { validateGithubUrl, ensureGithubToken } = require('../src/utils/index')
+const { validateGithubUrl, ensureGithubToken, getSeverityFromPriorityGroup } = require('../src/utils/index')
 
 describe('ensureGithubToken', () => {
   let originalGithubToken
@@ -41,5 +41,23 @@ describe('validateGithubUrl', () => {
   it('should return false for an invalid URL', () => {
     const url = 'not-a-valid-url'
     expect(validateGithubUrl(url)).toBe(false)
+  })
+})
+
+describe('getSeverityFromPriorityGroup', () => {
+  it('should return the correct severity based on the priority group', () => {
+    expect(getSeverityFromPriorityGroup('P0')).toBe('critical')
+    expect(getSeverityFromPriorityGroup('P1')).toBe('critical')
+    expect(getSeverityFromPriorityGroup('P2')).toBe('critical')
+    expect(getSeverityFromPriorityGroup('P3')).toBe('high')
+    expect(getSeverityFromPriorityGroup('P4')).toBe('high')
+    expect(getSeverityFromPriorityGroup('P5')).toBe('medium')
+    expect(getSeverityFromPriorityGroup('P6')).toBe('medium')
+    expect(getSeverityFromPriorityGroup('P7')).toBe('medium')
+    expect(getSeverityFromPriorityGroup('P8')).toBe('low')
+    expect(getSeverityFromPriorityGroup('P20')).toBe('low')
+    // Recommendations always have 'info' severity
+    expect(getSeverityFromPriorityGroup('R1')).toBe('info')
+    expect(getSeverityFromPriorityGroup('R11')).toBe('info')
   })
 })

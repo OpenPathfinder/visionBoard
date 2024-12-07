@@ -29,6 +29,7 @@ You have several templates available:
 
 ## Pull Requests
 
+### Create a good PR in this project
 Here are some recommendations for creating PRs in this project.
 
 Creating a high-quality Pull Request (PR) helps maintainers review your contribution efficiently and ensures it aligns with the project's standards. Follow these steps to make your PR outstanding:
@@ -81,6 +82,23 @@ Before submitting your PR:
 - **Ask for Help Anytime:** Contributing to an open-source project might be challenging. Please share any concerns or ask for clarifications when needed. We are here to help you.
 
 By following these steps, you'll create a high-quality PR that is easier to review and more likely to be accepted. Thank you for contributing!
+
+### Additional Support
+
+This project provides automatic comments in PRs when certain conditions are met. These comments include checklists to guide contributors through the required steps. Here are some examples:
+
+**When a compliance check is added/modified**
+
+The bot provides this checklist to ensure the updated compliance checks meet all project requirements.
+
+![Checklist for compliance check updates with questions to validate changes, including schema generation, migrations, tests, and severity validation](https://github.com/user-attachments/assets/fb7fddbf-1592-4213-bf4d-821a7f8c8be8)
+
+**When a migration is added/modified**
+
+This checklist ensures that contributors validate schema generation and rollback behavior while avoiding edits to existing migrations.
+
+![Checklist for migration updates with reminders about schema generation and rollback testing, and a note to avoid editing existing migrations](https://github.com/user-attachments/assets/169bea0d-b2aa-4c7e-84e2-9fb4f52ac289)
+
 
 ## Current Initiatives
 

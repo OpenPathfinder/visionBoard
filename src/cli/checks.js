@@ -39,7 +39,7 @@ async function runCheckCommand (knex, options = {}) {
     ])
 
   debug('Running check with code_name:', answers.name)
-  checks[answers.name](knex)
+  await checks[answers.name](knex)
 }
 
 module.exports = {

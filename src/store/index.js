@@ -51,6 +51,45 @@ const getAllComplianceChecks = knex => async () => {
   return knex('compliance_checks').select().returning('*')
 }
 
+const getCheckByCodeName = knex => async (codeName) => {
+  debug(`Getting check by code name (${codeName})...`)
+  return knex('compliance_checks').where({ code_name: codeName }).first()
+}
+
+const getAllProjects = knex => async () => {
+  debug('Getting all projects...')
+  return knex('projects').select().returning('*')
+}
+
+const deleteAlertsByComplianceCheckId = knex => async (complianceCheckId) => {
+  debug(`Deleting alerts by compliance_check_id (${complianceCheckId})...`)
+  return knex('compliance_checks_alerts').where({ compliance_check_id: complianceCheckId }).delete()
+}
+
+const deleteTasksByComplianceCheckId = knex => async (complianceCheckId) => {
+  debug(`Deleting tasks by compliance_check_id (${complianceCheckId})...`)
+  return knex('compliance_checks_tasks').where({ compliance_check_id: complianceCheckId }).delete()
+}
+
+const addAlert = knex => async (alert) => {
+  debug('Inserting alert...')
+  return knex('compliance_checks_alerts').insert(alert).returning('*')
+}
+
+const addTask = knex => async (task) => {
+  debug('Inserting task...')
+  return knex('compliance_checks_tasks').insert(task).returning('*')
+}
+
+const upsertComplianceCheckResult = knex => async (result) => {
+  const existingComplianceCheck = await knex('compliance_checks_results').where({ compliance_check_id: result.compliance_check_id }).first()
+  if (existingComplianceCheck) {
+    return knex('compliance_checks_results').where({ compliance_check_id: result.compliance_check_id }).update(result).returning('*')
+  } else {
+    return knex('compliance_checks_results').insert(result).returning('*')
+  }
+}
+
 const initializeStore = (knex) => {
   debug('Initializing store...')
   return {
@@ -59,7 +98,14 @@ const initializeStore = (knex) => {
     getAllGithubOrganizations: getAllGithubOrganizations(knex),
     updateGithubOrganization: updateGithubOrganization(knex),
     upsertGithubRepository: upsertGithubRepository(knex),
-    getAllComplianceChecks: getAllComplianceChecks(knex)
+    getAllComplianceChecks: getAllComplianceChecks(knex),
+    getCheckByCodeName: getCheckByCodeName(knex),
+    getAllProjects: getAllProjects(knex),
+    deleteTasksByComplianceCheckId: deleteTasksByComplianceCheckId(knex),
+    deleteAlertsByComplianceCheckId: deleteAlertsByComplianceCheckId(knex),
+    addAlert: addAlert(knex),
+    addTask: addTask(knex),
+    upsertComplianceCheckResult: upsertComplianceCheckResult(knex)
   }
 }
 

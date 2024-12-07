@@ -1,4 +1,4 @@
-const { validateGithubUrl, ensureGithubToken, groupArrayItemsByCriteria, getSeverityFromPriorityGroup } = require('../src/utils/index')
+const { validateGithubUrl, ensureGithubToken, groupArrayItemsByCriteria, isCheckApplicableToProjectCategory, getSeverityFromPriorityGroup } = require('../src/utils/index')
 
 describe('ensureGithubToken', () => {
   let originalGithubToken
@@ -63,6 +63,31 @@ describe('groupArrayItemsByCriteria', () => {
       ]
     ]
     expect(groupByProject(items)).toEqual(expected)
+  })
+})
+
+describe('isCheckApplicableToProjectCategory', () => {
+  const disabledCheck = {
+    level_active_status: 'n/a',
+    level_incubating_status: 'n/a',
+    level_retiring_status: 'n/a'
+  }
+
+  it('should return false if the check is not applicable to the project category', () => {
+    let project = { category: 'impact' }
+    expect(isCheckApplicableToProjectCategory(disabledCheck, project)).toBe(false)
+    project = { category: 'incubation' }
+    expect(isCheckApplicableToProjectCategory(disabledCheck, project)).toBe(false)
+    project = { category: 'emeritus' }
+    expect(isCheckApplicableToProjectCategory(disabledCheck, project)).toBe(false)
+    project = { category: 'at-large' }
+    expect(isCheckApplicableToProjectCategory(disabledCheck, project)).toBe(false)
+  })
+
+  it('should return true if the check is applicable to the project category', () => {
+    const project = { category: 'impact' }
+    const check = { ...disabledCheck, level_active_status: 'recommended' }
+    expect(isCheckApplicableToProjectCategory(check, project)).toBe(true)
   })
 })
 

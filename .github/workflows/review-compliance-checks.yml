@@ -1,4 +1,4 @@
-name: Check Migrations
+name: Check Compliance Checks
 
 on:
   pull_request:
@@ -11,7 +11,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  check-migrations:
+  check-compliance-checks:
     runs-on: ubuntu-latest
 
     steps:

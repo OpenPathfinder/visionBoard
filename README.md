@@ -1,100 +1,110 @@
 # Secure Dashboard for the OpenJS Foundation
 
-This is an evolution of [this proof of concept (POC)](https://github.com/UlisesGascon/poc-openjs-security-program-standards-dashboard).
+This project aims to provide a secure and user-friendly dashboard for managing and monitoring projects under the OpenJS Foundation. It evolves from [this proof of concept (POC)](https://github.com/UlisesGascon/poc-openjs-security-program-standards-dashboard) and currently we are developing an MVP version ([milestone roadmap](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues/30)).
 
-## Prerequisites
+## Table of Contents
+
+1. [Motivation](#motivation)
+    - [More context](#more-context)
+    - [Engage now](#engage-now)
+2. [Getting Started](#getting-started)
+   - [Prerequisites](#prerequisites)
+   - [Infrastructure Setup](#infrastructure-setup)
+   - [Configuration](#configuration)
+3. [Usage](#usage)
+   - [Projects](#projects)
+   - [Workflows](#workflows)
+   - [Checks](#checks)
+4. [Database Management](#database-management)
+   - [Migrations](#migrations)
+   - [Seeding](#seeding)
+   - [Schema Management](#schema-management)
+5. [Development](#development)
+   - [Debugging](#debugging)
+   - [Linting](#linting)
+   - [Testing](#testing)
+6. [Community Guidelines](#community-guidelines)
+7. [License](#license)
+
+---
+
+## Motivation
+
+The goal of this project is to streamline the secure management of OpenJS Foundation projects by providing an intuitive dashboard with robust infrastructure support. It emphasizes security, simplicity, and extensibility ✨
+
+### More Context
+
+A few months ago, we started a discussion about [the OpenJS Security Collab space initiative](https://github.com/openjs-foundation/security-collab-space) ("[Security Program Standards](https://github.com/openjs-foundation/security-collab-space/issues/211)") to build a dashboard for monitoring security parameters in our projects (Node.js, Electron, jQuery, Express, etc.). After carefully planning and securing resources, we are now at an exciting point as we’ve recently launched a pilot program with some projects. 🚀
+
+So far, we’ve developed this website: [https://openjs-security-program-standards.netlify.app/](https://openjs-security-program-standards.netlify.app/), which is based on the checklist ([Google Sheet](https://docs.google.com/spreadsheets/d/1GwIsAudAn89xv9DAbr1HUaY4KEVBsYfg--_1cW0uIB0/edit#gid=0)) and the introductory document ([Google Doc](https://docs.google.com/document/d/1bWk3U5XpsKswqlPbZZHGxy3xRPuUx_gVzWa03OiMyQs/edit)) that we compiled during our original research. 😄
+
+You can watch this [YouTube video](https://www.youtube.com/watch?v=B1kd8k5SvBI) for a proper introduction to the Dashboard and website (both Proof of Concept versions) built based on feedback from [the Express Security WG](https://github.com/expressjs/security-wg) and others.
+
+In essence, this tool collects information from multiple sources, evaluates it, transforms it into actionable insights, and uses it to build dashboards, tasks, and alerts at both the foundation and project levels. If you prefer a non-video format, here are [the slides](https://slides.ulisesgascon.com/openjs-security-program-standards/) and [the code repository](https://github.com/UlisesGascon/poc-openjs-security-program-standards-dashboard/blob/main/README.md).
+
+Currently, we are focused on building a solid MVP and onboarding new contributors, aiming to create a great product by the end of this process. 😎
+
+### Engage Now
+
+Yes, we are looking for HELP in many ways! 😇 Let’s collaborate and have fun together. You can find more information in [the contributing guide](CONTRIBUTING.md). 🌟
+
+Another great way to get involved is by participating in [the OpenJS Security Collab Space](https://github.com/openjs-foundation/security-collab-space). We hold regular meetings to discuss this initiative and many other exciting topics.
+
+---
+
+## Getting Started
+
+### Prerequisites
 
 - Node.js 22 and npm
 - Docker and Docker Compose
-- Github token with repo:read level access.
+- GitHub token with `repo:read` access level (not needed for development)
 
-## Infrastructure
+### Infrastructure Setup
 
-This project requires a PostgreSQL database. You can run this project using a local database with Docker. Additionally, this project provides an instance of [Adminer](https://www.adminer.org/) accessible at `http://localhost:8080`.
+This project requires a PostgreSQL database and includes an instance of [Adminer](https://www.adminer.org/) accessible at `http://localhost:8080`.
 
-
-### Starting the Infrastructure
-
-To start the infrastructure, run the following command:
+#### Start Infrastructure
 
 ```bash
 npm run infra:start
 ```
 
-### Stopping the Infrastructure
-
-To stop the infrastructure, run the following command:
+#### Stop Infrastructure
 
 ```bash
 npm run infra:stop
 ```
 
-## Configuration
+### Configuration
 
-### Environment Variables
 
-This project requires a GitHub token to access the GitHub API. You need to set the `GITHUB_TOKEN` environment variable. 
+#### Environment Variables
 
-#### Optional: use .env file
+Set the `GITHUB_TOKEN` environment variable to authenticate with the GitHub API.
 
-Create a `.env` file and add your GitHub token:
-
-```sh
+Optionally, use a `.env` file:
+```
 GITHUB_TOKEN=your_github_token_here
 ```
 
-then use `--env-file` flag to load it, like `node --env-file=.env index.js workflow run --name populate-repos-list`
-
-
-## Database Management
-
-### Running Migrations
-
-To run the latest database migrations, use the following command:
+Then load it using:
 
 ```bash
-npm run db:migrate
-```
-
-### Rolling Back Migrations
-
-To rollback the last batch of migrations, use the following command:
-
-```bash
-npm run db:rollback
-```
-
-### Seeding the Database
-
-To seed the database with initial data, use the following command:
-
-```bash
-npm run db:seed
-```
-
-### Examine the database schema
-
-You can find an updated version of the schemas in [/src/database/schema/schema.sql](src/database/schema/schema.sql) so you don't have to start the infra and run the migrations if you just want to know about the database structure.
-
-### Update the database schema
-
-To update the schema, use the following command:
-
-```bash
-npm run db:generate-schema
+node --env-file=.env index.js workflow run --name populate-repos-list
 ```
 
 ## Usage
 
 ### Projects
 
-To add a new project, use the following command:
+Add a new project:
 
 ```bash
 node index.js project add [--name <name>] [--github-urls <urls...>] [--category <category>]
 ```
 
-For example, to add a project named "express" with GitHub URLs:
+Example:
 
 ```bash
 node index.js project add --name express --github-urls https://github.com/expressjs https://github.com/pillarjs https://github.com/jshttp --category impact
@@ -102,13 +112,13 @@ node index.js project add --name express --github-urls https://github.com/expres
 
 ### Workflows
 
-To run a workflow, use the following command:
+Run a workflow:
 
 ```bash
 node index.js workflow run [--name <name>]
 ```
 
-To list all available workflows, use the following command:
+List workflows:
 
 ```bash
 node index.js workflow list
@@ -116,52 +126,107 @@ node index.js workflow list
 
 ### Checks
 
-You can list all the implemented checks, use the following command:
+List all checks:
 
 ```bash
 node index.js check list
 ```
-
-You can any implemented check at any time by running the following command:
+Run a specific check:
 
 ```bash
 node index.js check run [--name <name>]
 ```
 
+There is an specific workflow that runs all the checks sequentially:
 
-## Debug mode
+```bash
+node index.js workflow run run-all-checks
+```
 
-This project uses the [debug library](https://www.npmjs.com/package/debug), so you can always use the environmental variable `DEBUG=*` to print more detailed information of the execution.
+## Database Management
 
+### Migrations
 
-## Linting
+Run latest migrations:
 
-To lint the files, use the following command:
+```bash
+npm run db:migrate
+```
+
+Rollback migrations:
+
+```bash
+npm run db:rollback
+```
+
+### Seeding
+
+Seed the database:
+
+```bash
+npm run db:seed
+```
+
+### Schema Management
+
+Check the schema:
+
+Refer to the latest schema file at [/src/database/schema/schema.sql](src/database/schema/schema.sql).
+
+Update the schema:
+
+```bash
+npm run db:generate-schema
+```
+
+## Development
+
+### Debugging
+
+Enable debug logs using the `DEBUG` environment variable:
+
+```bash
+DEBUG=* node index.js
+```
+
+### Linting
+
+Run lint checks:
 
 ```bash
 npm run lint
 ```
 
-To automatically fix linting issues, use the following command:
+Fix lint issues:
 
 ```bash
 npm run lint:fix
 ```
 
-## Running Tests
+### Testing
 
-To run the tests, use the following command:
+Run tests:
 
 ```bash
 npm test
 ```
 
-To run the tests with coverage, use the following command:
+Run tests with coverage:
 
 ```bash
 npm run test:coverage
 ```
 
+Update the snapshots when needed:
+```bash
+npm run test -- -u
+```
+
+## Community Guidelines
+
+We encourage contributors to adhere to our [Code of Conduct](CODE_OF_CONDUCT.md) and [Contributing Guidelines](CONTRIBUTING.md). Security-related concerns should follow our [Security Policy](SECURITY.md).
+
+
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](/LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

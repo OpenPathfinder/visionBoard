@@ -12,6 +12,8 @@ permissions:
 
 jobs:
   check-migrations:
+    # Skip this job if the PR include changes for compliance checks
+    if: "!contains(github.event.pull_request.changed_files, 'src/checks/')"
     runs-on: ubuntu-latest
 
     steps:

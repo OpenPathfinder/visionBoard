@@ -3,7 +3,7 @@ const { isCheckApplicableToProjectCategory, getSeverityFromPriorityGroup, isDate
 
 const expirationPolicy = '6m'
 
-module.exports = ({ trainings=[], check, projects }) => {
+module.exports = ({ trainings = [], check, projects }) => {
   debug('Validating Software Design Training...')
   const alerts = []
   const results = []

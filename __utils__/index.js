@@ -1,4 +1,5 @@
 const resetDatabase = async (knex) => {
+  await knex.raw('TRUNCATE TABLE software_design_training RESTART IDENTITY CASCADE')
   await knex.raw('TRUNCATE TABLE compliance_checks_results RESTART IDENTITY CASCADE')
   await knex.raw('TRUNCATE TABLE compliance_checks_tasks RESTART IDENTITY CASCADE')
   await knex.raw('TRUNCATE TABLE compliance_checks_alerts RESTART IDENTITY CASCADE')
@@ -50,6 +51,13 @@ const getCheckByCodeName = async (knex, codeName) => {
   return check
 }
 
+const addSSoftwareDesignTraining = async (knex, data) => {
+  const [training] = await knex('software_design_training').insert(data).returning('*')
+  return training
+}
+
+const getAllSoftwareDesignTrainings = (knex) => knex('software_design_training').select('*')
+
 module.exports = {
   getAllComplianceChecks,
   resetDatabase,
@@ -65,5 +73,7 @@ module.exports = {
   addAlert,
   addTask,
   addResult,
-  getCheckByCodeName
+  getCheckByCodeName,
+  addSSoftwareDesignTraining,
+  getAllSoftwareDesignTrainings
 }

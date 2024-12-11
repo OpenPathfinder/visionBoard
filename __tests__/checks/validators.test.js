@@ -148,16 +148,16 @@ describe('githubOrgMFA', () => {
 })
 
 describe('softwareDesignTraining', () => {
-  let softwareDesignTrainings, check, projects
+  let trainings, check, projects
   beforeEach(() => {
-    softwareDesignTrainings = [
+    trainings = [
       {
         project_id: 1,
-        date: new Date().toISOString()
+        training_date: new Date().toISOString()
       },
       {
         project_id: 2,
-        date: new Date().toISOString()
+        training_date: new Date().toISOString()
       }
     ]
 
@@ -183,7 +183,7 @@ describe('softwareDesignTraining', () => {
   })
 
   it('Should generate a passed result if the project has a software design training and it is up to date', () => {
-    const analysis = softwareDesignTraining({ softwareDesignTrainings, check, projects })
+    const analysis = softwareDesignTraining({ trainings, check, projects })
     expect(analysis).toEqual({
       alerts: [],
       results: [
@@ -206,8 +206,8 @@ describe('softwareDesignTraining', () => {
     })
   })
   it('Should generate a failed result if the project has a software design training but it is out of date', () => {
-    softwareDesignTrainings[0].date = '2019-01-01'
-    const analysis = softwareDesignTraining({ softwareDesignTrainings, check, projects })
+    trainings[0].training_date = '2019-01-01'
+    const analysis = softwareDesignTraining({ trainings, check, projects })
     expect(analysis).toEqual({
       alerts: [
         {
@@ -246,8 +246,8 @@ describe('softwareDesignTraining', () => {
     })
   })
   it('Should generate a failed result if the project does not have a software design training', () => {
-    softwareDesignTrainings = []
-    const analysis = softwareDesignTraining({ softwareDesignTrainings, check, projects })
+    trainings = []
+    const analysis = softwareDesignTraining({ trainings, check, projects })
     expect(analysis).toEqual({
       alerts: [
         {
@@ -303,7 +303,7 @@ describe('softwareDesignTraining', () => {
     check.level_active_status = 'n/a'
     check.level_incubating_status = 'n/a'
     check.level_retiring_status = 'n/a'
-    const analysis = softwareDesignTraining({ softwareDesignTrainings, check, projects })
+    const analysis = softwareDesignTraining({ trainings, check, projects })
     expect(analysis).toEqual({
       alerts: [],
       results: [],

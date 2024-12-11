@@ -3,7 +3,7 @@ const { isCheckApplicableToProjectCategory, getSeverityFromPriorityGroup, isDate
 
 const expirationPolicy = '6m'
 
-module.exports = ({ softwareDesignTrainings, check, projects }) => {
+module.exports = ({ trainings = [], check, projects = [] }) => {
   debug('Validating Software Design Training...')
   const alerts = []
   const results = []
@@ -28,7 +28,7 @@ module.exports = ({ softwareDesignTrainings, check, projects }) => {
     const task = { ...baseData }
     const alert = { ...baseData }
 
-    const trainingDetails = softwareDesignTrainings.find(training => training.project_id === project.id)
+    const trainingDetails = trainings.find(training => training.project_id === project.id)
     if (!trainingDetails) {
       result.status = 'failed'
       result.rationale = 'No Software Design Training found'
@@ -36,7 +36,7 @@ module.exports = ({ softwareDesignTrainings, check, projects }) => {
       alert.description = `Check the details on ${check.details_url}`
       task.title = 'Create a Software Design Training'
       task.description = `Check the details on ${check.details_url}`
-    } else if (trainingDetails && !isDateWithinPolicy(trainingDetails.date, expirationPolicy)) {
+    } else if (trainingDetails?.training_date && !isDateWithinPolicy(trainingDetails.training_date, expirationPolicy)) {
       result.status = 'failed'
       result.rationale = 'Software Design Training is out of date'
       alert.title = 'Software Design Training is out of date'

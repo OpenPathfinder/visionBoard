@@ -4,7 +4,7 @@ const { getSeverityFromPriorityGroup, isCheckApplicableToProjectCategory, groupA
 const groupByProject = groupArrayItemsByCriteria('project_id')
 
 // @see: https://github.com/secure-dashboards/openjs-foundation-dashboard/issues/43
-module.exports = ({ organizations, check, projects }) => {
+module.exports = ({ organizations = [], check, projects = [] }) => {
   debug('Validating GitHub organizations MFA...')
   debug('Grouping organizations by project...')
   const organizationsGroupedByProject = groupByProject(organizations)

@@ -478,6 +478,42 @@ ALTER SEQUENCE public.projects_id_seq OWNED BY public.projects.id;
 
 
 --
+-- Name: software_design_training; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.software_design_training (
+    id integer NOT NULL,
+    description text NOT NULL,
+    implementation_status text DEFAULT 'pending'::text NOT NULL,
+    training_date timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    project_id integer NOT NULL,
+    CONSTRAINT software_design_training_implementation_status_check CHECK ((implementation_status = ANY (ARRAY['unknown'::text, 'pending'::text, 'completed'::text])))
+);
+
+
+--
+-- Name: software_design_training_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.software_design_training_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: software_design_training_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.software_design_training_id_seq OWNED BY public.software_design_training.id;
+
+
+--
 -- Name: compliance_checks id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -538,6 +574,13 @@ ALTER TABLE ONLY public.knex_migrations_lock ALTER COLUMN index SET DEFAULT next
 --
 
 ALTER TABLE ONLY public.projects ALTER COLUMN id SET DEFAULT nextval('public.projects_id_seq'::regclass);
+
+
+--
+-- Name: software_design_training id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.software_design_training ALTER COLUMN id SET DEFAULT nextval('public.software_design_training_id_seq'::regclass);
 
 
 --
@@ -653,6 +696,14 @@ ALTER TABLE ONLY public.projects
 
 
 --
+-- Name: software_design_training software_design_training_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.software_design_training
+    ADD CONSTRAINT software_design_training_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: compliance_checks set_updated_at_compliance_checks; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -699,6 +750,13 @@ CREATE TRIGGER set_updated_at_github_repositories BEFORE UPDATE ON public.github
 --
 
 CREATE TRIGGER set_updated_at_projects BEFORE UPDATE ON public.projects FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+
+--
+-- Name: software_design_training set_updated_at_software_design_training; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER set_updated_at_software_design_training BEFORE UPDATE ON public.software_design_training FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 
 --
@@ -763,6 +821,14 @@ ALTER TABLE ONLY public.github_organizations
 
 ALTER TABLE ONLY public.github_repositories
     ADD CONSTRAINT github_repositories_github_organization_id_foreign FOREIGN KEY (github_organization_id) REFERENCES public.github_organizations(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: software_design_training software_design_training_project_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.software_design_training
+    ADD CONSTRAINT software_design_training_project_id_foreign FOREIGN KEY (project_id) REFERENCES public.projects(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

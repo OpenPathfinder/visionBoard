@@ -153,11 +153,11 @@ describe('softwareDesignTraining', () => {
     trainings = [
       {
         project_id: 1,
-        date: new Date().toISOString()
+        training_date: new Date().toISOString()
       },
       {
         project_id: 2,
-        date: new Date().toISOString()
+        training_date: new Date().toISOString()
       }
     ]
 
@@ -206,7 +206,7 @@ describe('softwareDesignTraining', () => {
     })
   })
   it('Should generate a failed result if the project has a software design training but it is out of date', () => {
-    trainings[0].date = '2019-01-01'
+    trainings[0].training_date = '2019-01-01'
     const analysis = softwareDesignTraining({ trainings, check, projects })
     expect(analysis).toEqual({
       alerts: [

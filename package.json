@@ -6,8 +6,8 @@
   "scripts": {
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "test": "NODE_ENV=test jest",
-    "test:coverage": "NODE_ENV=test jest --coverage",
+    "test": "NODE_ENV=test jest --runInBand",
+    "test:coverage": "NODE_ENV=test jest --runInBand --coverage",
     "test:ci": "NODE_ENV=test jest --runInBand --verbose --coverage",
     "infra:start": "docker-compose up -d",
     "infra:stop": "docker-compose down",

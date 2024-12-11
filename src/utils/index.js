@@ -74,6 +74,11 @@ const isDateWithinPolicy = (targetDate, policy) => {
     throw new Error('Policy is required')
   }
 
+  // Ensure targetDate is a string
+  if (typeof targetDate !== 'string') {
+    targetDate = targetDate.toISOString()
+  }
+
   const targetDateObj = parseISO(targetDate) // Parse ISO string into Date object
   let expirationDate
 

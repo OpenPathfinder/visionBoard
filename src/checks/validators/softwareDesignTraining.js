@@ -3,7 +3,7 @@ const { isCheckApplicableToProjectCategory, getSeverityFromPriorityGroup, isDate
 
 const expirationPolicy = '6m'
 
-module.exports = ({ trainings = [], check, projects }) => {
+module.exports = ({ trainings = [], check, projects = [] }) => {
   debug('Validating Software Design Training...')
   const alerts = []
   const results = []
@@ -36,7 +36,7 @@ module.exports = ({ trainings = [], check, projects }) => {
       alert.description = `Check the details on ${check.details_url}`
       task.title = 'Create a Software Design Training'
       task.description = `Check the details on ${check.details_url}`
-    } else if (trainingDetails && !isDateWithinPolicy(trainingDetails.date, expirationPolicy)) {
+    } else if (trainingDetails?.training_date && !isDateWithinPolicy(trainingDetails.training_date, expirationPolicy)) {
       result.status = 'failed'
       result.rationale = 'Software Design Training is out of date'
       alert.title = 'Software Design Training is out of date'

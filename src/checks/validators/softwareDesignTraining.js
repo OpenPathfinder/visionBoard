@@ -3,7 +3,7 @@ const { isCheckApplicableToProjectCategory, getSeverityFromPriorityGroup, isDate
 
 const expirationPolicy = '6m'
 
-module.exports = ({ softwareDesignTrainings, check, projects }) => {
+module.exports = ({ trainings=[], check, projects }) => {
   debug('Validating Software Design Training...')
   const alerts = []
   const results = []
@@ -28,7 +28,7 @@ module.exports = ({ softwareDesignTrainings, check, projects }) => {
     const task = { ...baseData }
     const alert = { ...baseData }
 
-    const trainingDetails = softwareDesignTrainings.find(training => training.project_id === project.id)
+    const trainingDetails = trainings.find(training => training.project_id === project.id)
     if (!trainingDetails) {
       result.status = 'failed'
       result.rationale = 'No Software Design Training found'

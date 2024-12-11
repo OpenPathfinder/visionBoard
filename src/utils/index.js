@@ -1,3 +1,4 @@
+const { add, parseISO, isBefore } = require('date-fns')
 const isURL = require('validator/lib/isURL.js')
 
 const validateGithubUrl = (url) => isURL(url, { protocols: ['https'], require_protocol: true }) && url.includes('github.com')
@@ -64,7 +65,38 @@ const groupArrayItemsByCriteria = criteria => items => Object.values(
   }, {})
 )
 
+const isDateWithinPolicy = (targetDate, policy) => {
+  if (!targetDate) {
+    throw new Error('Target date is required')
+  }
+
+  if (!policy) {
+    throw new Error('Policy is required')
+  }
+
+  const targetDateObj = parseISO(targetDate) // Parse ISO string into Date object
+  let expirationDate
+
+  // Handle expiration policy
+  if (policy.endsWith('d')) {
+    const days = parseInt(policy.replace('d', ''), 10)
+    expirationDate = add(targetDateObj, { days })
+  } else if (policy.endsWith('m')) {
+    const months = parseInt(policy.replace('m', ''), 10)
+    expirationDate = add(targetDateObj, { months })
+  } else if (policy.endsWith('q')) {
+    const quarters = parseInt(policy.replace('q', ''), 10)
+    expirationDate = add(targetDateObj, { months: quarters * 3 })
+  } else {
+    throw new Error('Unsupported policy format')
+  }
+
+  const currentDate = new Date() // Get current date
+  return isBefore(currentDate, expirationDate) // Check if current date is before expiration
+}
+
 module.exports = {
+  isDateWithinPolicy,
   validateGithubUrl,
   ensureGithubToken,
   getSeverityFromPriorityGroup,

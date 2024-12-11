@@ -90,6 +90,11 @@ const upsertComplianceCheckResult = knex => async (result) => {
   }
 }
 
+const getAllSSoftwareDesignTrainings = knex => async () => {
+  debug('Getting all software design trainings...')
+  return knex('software_design_training').select().returning('*')
+}
+
 const initializeStore = (knex) => {
   debug('Initializing store...')
   return {
@@ -105,7 +110,8 @@ const initializeStore = (knex) => {
     deleteAlertsByComplianceCheckId: deleteAlertsByComplianceCheckId(knex),
     addAlert: addAlert(knex),
     addTask: addTask(knex),
-    upsertComplianceCheckResult: upsertComplianceCheckResult(knex)
+    upsertComplianceCheckResult: upsertComplianceCheckResult(knex),
+    getAllSSoftwareDesignTrainings: getAllSSoftwareDesignTrainings(knex)
   }
 }
 

@@ -1,6 +1,6 @@
 const inquirer = require('inquirer').default
 const debug = require('debug')('cli:workflows')
-const { updateGithubOrgs, upsertGithubRepositories, runAllTheComplianceChecks } = require('../workflows')
+const { updateGithubOrgs, upsertGithubRepositories, runAllTheComplianceChecks, upsertOSSFScorecardAnalysis } = require('../workflows')
 const { logger } = require('../utils')
 
 const commandList = [{
@@ -15,6 +15,10 @@ const commandList = [{
   name: 'run-all-checks',
   description: 'Run all the compliance checks for the stored data.',
   workflow: runAllTheComplianceChecks
+}, {
+  name: 'upsert-ossf-scorecard',
+  description: 'Upsert the OSSF Scorecard scoring by running and checking every repository in the database.',
+  workflow: upsertOSSFScorecardAnalysis
 }]
 
 const validCommandNames = commandList.map(({ name }) => name)

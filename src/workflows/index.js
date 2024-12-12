@@ -1,9 +1,11 @@
 const debug = require('debug')('workflows')
-const { github } = require('../providers')
+const { github, ossf } = require('../providers')
 const { initializeStore } = require('../store')
 const { logger } = require('../utils')
-const { validateGithubOrg, validateGithubListOrgRepos, validateGithubRepository } = require('../schemas')
+const { validateGithubOrg, validateGithubListOrgRepos, validateGithubRepository, validateOSSFResult } = require('../schemas')
 const checks = require('../checks')
+const { chunkArray } = require('@ulisesgascon/array-to-chunks')
+const { ossfScorecardSettings } = require('../config').getConfig()
 
 const updateGithubOrgs = async (knex) => {
   const { getAllGithubOrganizations, updateGithubOrganization } = initializeStore(knex)
@@ -71,8 +73,37 @@ const runAllTheComplianceChecks = async (knex) => {
   logger.log('All checks ran successfully')
 }
 
+const upsertOSSFScorecardAnalysis = async (knex) => {
+  const { getAllGithubRepositories, upsertOSSFScorecard } = initializeStore(knex)
+  const repositories = await getAllGithubRepositories()
+  debug('Checking stored repositories')
+  if (repositories.length === 0) {
+    throw new Error('No repositories found. Please add repositories before running this workflow.')
+  }
+  logger.log('Running OSSF Scorecard for all repositories')
+  logger.log('This may take a while...')
+  const chunks = chunkArray(repositories, ossfScorecardSettings.parallelJobs)
+  for (let i = 0; i < chunks.length; i++) {
+    const chunk = chunks[i]
+    logger.log(`Processing chunk ${i + 1} of ${chunks.length} including ${chunk.length} repositories`)
+    await Promise.all(chunk.map(async (repo) => {
+      debug(`Running OSSF Scorecard for repository (${repo.full_name})`)
+      const scorecard = await ossf.performScorecardAnalysis(repo)
+      debug(`Validating OSSF Scorecard result for repository (${repo.full_name})`)
+      validateOSSFResult(scorecard)
+      debug(`Transforming OSSF Scorecard result for repository (${repo.full_name})`)
+      const mappedData = ossf.mappers.result(scorecard)
+      debug(`Upserting OSSF Scorecard result for repository (${repo.full_name})`)
+      await upsertOSSFScorecard({ ...mappedData, github_repository_id: repo.id })
+    }))
+  }
+
+  logger.log('The OSSF Scorecard ran successfully')
+}
+
 module.exports = {
   updateGithubOrgs,
   upsertGithubRepositories,
-  runAllTheComplianceChecks
+  runAllTheComplianceChecks,
+  upsertOSSFScorecardAnalysis
 }

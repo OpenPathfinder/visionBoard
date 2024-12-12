@@ -17,5 +17,10 @@ exports[`list - Non-Interactive Mode Should provide a list of available workflow
     "name": "run-all-checks",
     "workflow": [Function],
   },
+  {
+    "description": "Upsert the OSSF Scorecard scoring by running and checking every repository in the database.",
+    "name": "upsert-ossf-scorecard",
+    "workflow": [Function],
+  },
 ]
 `;

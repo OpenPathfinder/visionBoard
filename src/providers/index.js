@@ -1,6 +1,10 @@
 const { Octokit } = require('octokit')
-const { ensureGithubToken } = require('../utils')
+const { logger, ensureGithubToken } = require('../utils')
 const { simplifyObject } = require('@ulisesgascon/simplify-object')
+const util = require('util')
+const exec = util.promisify(require('node:child_process').exec)
+const { ossfScorecardSettings } = require('../config').getConfig()
+
 const debug = require('debug')('providers:github')
 
 const fetchOrgByLogin = async (login) => {
@@ -51,6 +55,23 @@ const fetchRepoByFullName = async (fullName) => {
     owner: fullName.split('/')[0],
     repo: fullName.split('/')[1]
   })
+  return data
+}
+
+const performScorecardAnalysis = async (repo) => {
+  ensureGithubToken()
+  logger.log(`Running OSSF Scorecard for repository (${repo.full_name})...`)
+
+  const start = new Date().getTime()
+  const { stdout, stderr } = await exec(`docker run -e GITHUB_AUTH_TOKEN=${process.env.GITHUB_TOKEN} --rm ${ossfScorecardSettings.dockerImage} --repo=${repo.html_url} --show-details --format=json`)
+  if (stderr) {
+    console.error(stderr)
+    throw new Error(`Error running OSSF Scorecard for repository (${repo.full_name})`)
+  }
+  const data = JSON.parse(stdout)
+  const end = new Date().getTime()
+  data.analysis_execution_time = (end - start)
+  logger.log(`OSSF Scorecard finished successfully for repository (${repo.full_name}) in ${data.analysis_execution_time / 1000}s`)
   return data
 }
 
@@ -130,6 +151,30 @@ const github = {
   }
 }
 
+const ossf = {
+  performScorecardAnalysis,
+  mappers: {
+    result: (data) => {
+      const output = {}
+      output.analysis_score = data.score
+      output.analysis_time = data.date
+      output.repo_commit = data.repo?.commit
+      output.scorecard_version = data.scorecard?.version
+      output.scorecard_commit = data.scorecard?.commit
+      data.checks?.forEach((check, i) => {
+        const checkName = check.name.toLowerCase().replaceAll('-', '_')
+        output[`${checkName}_reason`] = check.reason
+        output[`${checkName}_score`] = check.score
+        output[`${checkName}_documentation_url`] = check.documentation?.url
+        output[`${checkName}_documentation`] = check.documentation?.short
+        output[`${checkName}_details`] = check.details?.join('\n')
+      })
+      return output
+    }
+  }
+}
+
 module.exports = {
-  github
+  github,
+  ossf
 }

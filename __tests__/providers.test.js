@@ -45,7 +45,7 @@ describe('OSSF Provider', () => {
   })
   describe('mappers', () => {
     it('Should map scorecard data correctly', () => {
-      const mappedData = ossf.mappers.result(sampleOSSFScorecardResult)
+      const mappedData = ossf.mappers.result({...sampleOSSFScorecardResult, analysis_execution_time: 19876})
       expect(mappedData).toMatchSnapshot()
     })
   })

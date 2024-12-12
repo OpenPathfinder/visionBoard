@@ -117,6 +117,7 @@ exports[`GitHub Provider mappers Should map repository data correctly 1`] = `
 
 exports[`OSSF Provider mappers Should map scorecard data correctly 1`] = `
 {
+  "analysis_execution_time": 19876,
   "analysis_score": 6,
   "analysis_time": "2024-12-11T23:55:17Z",
   "binary_artifacts_details": undefined,

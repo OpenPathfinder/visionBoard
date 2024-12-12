@@ -169,6 +169,7 @@ const ossf = {
         output[`${checkName}_documentation`] = check.documentation?.short
         output[`${checkName}_details`] = check.details?.join('\n')
       })
+      output.analysis_execution_time = data.analysis_execution_time
       return output
     }
   }

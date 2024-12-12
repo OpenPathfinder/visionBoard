@@ -813,10 +813,13 @@ const sampleOSSFScorecardResult = {
       }
     },
     {
-      details: null,
       score: 10,
       reason: 'license file detected',
       name: 'License',
+      details: [
+        'Info: project has a license file: LICENSE:0',
+        'Info: FSF or OSI recognized license: MIT License: LICENSE:0'
+      ],
       documentation: {
         url: 'https://github.com/ossf/scorecard/blob/ea7e27ed41b76ab879c862fa0ca4cc9c61764ee4/docs/checks.md#license',
         short: 'Determines if the project has defined a license.'

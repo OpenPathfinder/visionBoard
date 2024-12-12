@@ -44,8 +44,10 @@
           "type": "object",
           "properties": {
             "details": {
-              "type": ["string", "null"],
-              "examples": [null]
+              "type": ["array", "null"],
+              "items": {
+                "type": "string"
+              }
             },
             "score": {
               "type": "number",

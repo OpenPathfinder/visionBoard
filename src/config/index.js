@@ -24,7 +24,7 @@ const dbSettings = {
 
 const ossfScorecardSettings = {
   dockerImage: 'ghcr.io/ossf/scorecard/v5:ea7e27ed41b76ab879c862fa0ca4cc9c61764ee4',
-  parallelJobs: 5,
+  parallelJobs: 5
 }
 
 const defaultValues = {

@@ -88,13 +88,17 @@ const upsertOSSFScorecardAnalysis = async (knex) => {
     logger.log(`Processing chunk ${i + 1} of ${chunks.length} including ${chunk.length} repositories`)
     await Promise.all(chunk.map(async (repo) => {
       debug(`Running OSSF Scorecard for repository (${repo.full_name})`)
-      const scorecard = await ossf.performScorecardAnalysis(repo)
-      debug(`Validating OSSF Scorecard result for repository (${repo.full_name})`)
-      validateOSSFResult(scorecard)
-      debug(`Transforming OSSF Scorecard result for repository (${repo.full_name})`)
-      const mappedData = ossf.mappers.result(scorecard)
-      debug(`Upserting OSSF Scorecard result for repository (${repo.full_name})`)
-      await upsertOSSFScorecard({ ...mappedData, github_repository_id: repo.id })
+      try {
+        const scorecard = await ossf.performScorecardAnalysis(repo)
+        debug(`Validating OSSF Scorecard result for repository (${repo.full_name})`)
+        validateOSSFResult(scorecard)
+        debug(`Transforming OSSF Scorecard result for repository (${repo.full_name})`)
+        const mappedData = ossf.mappers.result(scorecard)
+        debug(`Upserting OSSF Scorecard result for repository (${repo.full_name})`)
+        await upsertOSSFScorecard({ ...mappedData, github_repository_id: repo.id })
+      } catch (error) {
+        logger.warn(`Error running OSSF Scorecard for repository (${repo.full_name}). Skipping...`)
+      }
     }))
   }
 

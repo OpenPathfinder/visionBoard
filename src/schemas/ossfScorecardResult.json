@@ -1,0 +1,85 @@
+{
+    "title": "OpenSSF Scorecard Result",
+    "description": "OpenSSF Scorecard Result for a project",
+    "type": "object",
+    "properties": {
+      "date": {
+        "type": "string",
+        "format": "date-time",
+        "examples": ["2024-12-11T23:55:17Z"]
+      },
+      "repo": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "examples": ["github.com/octocat/Hello-World"]
+          },
+          "commit": {
+            "type": "string",
+            "examples": ["e739f419e56442b754e4fea6dbcf98c1c8d00dda"]
+          }
+        }
+      },
+      "scorecard": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "examples": ["v5.0.0"]
+          },
+          "commit": {
+            "type": "string",
+            "examples": ["ea7e27ed41b76ab879c862fa0ca4cc9c61764ee4"]
+          }
+        }
+      },
+      "score": {
+        "type": "number",
+        "examples": [6]
+      },
+      "checks": {
+        "type": ["array", "null"],
+        "items": {
+          "type": "object",
+          "properties": {
+            "details": {
+              "type": ["string", "null"],
+              "examples": [null]
+            },
+            "score": {
+              "type": "number",
+              "examples": [10]
+            },
+            "reason": {
+              "type": "string",
+              "examples": ["no binaries found in the repo"]
+            },
+            "name": {
+              "type": "string",
+              "examples": ["Binary-Artifacts"]
+            },
+            "documentation": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "format": "uri",
+                  "examples": [
+                    "https://github.com/ossf/scorecard/blob/ea7e27ed41b76ab879c862fa0ca4cc9c61764ee4/docs/checks.md#binary-artifacts"
+                  ]
+                },
+                "short": {
+                  "type": "string",
+                  "examples": [
+                    "Determines if the project has generated executable (binary) artifacts in the source repository."
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  

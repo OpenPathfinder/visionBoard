@@ -1,14 +1,16 @@
 const {
   sampleGithubOrg,
-  sampleGithubRepository
+  sampleGithubRepository,
+  sampleOSSFScorecardResult
 } = require('../../../__fixtures__')
 const {
   resetDatabase,
   addProject,
   addGithubOrg,
-  addGithubRepo
+  addGithubRepo,
+  addOSSFScorecardResult
 } = require('../../../__utils__')
-const { github } = require('../../providers')
+const { github, ossf } = require('../../providers')
 
 exports.seed = async (knex) => {
   // Clean up the database
@@ -24,5 +26,8 @@ exports.seed = async (knex) => {
   const githubOrg = await addGithubOrg(knex, { ...github.mappers.org(sampleGithubOrg), project_id: project.id })
 
   // Add GitHub repository
-  await addGithubRepo(knex, { ...github.mappers.repo(sampleGithubRepository), github_organization_id: githubOrg.id })
+  const githubRepo = await addGithubRepo(knex, { ...github.mappers.repo(sampleGithubRepository), github_organization_id: githubOrg.id })
+
+  // Add OSSF Scorecard results
+  await addOSSFScorecardResult(knex, { ...ossf.mappers.result(sampleOSSFScorecardResult), github_repository_id: githubRepo.id, analysis_execution_time: 19123 })
 }

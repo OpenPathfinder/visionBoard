@@ -26,6 +26,7 @@
     ]
   },
   "dependencies": {
+    "@ulisesgascon/array-to-chunks": "2.0.0",
     "@ulisesgascon/normalize-boolean": "2.0.0",
     "@ulisesgascon/simplify-object": "2.0.0",
     "@ulisesgascon/string-to-array": "2.0.0",

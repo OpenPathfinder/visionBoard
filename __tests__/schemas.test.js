@@ -1,5 +1,5 @@
-const { sampleGithubOrg, sampleGithubListOrgRepos, sampleGithubRepository } = require('../__fixtures__')
-const { validateGithubOrg, validateGithubListOrgRepos, validateGithubRepository } = require('../src/schemas')
+const { sampleGithubOrg, sampleGithubListOrgRepos, sampleGithubRepository, sampleOSSFScorecardResult } = require('../__fixtures__')
+const { validateGithubOrg, validateGithubListOrgRepos, validateGithubRepository, validateOSSFResult } = require('../src/schemas')
 
 describe('schemas', () => {
   describe('validateGithubOrg', () => {
@@ -51,6 +51,21 @@ describe('schemas', () => {
     test('Should throw an error with invalid data', () => {
       const invalidData = { ...sampleGithubRepository, id: '123' }
       expect(() => validateGithubRepository(invalidData)).toThrow()
+    })
+  })
+  describe('validateOSSFResult', () => {
+    test('Should not throw an error with valid data', () => {
+      expect(() => validateOSSFResult(sampleOSSFScorecardResult)).not.toThrow()
+    })
+
+    test('Should not throw an error with additional data', () => {
+      const additionalData = { ...sampleOSSFScorecardResult, additionalKey: 'value' }
+      expect(() => validateOSSFResult(additionalData)).not.toThrow()
+    })
+
+    test('Should throw an error with invalid data', () => {
+      const invalidData = { ...sampleOSSFScorecardResult, score: '123' }
+      expect(() => validateOSSFResult(invalidData)).toThrow()
     })
   })
 })

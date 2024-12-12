@@ -140,3 +140,7 @@ describe('run upsert-github-repositories', () => {
 describe('run run-all-checks', () => {
   test.todo('Should run all the compliance checks for the stored data')
 })
+
+describe('run upsert-ossf-scorecard', () => {
+  test.todo('Should upsert the OSSF Scorecard scoring by running and checking every repository in the database')
+})

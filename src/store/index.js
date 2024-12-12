@@ -95,6 +95,22 @@ const getAllSSoftwareDesignTrainings = knex => async () => {
   return knex('software_design_training').select().returning('*')
 }
 
+const getAllGithubRepositories = knex => async () => {
+  debug('Getting all GitHub repositories...')
+  return knex('github_repositories').select().returning('*')
+}
+
+const upsertOSSFScorecard = knex => async (scorecard) => {
+  // IMPORTANT: Check for repo_id and commit hash as multiple results can exist for the same repo
+  const query = { github_repository_id: scorecard.github_repository_id, scorecard_commit: scorecard.scorecard_commit }
+  const existingScorecard = await knex('ossf_scorecard_results').where(query).first()
+  if (existingScorecard) {
+    return knex('ossf_scorecard_results').where(query).update(scorecard).returning('*')
+  } else {
+    return knex('ossf_scorecard_results').insert(scorecard).returning('*')
+  }
+}
+
 const initializeStore = (knex) => {
   debug('Initializing store...')
   return {
@@ -111,7 +127,9 @@ const initializeStore = (knex) => {
     addAlert: addAlert(knex),
     addTask: addTask(knex),
     upsertComplianceCheckResult: upsertComplianceCheckResult(knex),
-    getAllSSoftwareDesignTrainings: getAllSSoftwareDesignTrainings(knex)
+    getAllSSoftwareDesignTrainings: getAllSSoftwareDesignTrainings(knex),
+    getAllGithubRepositories: getAllGithubRepositories(knex),
+    upsertOSSFScorecard: upsertOSSFScorecard(knex)
   }
 }
 

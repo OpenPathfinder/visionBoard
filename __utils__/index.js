@@ -58,6 +58,11 @@ const addSSoftwareDesignTraining = async (knex, data) => {
 
 const getAllSoftwareDesignTrainings = (knex) => knex('software_design_training').select('*')
 
+const addOSSFScorecardResult = async (knex, data) => {
+  const [result] = await knex('ossf_scorecard_results').insert(data).returning('*')
+  return result
+}
+
 module.exports = {
   getAllComplianceChecks,
   resetDatabase,
@@ -75,5 +80,6 @@ module.exports = {
   addResult,
   getCheckByCodeName,
   addSSoftwareDesignTraining,
-  getAllSoftwareDesignTrainings
+  getAllSoftwareDesignTrainings,
+  addOSSFScorecardResult
 }

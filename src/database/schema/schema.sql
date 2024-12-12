@@ -444,6 +444,134 @@ ALTER SEQUENCE public.knex_migrations_lock_index_seq OWNED BY public.knex_migrat
 
 
 --
+-- Name: ossf_scorecard_results; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ossf_scorecard_results (
+    id integer NOT NULL,
+    analysis_score real NOT NULL,
+    analysis_time timestamp with time zone NOT NULL,
+    analysis_execution_time character varying(255) NOT NULL,
+    repo_commit character varying(255) NOT NULL,
+    scorecard_version character varying(255) NOT NULL,
+    scorecard_commit character varying(255) NOT NULL,
+    binary_artifacts_reason character varying(255),
+    binary_artifacts_score real,
+    binary_artifacts_documentation_url character varying(255),
+    binary_artifacts_documentation character varying(255),
+    binary_artifacts_details text,
+    branch_protection_reason character varying(255),
+    branch_protection_score real,
+    branch_protection_documentation_url character varying(255),
+    branch_protection_documentation character varying(255),
+    branch_protection_details text,
+    ci_tests_reason character varying(255),
+    ci_tests_score real,
+    ci_tests_documentation_url character varying(255),
+    ci_tests_documentation character varying(255),
+    ci_tests_details text,
+    cii_best_practices_reason character varying(255),
+    cii_best_practices_score real,
+    cii_best_practices_documentation_url character varying(255),
+    cii_best_practices_documentation character varying(255),
+    cii_best_practices_details text,
+    code_review_reason character varying(255),
+    code_review_score real,
+    code_review_documentation_url character varying(255),
+    code_review_documentation character varying(255),
+    code_review_details text,
+    contributors_reason character varying(255),
+    contributors_score real,
+    contributors_documentation_url character varying(255),
+    contributors_documentation character varying(255),
+    contributors_details text,
+    dangerous_workflow_reason character varying(255),
+    dangerous_workflow_score real,
+    dangerous_workflow_documentation_url character varying(255),
+    dangerous_workflow_documentation character varying(255),
+    dangerous_workflow_details text,
+    dependency_update_tool_reason character varying(255),
+    dependency_update_tool_score real,
+    dependency_update_tool_documentation_url character varying(255),
+    dependency_update_tool_documentation character varying(255),
+    dependency_update_tool_details text,
+    fuzzing_reason character varying(255),
+    fuzzing_score real,
+    fuzzing_documentation_url character varying(255),
+    fuzzing_documentation character varying(255),
+    fuzzing_details text,
+    license_reason character varying(255),
+    license_score real,
+    license_documentation_url character varying(255),
+    license_documentation character varying(255),
+    license_details text,
+    maintained_reason character varying(255),
+    maintained_score real,
+    maintained_documentation_url character varying(255),
+    maintained_documentation character varying(255),
+    maintained_details text,
+    packaging_reason character varying(255),
+    packaging_score real,
+    packaging_documentation_url character varying(255),
+    packaging_documentation character varying(255),
+    packaging_details text,
+    pinned_dependencies_reason character varying(255),
+    pinned_dependencies_score real,
+    pinned_dependencies_documentation_url character varying(255),
+    pinned_dependencies_documentation character varying(255),
+    pinned_dependencies_details text,
+    sast_reason character varying(255),
+    sast_score real,
+    sast_documentation_url character varying(255),
+    sast_documentation character varying(255),
+    sast_details text,
+    security_policy_reason character varying(255),
+    security_policy_score real,
+    security_policy_documentation_url character varying(255),
+    security_policy_documentation character varying(255),
+    security_policy_details text,
+    signed_releases_reason character varying(255),
+    signed_releases_score real,
+    signed_releases_documentation_url character varying(255),
+    signed_releases_documentation character varying(255),
+    signed_releases_details text,
+    token_permissions_reason character varying(255),
+    token_permissions_score real,
+    token_permissions_documentation_url character varying(255),
+    token_permissions_documentation character varying(255),
+    token_permissions_details text,
+    vulnerabilities_reason character varying(255),
+    vulnerabilities_score real,
+    vulnerabilities_documentation_url character varying(255),
+    vulnerabilities_documentation character varying(255),
+    vulnerabilities_details text,
+    github_repository_id integer NOT NULL,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: ossf_scorecard_results_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.ossf_scorecard_results_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ossf_scorecard_results_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.ossf_scorecard_results_id_seq OWNED BY public.ossf_scorecard_results.id;
+
+
+--
 -- Name: projects; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -570,6 +698,13 @@ ALTER TABLE ONLY public.knex_migrations_lock ALTER COLUMN index SET DEFAULT next
 
 
 --
+-- Name: ossf_scorecard_results id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ossf_scorecard_results ALTER COLUMN id SET DEFAULT nextval('public.ossf_scorecard_results_id_seq'::regclass);
+
+
+--
 -- Name: projects id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -688,6 +823,14 @@ ALTER TABLE ONLY public.knex_migrations
 
 
 --
+-- Name: ossf_scorecard_results ossf_scorecard_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ossf_scorecard_results
+    ADD CONSTRAINT ossf_scorecard_results_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: projects projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -743,6 +886,13 @@ CREATE TRIGGER set_updated_at_github_organizations BEFORE UPDATE ON public.githu
 --
 
 CREATE TRIGGER set_updated_at_github_repositories BEFORE UPDATE ON public.github_repositories FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+
+--
+-- Name: ossf_scorecard_results set_updated_at_ossf_scorecard_results; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER set_updated_at_ossf_scorecard_results BEFORE UPDATE ON public.ossf_scorecard_results FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 
 --
@@ -821,6 +971,14 @@ ALTER TABLE ONLY public.github_organizations
 
 ALTER TABLE ONLY public.github_repositories
     ADD CONSTRAINT github_repositories_github_organization_id_foreign FOREIGN KEY (github_organization_id) REFERENCES public.github_organizations(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: ossf_scorecard_results ossf_scorecard_results_github_repository_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ossf_scorecard_results
+    ADD CONSTRAINT ossf_scorecard_results_github_repository_id_foreign FOREIGN KEY (github_repository_id) REFERENCES public.github_repositories(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

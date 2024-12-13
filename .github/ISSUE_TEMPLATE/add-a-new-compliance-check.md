@@ -9,8 +9,7 @@ assignees: UlisesGascon
 
 ### How the Check Works
 
-_Provide a clear definition_
-
+_Provide a clear definition based on [the spreadsheet](https://docs.google.com/spreadsheets/d/1VwqOty0RVHTlplRK5omZWJEltFRE3gl9NrgWhEpJXfo/edit?usp=sharing)_
 
 ### Pending Tasks
 

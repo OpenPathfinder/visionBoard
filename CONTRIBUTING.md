@@ -104,13 +104,21 @@ This checklist ensures that contributors validate schema generation and rollback
 
 Here you can find the best ways to make meaningful contributions to the project.
 
+### Solve Technical Debt
+
+You can always take the lead and contribute to the project by solving [technical debt issues](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen+label%3Atechnical-debt). Most of these issues don’t require a heavy investment, especially the ones tagged as [good first issue](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22).
+
+### Research on Compliance Checks
+
+You can help us by researching how the checks should work. A key part of this process is defining a way to implement the compliance checks (e.g., data usage, alerting criteria, etc.). Use the combo tags [compliance-checks + research-needed](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen+label%3Acompliance-checks+label%3Aresearch-needed) to identify these opportunities.
+
 ### Add Compliance Checks
 
-We are looking for contributors to implement compliance checks in the Dashboard. Here is a process to achieve this:
+We are looking for contributors to implement compliance checks in the Dashboard. Here’s how you can get started:
 
-1. Check the open issues related to [compliance checks](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues?q=sort%3Aupdated-desc+is%3Aissue+label%3Acompliance-checks+is%3Aopen). Focus on issues with a title following this pattern: `Add Compliance check: *`, such as [Add Compliance check: githubOrgMFA](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues/43).
+1. Check the open issues related to [compliance-checks + implementation-needed](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen+label%3Acompliance-checks+label%3Aimplementation-needed).
 
-2. Engage in the conversation and request to lead or contribute to the implementation. A key part of this process is defining a way to implement the compliance check (e.g., data usage, alerting criteria, etc.).
+2. Engage in the conversation and request to lead or contribute to the implementation. A key part of this process is ensuring that the definitions are clear before starting development.
 
 3. Start development by completing the following tasks:
 

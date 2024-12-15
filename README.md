@@ -50,6 +50,8 @@ Yes, we are looking for HELP in many ways! 😇 Let’s collaborate and have fun
 
 Another great way to get involved is by participating in [the OpenJS Security Collab Space](https://github.com/openjs-foundation/security-collab-space). We hold regular meetings to discuss this initiative and many other exciting topics.
 
+The project includes a [technical architecture guide](/ARCHITECTURE.md) that provides in-depth explanations of various concepts.
+
 ---
 
 ## Getting Started

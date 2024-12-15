@@ -9,6 +9,7 @@ The project has an open governance model. Individuals making significant and val
 ## Contents
 
 * [Code of Conduct](#code-of-conduct)
+* [Architecture](#architecture)
 * [Issues](#issues)
 * [Pull Requests](#pull-requests)
 * [Current Initiatives](#current-initiatives)
@@ -17,6 +18,11 @@ The project has an open governance model. Individuals making significant and val
 ## Code of Conduct
 
 The project has a [Code of Conduct](/CODE_OF_CONDUCT.md) to which all contributors must adhere.
+
+
+## Architecture
+
+The project includes a [technical architecture guide](/ARCHITECTURE.md) that provides in-depth explanations of various concepts.
 
 ## Issues
 

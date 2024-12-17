@@ -1,5 +1,38 @@
 const { add, parseISO, isBefore } = require('date-fns')
 const isURL = require('validator/lib/isURL.js')
+const pinoInit = require('pino')
+
+// GitHub token pattern: looks for patterns matching the GitHub token structure
+const GITHUB_TOKEN_PATTERN = /\b(ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{1,255}\b/g
+
+// A helper function to redact sensitive data
+const redactSensitiveData = value => {
+  if (typeof value === 'string') {
+    return value.replace(GITHUB_TOKEN_PATTERN, '[REDACTED]')
+  }
+  return value
+}
+
+const logger = pinoInit({
+  hooks: {
+    logMethod (inputArgs, method) {
+      const [msg, obj] = inputArgs
+
+      // Redact sensitive data from message that are outside of the https://github.com/pinojs/pino/blob/main/docs/redaction.md capabilities.
+      const cleanMsg = redactSensitiveData(msg)
+      const cleanObj = redactSensitiveData(obj)
+
+      return method.apply(this, [cleanMsg, cleanObj])
+    }
+  },
+  transport: {
+    target: 'pino-pretty',
+    options: {
+      ignore: 'pid,hostname'
+    }
+  },
+  level: process.env.NODE_ENV === 'test' ? 'silent' : 'info'
+})
 
 const validateGithubUrl = (url) => isURL(url, { protocols: ['https'], require_protocol: true }) && url.includes('github.com')
 
@@ -7,20 +40,6 @@ const ensureGithubToken = () => {
   if (!process.env.GITHUB_TOKEN) {
     throw new Error('GITHUB_TOKEN is required')
   }
-}
-
-const defineLog = (type) => function () {
-  if (process.env.NODE_ENV === 'test') {
-    return () => {}
-  }
-  return console[type](...arguments)
-}
-
-const logger = {
-  info: defineLog('info'),
-  error: defineLog('error'),
-  warn: defineLog('warn'),
-  log: defineLog('log')
 }
 
 const getSeverityFromPriorityGroup = (priorityGroup) => {
@@ -107,5 +126,6 @@ module.exports = {
   getSeverityFromPriorityGroup,
   isCheckApplicableToProjectCategory,
   groupArrayItemsByCriteria,
+  redactSensitiveData,
   logger
 }

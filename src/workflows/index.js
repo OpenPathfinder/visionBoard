@@ -25,7 +25,7 @@ const updateGithubOrgs = async (knex) => {
     debug('Updating organization in database')
     await updateGithubOrganization(mappedData)
   }))
-  logger.log('GitHub organizations updated successfully')
+  logger.info('GitHub organizations updated successfully')
 }
 
 const upsertGithubRepositories = async (knex) => {
@@ -65,12 +65,12 @@ const runAllTheComplianceChecks = async (knex) => {
   debug('Fetching all compliance checks')
   const complianceChecks = await getAllComplianceChecks()
   const implementedChecks = complianceChecks.filter(check => check.implementation_status === 'completed')
-  logger.log('Running all implemented checks sequentially')
+  logger.info('Running all implemented checks sequentially')
   for (const check of implementedChecks) {
-    logger.log(`Running check (${check.code_name})`)
+    logger.info(`Running check (${check.code_name})`)
     await checks[check.code_name](knex)
   }
-  logger.log('All checks ran successfully')
+  logger.info('All checks ran successfully')
 }
 
 const upsertOSSFScorecardAnalysis = async (knex) => {
@@ -80,12 +80,12 @@ const upsertOSSFScorecardAnalysis = async (knex) => {
   if (repositories.length === 0) {
     throw new Error('No repositories found. Please add repositories before running this workflow.')
   }
-  logger.log('Running OSSF Scorecard for all repositories')
-  logger.log('This may take a while...')
+  logger.info('Running OSSF Scorecard for all repositories')
+  logger.info('This may take a while...')
   const chunks = chunkArray(repositories, ossfScorecardSettings.parallelJobs)
   for (let i = 0; i < chunks.length; i++) {
     const chunk = chunks[i]
-    logger.log(`Processing chunk ${i + 1} of ${chunks.length} including ${chunk.length} repositories`)
+    logger.info(`Processing chunk ${i + 1} of ${chunks.length} including ${chunk.length} repositories`)
     await Promise.all(chunk.map(async (repo) => {
       debug(`Running OSSF Scorecard for repository (${repo.full_name})`)
       try {
@@ -102,7 +102,7 @@ const upsertOSSFScorecardAnalysis = async (knex) => {
     }))
   }
 
-  logger.log('The OSSF Scorecard ran successfully')
+  logger.info('The OSSF Scorecard ran successfully')
 }
 
 module.exports = {

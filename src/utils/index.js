@@ -1,13 +1,14 @@
 const { add, parseISO, isBefore } = require('date-fns')
 const isURL = require('validator/lib/isURL.js')
-const pino = require('pino')({
+const pinoInit = require('pino')
+const logger = pinoInit({
   transport: {
     target: 'pino-pretty',
     options: {
       ignore: 'pid,hostname'
     }
   },
-  level: process.env.PINO_LOG_LEVEL || 'trace'
+  level: process.env.NODE_ENV === 'test' ? 'silent' : 'info'
 })
 
 const validateGithubUrl = (url) => isURL(url, { protocols: ['https'], require_protocol: true }) && url.includes('github.com')
@@ -16,21 +17,6 @@ const ensureGithubToken = () => {
   if (!process.env.GITHUB_TOKEN) {
     throw new Error('GITHUB_TOKEN is required')
   }
-}
-
-const defineLog = (type) => function () {
-  if (process.env.NODE_ENV === 'test') {
-    return () => {}
-  }
-
-  return pino[type](...arguments)
-}
-
-const logger = {
-  info: defineLog('info'),
-  error: defineLog('error'),
-  warn: defineLog('warn'),
-  log: defineLog('trace')
 }
 
 const getSeverityFromPriorityGroup = (priorityGroup) => {

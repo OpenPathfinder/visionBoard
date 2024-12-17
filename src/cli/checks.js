@@ -9,10 +9,10 @@ async function listCheckCommand (knex, options = {}) {
   const checks = await getAllComplianceChecks(knex)
   const implementedChecks = checks.filter(check => check.implementation_status === 'completed')
   implementedChecks.forEach(check => {
-    logger.log(`- ${check.code_name}: ${check.title}`)
+    logger.info(`- ${check.code_name}: ${check.title}`)
   })
-  logger.log('------------------------------------')
-  logger.log(`Implemented checks: ${implementedChecks.length}/${checks.length}.`)
+  logger.info('------------------------------------')
+  logger.info(`Implemented checks: ${implementedChecks.length}/${checks.length}.`)
   return implementedChecks
 }
 

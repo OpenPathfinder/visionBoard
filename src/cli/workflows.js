@@ -24,8 +24,8 @@ const commandList = [{
 const validCommandNames = commandList.map(({ name }) => name)
 
 function listWorkflowCommand (options = {}) {
-  logger.log('Available workflows: \n')
-  commandList.forEach(({ name, description }) => logger.log(`- ${name}: ${description}`))
+  logger.info('Available workflows:')
+  commandList.forEach(({ name, description }) => logger.info(`- ${name}: ${description}`))
   return commandList
 }
 

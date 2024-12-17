@@ -3,7 +3,7 @@ const { stringToArray } = require('@ulisesgascon/string-to-array')
 const isSlug = require('validator/lib/isSlug.js')
 const debug = require('debug')('cli')
 const { getConfig } = require('../config')
-const { validateGithubUrl } = require('../utils')
+const { validateGithubUrl, logger } = require('../utils')
 const { initializeStore } = require('../store')
 
 const { projectCategories } = getConfig()
@@ -102,6 +102,7 @@ async function runAddProjectCommand (knex, options = {}) {
   })))
 
   debug(`All orgs were stored and linked to (${answers.name}) added successfully!`)
+  logger.info(`Project (${answers.name}) added successfully!`)
 
   return answers
 }

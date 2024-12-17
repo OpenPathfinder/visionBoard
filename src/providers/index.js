@@ -65,7 +65,7 @@ const performScorecardAnalysis = async (repo) => {
   const start = new Date().getTime()
   const { stdout, stderr } = await exec(`docker run -e GITHUB_AUTH_TOKEN=${process.env.GITHUB_TOKEN} --rm ${ossfScorecardSettings.dockerImage} --repo=${repo.html_url} --show-details --format=json`)
   if (stderr) {
-    throw new Error(`Error running OSSF Scorecard for repository (${repo.full_name})`)
+    throw new Error(`Error running analysis with OSSF Scorecard for repository (${repo.full_name}): ${stderr}`)
   }
   const data = JSON.parse(stdout)
   const end = new Date().getTime()

@@ -40,11 +40,13 @@ const upsertGithubRepositories = async (knex) => {
 
   await Promise.all(organizations.map(async (org) => {
     debug(`Fetching repositories for org (${org.login})`)
+    logger.info(`Fetching repositories for org (${org.login})`)
     const repoList = await github.fetchOrgReposListByLogin(org.login)
     debug(`Got ${repoList.length} repositories for org (${org.login})`)
     debug('Validating data')
     validateGithubListOrgRepos(repoList)
     debug(`Enriching all repositories for org (${org.login})`)
+    logger.info(`Enriching all repositories for org (${org.login})`)
 
     // Enrich and upsert each repository in parallel
     await Promise.all(repoList.map(async (repo) => {
@@ -58,6 +60,7 @@ const upsertGithubRepositories = async (knex) => {
       await upsertGithubRepository(mappedData, org.id)
     }))
   }))
+  logger.info('GitHub repositories updated successfully')
 }
 
 const runAllTheComplianceChecks = async (knex) => {
@@ -98,6 +101,7 @@ const upsertOSSFScorecardAnalysis = async (knex) => {
         await upsertOSSFScorecard({ ...mappedData, github_repository_id: repo.id })
       } catch (error) {
         logger.warn(`Error running OSSF Scorecard for repository (${repo.full_name}). Skipping...`)
+        logger.warn(error.message)
       }
     }))
   }

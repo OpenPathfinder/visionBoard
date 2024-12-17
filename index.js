@@ -20,7 +20,7 @@ project
     try {
       await runAddProjectCommand(knex, options)
     } catch (error) {
-      logger.error('Error adding project:', error.message)
+      logger.error(error)
       process.exit(1)
     } finally {
       await knex.destroy()
@@ -38,7 +38,7 @@ workflow
     try {
       await runWorkflowCommand(knex, options)
     } catch (error) {
-      logger.error('Error running workflow:', error.message)
+      logger.error(error)
       process.exit(1)
     } finally {
       await knex.destroy()
@@ -62,7 +62,7 @@ check
     try {
       await listCheckCommand(knex, options)
     } catch (error) {
-      logger.error('Error running check:', error.message)
+      logger.error(error)
       process.exit(1)
     } finally {
       await knex.destroy()
@@ -77,7 +77,7 @@ check
     try {
       await runCheckCommand(knex, options)
     } catch (error) {
-      logger.error('Error running check:', error.message)
+      logger.error(error)
       process.exit(1)
     } finally {
       await knex.destroy()

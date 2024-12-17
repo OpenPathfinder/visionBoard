@@ -1,5 +1,14 @@
 const { add, parseISO, isBefore } = require('date-fns')
 const isURL = require('validator/lib/isURL.js')
+const pino = require('pino')({
+  transport: {
+    target: 'pino-pretty',
+    options: {
+      ignore: 'pid,hostname'
+    }
+  },
+  level: process.env.PINO_LOG_LEVEL || 'trace'
+})
 
 const validateGithubUrl = (url) => isURL(url, { protocols: ['https'], require_protocol: true }) && url.includes('github.com')
 
@@ -13,14 +22,15 @@ const defineLog = (type) => function () {
   if (process.env.NODE_ENV === 'test') {
     return () => {}
   }
-  return console[type](...arguments)
+
+  return pino[type](...arguments)
 }
 
 const logger = {
   info: defineLog('info'),
   error: defineLog('error'),
   warn: defineLog('warn'),
-  log: defineLog('log')
+  log: defineLog('trace')
 }
 
 const getSeverityFromPriorityGroup = (priorityGroup) => {

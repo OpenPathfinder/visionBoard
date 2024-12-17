@@ -1,7 +1,30 @@
 const { add, parseISO, isBefore } = require('date-fns')
 const isURL = require('validator/lib/isURL.js')
 const pinoInit = require('pino')
+
+// GitHub token pattern: looks for patterns matching the GitHub token structure
+const GITHUB_TOKEN_PATTERN = /\b(ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{1,255}\b/g
+
+// A helper function to redact sensitive data
+const redactSensitiveData = value => {
+  if (typeof value === 'string') {
+    return value.replace(GITHUB_TOKEN_PATTERN, '[REDACTED]')
+  }
+  return value
+}
+
 const logger = pinoInit({
+  hooks: {
+    logMethod (inputArgs, method) {
+      const [msg, obj] = inputArgs
+
+      // Redact sensitive data from message that are outside of the https://github.com/pinojs/pino/blob/main/docs/redaction.md capabilities.
+      const cleanMsg = redactSensitiveData(msg)
+      const cleanObj = redactSensitiveData(obj)
+
+      return method.apply(this, [cleanMsg, cleanObj])
+    }
+  },
   transport: {
     target: 'pino-pretty',
     options: {
@@ -103,5 +126,6 @@ module.exports = {
   getSeverityFromPriorityGroup,
   isCheckApplicableToProjectCategory,
   groupArrayItemsByCriteria,
+  redactSensitiveData,
   logger
 }

@@ -1,4 +1,4 @@
-const { validateGithubUrl, ensureGithubToken, groupArrayItemsByCriteria, isCheckApplicableToProjectCategory, getSeverityFromPriorityGroup, isDateWithinPolicy } = require('../src/utils/index')
+const { validateGithubUrl, ensureGithubToken, groupArrayItemsByCriteria, isCheckApplicableToProjectCategory, getSeverityFromPriorityGroup, isDateWithinPolicy, redactSensitiveData } = require('../src/utils/index')
 
 describe('ensureGithubToken', () => {
   let originalGithubToken
@@ -154,5 +154,17 @@ describe('isDateWithinPolicy', () => {
   it('should throw an error if the targetDate is not provided', () => {
     const policy = '3m'
     expect(() => isDateWithinPolicy(undefined, policy)).toThrow('Target date is required')
+  })
+})
+
+describe('redactSensitiveData', () => {
+  it('should redact sensitive data from a string', () => {
+    const input = 'This has a token: ghp_234 and other information'
+    const expected = 'This has a token: [REDACTED] and other information'
+    expect(redactSensitiveData(input)).toBe(expected)
+  })
+  it('Should return the same string if no sensitive data is found', () => {
+    const input = 'This is a normal string'
+    expect(redactSensitiveData(input)).toBe(input)
   })
 })

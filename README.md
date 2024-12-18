@@ -1,6 +1,12 @@
-# Secure Dashboard for the OpenJS Foundation
+![VisionBoard logo with a gold compass emblem and the tagline 'Transforming Data into Actionable Insights' on a black background](.github/OTHER/header.png)
 
-This project aims to provide a secure and user-friendly dashboard for managing and monitoring projects under the OpenJS Foundation. It evolves from [this proof of concept (POC)](https://github.com/UlisesGascon/poc-openjs-security-program-standards-dashboard) and currently we are developing an MVP version ([milestone roadmap](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues/30)).
+# VisionBoard
+
+Transforming Data into Actionable insights
+
+---
+
+This project aims to provide a secure and user-friendly dashboard for managing and monitoring projects under the OpenJS Foundation. It evolves from [this proof of concept (POC)](https://github.com/UlisesGascon/poc-openjs-security-program-standards-dashboard) and currently we are developing an MVP version ([milestone roadmap](https://github.com/OpenPathfinder/visionBoard/issues/30)).
 
 ## Table of Contents
 

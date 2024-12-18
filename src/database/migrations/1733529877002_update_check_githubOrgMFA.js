@@ -4,7 +4,7 @@ exports.up = async (knex) => {
     .update({
       implementation_status: 'completed',
       implementation_type: 'computed',
-      implementation_details_reference: 'https://github.com/secure-dashboards/openjs-foundation-dashboard/issues/43'
+      implementation_details_reference: 'https://github.com/OpenPathfinder/visionBoard/issues/43'
     })
 }
 

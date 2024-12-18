@@ -5,7 +5,7 @@ const dbSettings = {
   client: 'pg',
   connection: {
     host: process.env.DB_HOST || '0.0.0.0',
-    user: process.env.DB_USER || 'openjs',
+    user: process.env.DB_USER || 'visionBoard',
     password: process.env.DB_PASSWORD || 'password',
     database: process.env.DB_NAME || 'dashboard'
   },

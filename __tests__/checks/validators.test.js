@@ -1,5 +1,5 @@
 const { githubOrgMFA, softwareDesignTraining } = require('../../src/checks/validators')
-// @see: https://github.com/secure-dashboards/openjs-foundation-dashboard/issues/43
+// @see: https://github.com/OpenPathfinder/visionBoard/issues/43
 describe('githubOrgMFA', () => {
   let organizations, check, projects
   beforeEach(() => {

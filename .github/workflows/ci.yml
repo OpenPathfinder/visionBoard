@@ -17,12 +17,12 @@ jobs:
         image: postgres:17.2
         env:
           POSTGRES_DB: dashboard
-          POSTGRES_USER: openjs
+          POSTGRES_USER: visionBoard
           POSTGRES_PASSWORD: password
         ports:
           - 5432:5432
         options: >-
-          --health-cmd="pg_isready -U openjs"
+          --health-cmd="pg_isready -U visionBoard"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5

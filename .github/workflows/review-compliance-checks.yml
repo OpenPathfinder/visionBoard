@@ -48,7 +48,7 @@ jobs:
                 "- [ ] Have you included severity validation (`getSeverityFromPriorityGroup`) and checked applicability (`isCheckApplicableToProjectCategory`)?\n" +
                 "- [ ] Have you included the tasks, alerts, and results in the database tables?\n" +
                 "- [ ] Have you tested the check with `check run --name {check_code_name}` using the seeded database (`npm run db:seed`)?\n" +
-                "- [ ] Have you created a PR in [the website](https://github.com/secure-dashboards/openjs-security-program-standards) with the calculation details?\n" +
+                "- [ ] Have you created a PR in [the website](https://github.com/OpenPathfinder/website) with the calculation details?\n" +
                 "\n" +
                 "You can find more information in [the contributing guide](/CONTRIBUTING.md#add-compliance-checks).\n"
               });

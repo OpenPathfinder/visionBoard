@@ -28,10 +28,10 @@ The project includes a [technical architecture guide](/ARCHITECTURE.md) that pro
 
 You have several templates available:
 
-* [Asking for General Help](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues/new?assignees=&labels=&projects=&template=other.md&title=)
-* [Request a New Feature](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues/new?assignees=&labels=feature-request&projects=&template=feature_request.md&title=)
-* [Report a Bug](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=%5BBUG%5D)
-* [Other](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues/new?assignees=&labels=&projects=&template=other.md&title=)
+* [Asking for General Help](https://github.com/OpenPathfinder/visionBoard/issues/new?assignees=&labels=&projects=&template=other.md&title=)
+* [Request a New Feature](https://github.com/OpenPathfinder/visionBoard/issues/new?assignees=&labels=feature-request&projects=&template=feature_request.md&title=)
+* [Report a Bug](https://github.com/OpenPathfinder/visionBoard/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=%5BBUG%5D)
+* [Other](https://github.com/OpenPathfinder/visionBoard/issues/new?assignees=&labels=&projects=&template=other.md&title=)
 
 ## Pull Requests
 
@@ -112,17 +112,17 @@ Here you can find the best ways to make meaningful contributions to the project.
 
 ### Solve Technical Debt
 
-You can always take the lead and contribute to the project by solving [technical debt issues](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen+label%3Atechnical-debt). Most of these issues don’t require a heavy investment, especially the ones tagged as [good first issue](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22).
+You can always take the lead and contribute to the project by solving [technical debt issues](https://github.com/OpenPathfinder/visionBoard/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen+label%3Atechnical-debt). Most of these issues don’t require a heavy investment, especially the ones tagged as [good first issue](https://github.com/OpenPathfinder/visionBoard/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22).
 
 ### Research on Compliance Checks
 
-You can help us by researching how the checks should work. A key part of this process is defining a way to implement the compliance checks (e.g., data usage, alerting criteria, etc.). Use the combo tags [compliance-checks + research-needed](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen+label%3Acompliance-checks+label%3Aresearch-needed) to identify these opportunities.
+You can help us by researching how the checks should work. A key part of this process is defining a way to implement the compliance checks (e.g., data usage, alerting criteria, etc.). Use the combo tags [compliance-checks + research-needed](https://github.com/OpenPathfinder/visionBoard/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen+label%3Acompliance-checks+label%3Aresearch-needed) to identify these opportunities.
 
 ### Add Compliance Checks
 
 We are looking for contributors to implement compliance checks in the Dashboard. Here’s how you can get started:
 
-1. Check the open issues related to [compliance-checks + implementation-needed](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen+label%3Acompliance-checks+label%3Aimplementation-needed).
+1. Check the open issues related to [compliance-checks + implementation-needed](https://github.com/OpenPathfinder/visionBoard/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen+label%3Acompliance-checks+label%3Aimplementation-needed).
 
 2. Engage in the conversation and request to lead or contribute to the implementation. A key part of this process is ensuring that the definitions are clear before starting development.
 
@@ -130,17 +130,17 @@ We are looking for contributors to implement compliance checks in the Dashboard.
 
 #### Development Steps
 
-- **1. Define a Good Implementation ([Example](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues/43#issuecomment-2524594504)):**
+- **1. Define a Good Implementation ([Example](https://github.com/OpenPathfinder/visionBoard/issues/43#issuecomment-2524594504)):**
   - Read the documentation (guidelines, best practices, etc.).
   - Brainstorm the implementation details (logic, alerts, tasks, validations, edge cases, etc.).
   - Reach an agreement on the implementation details before starting.
 
-- **2. Update Check Record ([Example](https://github.com/secure-dashboards/openjs-foundation-dashboard/commit/55eaac59920a5229ef9eeaf859943578a66d1aeb)):**
+- **2. Update Check Record ([Example](https://github.com/OpenPathfinder/visionBoard/commit/55eaac59920a5229ef9eeaf859943578a66d1aeb)):**
   - Update the `compliance_checks` row with fields like `how_to_url`, `implementation_status`, `implementation_type`, and `implementation_details_reference`.
   - Test migration scripts using `npm run db:migrate` and `npm run db:rollback`.
   - Update the database schema with `npm run db:generate-schema`.
 
-- **3. Implement the Business Logic ([Validator Example](https://github.com/secure-dashboards/openjs-foundation-dashboard/commit/44c41d119f0daefb7b2e496ba35d5ab65bcc319b) and [Check Example](https://github.com/secure-dashboards/openjs-foundation-dashboard/commit/6f1e16129ee0d01a1b9b536cd2dc6090b048b71f)):**
+- **3. Implement the Business Logic ([Validator Example](https://github.com/OpenPathfinder/visionBoard/commit/44c41d119f0daefb7b2e496ba35d5ab65bcc319b) and [Check Example](https://github.com/OpenPathfinder/visionBoard/commit/6f1e16129ee0d01a1b9b536cd2dc6090b048b71f)):**
   - Add the specific validator in `src/checks/validators/index.js`.
   - Add the check logic in `src/checks/complianceChecks`.
   - Ensure the check is applicable to the organization (`isCheckApplicableToProjectCategory`).
@@ -153,13 +153,13 @@ We are looking for contributors to implement compliance checks in the Dashboard.
   - Verify all tests pass.
   - Run `check run --name {check_code_name}` and verify database changes. Update the seed script if necessary (`npm run db:seed`).
 
-- **5. Update the Website ([Example](https://github.com/secure-dashboards/openjs-security-program-standards/pull/9)):**
+- **5. Update the Website ([Example](https://github.com/OpenPathfinder/website/pull/9)):**
   - Review content at `https://openjs-security-program-standards.netlify.app/details/{check_code_name}`.
   - Create a PR to include check calculation details and mitigation information.
 
 ### Other
 
-Any issue labeled [help wanted](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) or [good first issue](https://github.com/secure-dashboards/openjs-foundation-dashboard/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) is a great opportunity to help the project.
+Any issue labeled [help wanted](https://github.com/OpenPathfinder/visionBoard/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) or [good first issue](https://github.com/OpenPathfinder/visionBoard/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) is a great opportunity to help the project.
 
 ## Developer's Certificate of Origin 1.1
 

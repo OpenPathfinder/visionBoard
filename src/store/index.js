@@ -1,5 +1,10 @@
 const debug = require('debug')('store')
 
+const getAllFn = (knex) => async (table) => {
+  debug(`Fetching all records from ${table}...`)
+  return knex(table).select('*')
+}
+
 const upsertGithubRepository = knex => async (repository, orgId) => {
   debug(`Upserting repository (${repository.full_name})...`)
 
@@ -9,11 +14,6 @@ const upsertGithubRepository = knex => async (repository, orgId) => {
   } else {
     return knex('github_repositories').insert({ ...repository, github_organization_id: orgId }).returning('*')
   }
-}
-
-const getAllGithubOrganizations = knex => async () => {
-  debug('Getting all GitHub organizations...')
-  return knex('github_organizations').select()
 }
 
 const updateGithubOrganization = knex => async (organization) => {
@@ -46,19 +46,9 @@ const addProject = knex => async (project) => {
   }).returning('*')
 }
 
-const getAllComplianceChecks = knex => async () => {
-  debug('Getting all checks...')
-  return knex('compliance_checks').select().returning('*')
-}
-
 const getCheckByCodeName = knex => async (codeName) => {
   debug(`Getting check by code name (${codeName})...`)
   return knex('compliance_checks').where({ code_name: codeName }).first()
-}
-
-const getAllProjects = knex => async () => {
-  debug('Getting all projects...')
-  return knex('projects').select().returning('*')
 }
 
 const deleteAlertsByComplianceCheckId = knex => async (complianceCheckId) => {
@@ -90,16 +80,6 @@ const upsertComplianceCheckResult = knex => async (result) => {
   }
 }
 
-const getAllSSoftwareDesignTrainings = knex => async () => {
-  debug('Getting all software design trainings...')
-  return knex('software_design_training').select().returning('*')
-}
-
-const getAllGithubRepositories = knex => async () => {
-  debug('Getting all GitHub repositories...')
-  return knex('github_repositories').select().returning('*')
-}
-
 const upsertOSSFScorecard = knex => async (scorecard) => {
   // IMPORTANT: Check for repo_id and commit hash as multiple results can exist for the same repo
   const query = { github_repository_id: scorecard.github_repository_id, scorecard_commit: scorecard.scorecard_commit }
@@ -113,22 +93,23 @@ const upsertOSSFScorecard = knex => async (scorecard) => {
 
 const initializeStore = (knex) => {
   debug('Initializing store...')
+  const getAll = getAllFn(knex)
   return {
     addProject: addProject(knex),
     addGithubOrganization: addGithubOrganization(knex),
-    getAllGithubOrganizations: getAllGithubOrganizations(knex),
+    getAllGithubOrganizations: async () => getAll('github_organizations'),
     updateGithubOrganization: updateGithubOrganization(knex),
     upsertGithubRepository: upsertGithubRepository(knex),
-    getAllComplianceChecks: getAllComplianceChecks(knex),
+    getAllComplianceChecks: async () => getAll('compliance_checks'),
     getCheckByCodeName: getCheckByCodeName(knex),
-    getAllProjects: getAllProjects(knex),
+    getAllProjects: async () => getAll('projects'),
     deleteTasksByComplianceCheckId: deleteTasksByComplianceCheckId(knex),
     deleteAlertsByComplianceCheckId: deleteAlertsByComplianceCheckId(knex),
     addAlert: addAlert(knex),
     addTask: addTask(knex),
     upsertComplianceCheckResult: upsertComplianceCheckResult(knex),
-    getAllSSoftwareDesignTrainings: getAllSSoftwareDesignTrainings(knex),
-    getAllGithubRepositories: getAllGithubRepositories(knex),
+    getAllSSoftwareDesignTrainings: async () => getAll('software_design_training'),
+    getAllGithubRepositories: async () => getAll('github_repositories'),
     upsertOSSFScorecard: upsertOSSFScorecard(knex)
   }
 }

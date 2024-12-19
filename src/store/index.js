@@ -10,14 +10,14 @@ const addFn = knex => async (table, record) => {
   return knex(table).insert(record).returning('*')
 }
 
-const upsertGithubRepository = knex => async (repository, orgId) => {
-  debug(`Upserting repository (${repository.full_name})...`)
-
-  const existingRepository = await knex('github_repositories').where({ full_name: repository.full_name }).first()
-  if (existingRepository) {
-    return knex('github_repositories').where({ full_name: repository.full_name, github_organization_id: orgId }).update(repository).returning('*')
+const upsertRecord = async (knex, table, uniqueCriteria, data) => {
+  const existingRecord = await knex(table).where(uniqueCriteria).first()
+  if (existingRecord) {
+    return knex(table).where(uniqueCriteria).update(data).returning('*')
   } else {
-    return knex('github_repositories').insert({ ...repository, github_organization_id: orgId }).returning('*')
+    return knex(table)
+      .insert({ ...uniqueCriteria, ...data })
+      .returning('*')
   }
 }
 
@@ -66,24 +66,24 @@ const deleteTasksByComplianceCheckId = knex => async (complianceCheckId) => {
   return knex('compliance_checks_tasks').where({ compliance_check_id: complianceCheckId }).delete()
 }
 
-const upsertComplianceCheckResult = knex => async (result) => {
-  const existingComplianceCheck = await knex('compliance_checks_results').where({ compliance_check_id: result.compliance_check_id }).first()
-  if (existingComplianceCheck) {
-    return knex('compliance_checks_results').where({ compliance_check_id: result.compliance_check_id }).update(result).returning('*')
-  } else {
-    return knex('compliance_checks_results').insert(result).returning('*')
+const upsertComplianceCheckResult = (knex) => async (result) =>
+  upsertRecord(knex, 'compliance_checks_results', { compliance_check_id: result.compliance_check_id }, result)
+
+const upsertOSSFScorecard = (knex) => async (scorecard) => {
+  const uniqueCriteria = {
+    github_repository_id: scorecard.github_repository_id,
+    scorecard_commit: scorecard.scorecard_commit
   }
+  return upsertRecord(knex, 'ossf_scorecard_results', uniqueCriteria, scorecard)
 }
 
-const upsertOSSFScorecard = knex => async (scorecard) => {
-  // IMPORTANT: Check for repo_id and commit hash as multiple results can exist for the same repo
-  const query = { github_repository_id: scorecard.github_repository_id, scorecard_commit: scorecard.scorecard_commit }
-  const existingScorecard = await knex('ossf_scorecard_results').where(query).first()
-  if (existingScorecard) {
-    return knex('ossf_scorecard_results').where(query).update(scorecard).returning('*')
-  } else {
-    return knex('ossf_scorecard_results').insert(scorecard).returning('*')
+const upsertGithubRepository = (knex) => async (repository, orgId) => {
+  const uniqueCriteria = {
+    full_name: repository.full_name,
+    github_organization_id: orgId
   }
+  const data = { ...repository, github_organization_id: orgId }
+  return upsertRecord(knex, 'github_repositories', uniqueCriteria, data)
 }
 
 const initializeStore = (knex) => {

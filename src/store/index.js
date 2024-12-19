@@ -1,8 +1,13 @@
 const debug = require('debug')('store')
 
-const getAllFn = (knex) => async (table) => {
+const getAllFn = knex => async (table) => {
   debug(`Fetching all records from ${table}...`)
   return knex(table).select('*')
+}
+
+const addFn = knex => async (table, record) => {
+  debug(`Inserting ${record} in ${table}`)
+  return knex(table).insert(record).returning('*')
 }
 
 const upsertGithubRepository = knex => async (repository, orgId) => {
@@ -61,16 +66,6 @@ const deleteTasksByComplianceCheckId = knex => async (complianceCheckId) => {
   return knex('compliance_checks_tasks').where({ compliance_check_id: complianceCheckId }).delete()
 }
 
-const addAlert = knex => async (alert) => {
-  debug('Inserting alert...')
-  return knex('compliance_checks_alerts').insert(alert).returning('*')
-}
-
-const addTask = knex => async (task) => {
-  debug('Inserting task...')
-  return knex('compliance_checks_tasks').insert(task).returning('*')
-}
-
 const upsertComplianceCheckResult = knex => async (result) => {
   const existingComplianceCheck = await knex('compliance_checks_results').where({ compliance_check_id: result.compliance_check_id }).first()
   if (existingComplianceCheck) {
@@ -94,6 +89,7 @@ const upsertOSSFScorecard = knex => async (scorecard) => {
 const initializeStore = (knex) => {
   debug('Initializing store...')
   const getAll = getAllFn(knex)
+  const addTo = addFn(knex)
   return {
     addProject: addProject(knex),
     addGithubOrganization: addGithubOrganization(knex),
@@ -105,8 +101,8 @@ const initializeStore = (knex) => {
     getAllProjects: async () => getAll('projects'),
     deleteTasksByComplianceCheckId: deleteTasksByComplianceCheckId(knex),
     deleteAlertsByComplianceCheckId: deleteAlertsByComplianceCheckId(knex),
-    addAlert: addAlert(knex),
-    addTask: addTask(knex),
+    addAlert: async (alert) => addTo('compliance_checks_alerts', alert),
+    addTask: async (task) => addTo('compliance_checks_tasks', task),
     upsertComplianceCheckResult: upsertComplianceCheckResult(knex),
     getAllSSoftwareDesignTrainings: async () => getAll('software_design_training'),
     getAllGithubRepositories: async () => getAll('github_repositories'),

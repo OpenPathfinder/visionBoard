@@ -1,16 +1,16 @@
 const debug = require('debug')('store')
 
-const getAllFn = knex => async (table) => {
+const getAllFn = knex => (table) => {
   debug(`Fetching all records from ${table}...`)
   return knex(table).select('*')
 }
 
-const addFn = knex => async (table, record) => {
+const addFn = knex => (table, record) => {
   debug(`Inserting ${record} in ${table}`)
   return knex(table).insert(record).returning('*')
 }
 
-const upsertRecord = async (knex, table, uniqueCriteria, data) => {
+const upsertRecord = async ({ knex, table, uniqueCriteria, data }) => {
   const existingRecord = await knex(table).where(uniqueCriteria).first()
   if (existingRecord) {
     return knex(table).where(uniqueCriteria).update(data).returning('*')
@@ -21,7 +21,7 @@ const upsertRecord = async (knex, table, uniqueCriteria, data) => {
   }
 }
 
-const updateGithubOrganization = knex => async (organization) => {
+const updateGithubOrganization = knex => (organization) => {
   const { login } = organization
   debug(`Updating organization (${login})...`)
   return knex('github_organizations').where({ login }).update(organization).returning('*')
@@ -51,40 +51,47 @@ const addProject = knex => async (project) => {
   }).returning('*')
 }
 
-const getCheckByCodeName = knex => async (codeName) => {
+const getCheckByCodeName = knex => (codeName) => {
   debug(`Getting check by code name (${codeName})...`)
   return knex('compliance_checks').where({ code_name: codeName }).first()
 }
 
-const deleteAlertsByComplianceCheckId = knex => async (complianceCheckId) => {
+const deleteAlertsByComplianceCheckId = knex => (complianceCheckId) => {
   debug(`Deleting alerts by compliance_check_id (${complianceCheckId})...`)
   return knex('compliance_checks_alerts').where({ compliance_check_id: complianceCheckId }).delete()
 }
 
-const deleteTasksByComplianceCheckId = knex => async (complianceCheckId) => {
+const deleteTasksByComplianceCheckId = knex => (complianceCheckId) => {
   debug(`Deleting tasks by compliance_check_id (${complianceCheckId})...`)
   return knex('compliance_checks_tasks').where({ compliance_check_id: complianceCheckId }).delete()
 }
+const upsertComplianceCheckResult = (knex) => (data) =>
+  upsertRecord({
+    knex,
+    table: 'compliance_checks_results',
+    uniqueCriteria: { compliance_check_id: data.compliance_check_id },
+    data
+  })
 
-const upsertComplianceCheckResult = (knex) => async (result) =>
-  upsertRecord(knex, 'compliance_checks_results', { compliance_check_id: result.compliance_check_id }, result)
+const upsertOSSFScorecard = (knex) => (data) => upsertRecord({
+  table: 'ossf_scorecard_results',
+  knex,
+  uniqueCriteria: {
+    github_repository_id: data.github_repository_id,
+    scorecard_commit: data.scorecard_commit
+  },
+  data
+})
 
-const upsertOSSFScorecard = (knex) => async (scorecard) => {
-  const uniqueCriteria = {
-    github_repository_id: scorecard.github_repository_id,
-    scorecard_commit: scorecard.scorecard_commit
-  }
-  return upsertRecord(knex, 'ossf_scorecard_results', uniqueCriteria, scorecard)
-}
-
-const upsertGithubRepository = (knex) => async (repository, orgId) => {
-  const uniqueCriteria = {
+const upsertGithubRepository = (knex) => (repository, orgId) => upsertRecord({
+  table: 'github_repositories',
+  knex,
+  uniqueCriteria: {
     full_name: repository.full_name,
     github_organization_id: orgId
-  }
-  const data = { ...repository, github_organization_id: orgId }
-  return upsertRecord(knex, 'github_repositories', uniqueCriteria, data)
-}
+  },
+  data: { ...repository, github_organization_id: orgId }
+})
 
 const initializeStore = (knex) => {
   debug('Initializing store...')
@@ -93,19 +100,19 @@ const initializeStore = (knex) => {
   return {
     addProject: addProject(knex),
     addGithubOrganization: addGithubOrganization(knex),
-    getAllGithubOrganizations: async () => getAll('github_organizations'),
+    getAllGithubOrganizations: () => getAll('github_organizations'),
     updateGithubOrganization: updateGithubOrganization(knex),
     upsertGithubRepository: upsertGithubRepository(knex),
-    getAllComplianceChecks: async () => getAll('compliance_checks'),
+    getAllComplianceChecks: () => getAll('compliance_checks'),
     getCheckByCodeName: getCheckByCodeName(knex),
-    getAllProjects: async () => getAll('projects'),
+    getAllProjects: () => getAll('projects'),
     deleteTasksByComplianceCheckId: deleteTasksByComplianceCheckId(knex),
     deleteAlertsByComplianceCheckId: deleteAlertsByComplianceCheckId(knex),
-    addAlert: async (alert) => addTo('compliance_checks_alerts', alert),
-    addTask: async (task) => addTo('compliance_checks_tasks', task),
+    addAlert: (alert) => addTo('compliance_checks_alerts', alert),
+    addTask: (task) => addTo('compliance_checks_tasks', task),
     upsertComplianceCheckResult: upsertComplianceCheckResult(knex),
-    getAllSSoftwareDesignTrainings: async () => getAll('software_design_training'),
-    getAllGithubRepositories: async () => getAll('github_repositories'),
+    getAllSSoftwareDesignTrainings: () => getAll('software_design_training'),
+    getAllGithubRepositories: () => getAll('github_repositories'),
     upsertOSSFScorecard: upsertOSSFScorecard(knex)
   }
 }

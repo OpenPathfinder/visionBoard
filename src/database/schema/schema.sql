@@ -349,7 +349,7 @@ CREATE TABLE public.github_repositories (
     dependabot_security_updates_status text DEFAULT 'disabled'::text,
     secret_scanning_non_provider_patterns_status text DEFAULT 'disabled'::text,
     secret_scanning_validity_checks_status text DEFAULT 'disabled'::text,
-    github_organization_id integer,
+    github_organization_id integer NOT NULL,
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT github_repositories_dependabot_security_updates_status_check CHECK ((dependabot_security_updates_status = ANY (ARRAY['enabled'::text, 'disabled'::text]))),

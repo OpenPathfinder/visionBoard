@@ -64,8 +64,8 @@ exports.up = async (knex) => {
     table.enu('secret_scanning_validity_checks_status', ['enabled', 'disabled']).defaultTo('disabled')
 
     // Foreign key to 'github_organizations' table
-    table
-      .integer('github_organization_id')
+    table.integer('github_organization_id')
+      .notNullable()
       .unsigned()
       .references('id')
       .inTable('github_organizations')

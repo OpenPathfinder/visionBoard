@@ -1,4 +1,8 @@
 const statusLevels = ['n/a', 'deferrable', 'expected', 'recommended']
+const priorityGroupOptions = [
+  'P0', 'P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 'P9', 'P10', 'P11', 'P12', 'P13', 'P14',
+  'R0', 'R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8', 'R9', 'R10', 'R11', 'R12', 'R13', 'R14'
+]
 
 exports.up = async (knex) => {
   await knex.schema.createTable('compliance_checks', (table) => {
@@ -8,7 +12,7 @@ exports.up = async (knex) => {
     table.string('section_number').notNullable()
     table.string('section_name').notNullable()
     table.string('code_name').unique().notNullable()
-    table.string('priority_group').notNullable()
+    table.enum('priority_group', priorityGroupOptions).notNullable()
     table.boolean('is_c_scrm').notNullable().defaultTo(false)
     table.enum('level_incubating_status', statusLevels).notNullable()
     table.enum('level_active_status', statusLevels).notNullable()

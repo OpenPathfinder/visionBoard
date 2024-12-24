@@ -143,7 +143,6 @@ We are looking for contributors to implement compliance checks in the Dashboard.
 - **3. Implement the Business Logic ([Validator Example](https://github.com/OpenPathfinder/visionBoard/commit/44c41d119f0daefb7b2e496ba35d5ab65bcc319b) and [Check Example](https://github.com/OpenPathfinder/visionBoard/commit/6f1e16129ee0d01a1b9b536cd2dc6090b048b71f)):**
   - Add the specific validator in `src/checks/validators/index.js`.
   - Add the check logic in `src/checks/complianceChecks`.
-  - Ensure the check is applicable to the organization (`isCheckApplicableToProjectCategory`).
   - Calculate `severity` accurately (`getSeverityFromPriorityGroup`).
   - Update relevant database tables (`compliance_checks_alerts`, `compliance_checks_tasks`, `compliance_checks_results`).
 

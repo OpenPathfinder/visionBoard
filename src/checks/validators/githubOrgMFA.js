@@ -1,5 +1,5 @@
 const debug = require('debug')('checks:validator:githubOrgMFA')
-const { getSeverityFromPriorityGroup, isCheckApplicableToProjectCategory, groupArrayItemsByCriteria } = require('../../utils')
+const { getSeverityFromPriorityGroup, groupArrayItemsByCriteria } = require('../../utils')
 
 const groupByProject = groupArrayItemsByCriteria('project_id')
 
@@ -17,17 +17,11 @@ module.exports = ({ organizations = [], check, projects = [] }) => {
   organizationsGroupedByProject.forEach((projectOrgs) => {
     debug(`Processing project (${projectOrgs[0].project_id})`)
     const project = projects.find(p => p.id === projectOrgs[0].project_id)
-    const isInScope = isCheckApplicableToProjectCategory(check, project)
-    // If the check is not in scope, skip it.
-    if (!isInScope) {
-      debug(`This check is not in scope for project (${project.id})`)
-      return
-    }
 
     const baseData = {
       project_id: projectOrgs[0].project_id,
       compliance_check_id: check.id,
-      severity: getSeverityFromPriorityGroup(check.priority_group)
+      severity: getSeverityFromPriorityGroup(check.default_priority_group)
     }
 
     const result = { ...baseData }

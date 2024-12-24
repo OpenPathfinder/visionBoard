@@ -23,11 +23,8 @@ describe('githubOrgMFA', () => {
 
     check = {
       id: 1,
-      priority_group: 'P1',
-      details_url: 'https://example.com',
-      level_incubating_status: 'expected',
-      level_active_status: 'expected',
-      level_retiring_status: 'expected'
+      default_priority_group: 'P1',
+      details_url: 'https://example.com'
     }
 
     projects = [
@@ -133,18 +130,6 @@ describe('githubOrgMFA', () => {
       tasks: []
     })
   })
-
-  it('Should skip the check if it is not in scope for the project category', () => {
-    check.level_active_status = 'n/a'
-    check.level_incubating_status = 'n/a'
-    check.level_retiring_status = 'n/a'
-    const analysis = githubOrgMFA({ organizations, check, projects })
-    expect(analysis).toEqual({
-      alerts: [],
-      results: [],
-      tasks: []
-    })
-  })
 })
 
 describe('softwareDesignTraining', () => {
@@ -163,11 +148,8 @@ describe('softwareDesignTraining', () => {
 
     check = {
       id: 1,
-      priority_group: 'P1',
-      details_url: 'https://example.com',
-      level_incubating_status: 'expected',
-      level_active_status: 'expected',
-      level_retiring_status: 'expected'
+      default_priority_group: 'P1',
+      details_url: 'https://example.com'
     }
 
     projects = [
@@ -297,17 +279,6 @@ describe('softwareDesignTraining', () => {
           description: 'Check the details on https://example.com'
         }
       ]
-    })
-  })
-  it('Should skip the check if it is not in scope for the project category', () => {
-    check.level_active_status = 'n/a'
-    check.level_incubating_status = 'n/a'
-    check.level_retiring_status = 'n/a'
-    const analysis = softwareDesignTraining({ trainings, check, projects })
-    expect(analysis).toEqual({
-      alerts: [],
-      results: [],
-      tasks: []
     })
   })
 })

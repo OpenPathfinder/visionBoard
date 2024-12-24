@@ -61,19 +61,6 @@ const getSeverityFromPriorityGroup = (priorityGroup) => {
   }
 }
 
-const isCheckApplicableToProjectCategory = (check, project) => {
-  if (['impact', 'at-large'].includes(project.category) && check.level_active_status === 'n/a') {
-    return false
-  }
-  if (project.category === 'incubation' && check.level_incubating_status === 'n/a') {
-    return false
-  }
-  if (project.category === 'emeritus' && check.level_retiring_status === 'n/a') {
-    return false
-  }
-  return true
-}
-
 const groupArrayItemsByCriteria = criteria => items => Object.values(
   items.reduce((acc, item) => {
     if (!acc[item[criteria]]) {
@@ -124,7 +111,6 @@ module.exports = {
   validateGithubUrl,
   ensureGithubToken,
   getSeverityFromPriorityGroup,
-  isCheckApplicableToProjectCategory,
   groupArrayItemsByCriteria,
   redactSensitiveData,
   logger

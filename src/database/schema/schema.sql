@@ -36,6 +36,79 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: checklist_items; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.checklist_items (
+    id integer NOT NULL,
+    checklist_id integer NOT NULL,
+    compliance_check_id integer NOT NULL,
+    priority_group text,
+    section_number character varying(255),
+    section_name character varying(255),
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    CONSTRAINT checklist_items_priority_group_check CHECK ((priority_group = ANY (ARRAY['P0'::text, 'P1'::text, 'P2'::text, 'P3'::text, 'P4'::text, 'P5'::text, 'P6'::text, 'P7'::text, 'P8'::text, 'P9'::text, 'P10'::text, 'P11'::text, 'P12'::text, 'P13'::text, 'P14'::text, 'R0'::text, 'R1'::text, 'R2'::text, 'R3'::text, 'R4'::text, 'R5'::text, 'R6'::text, 'R7'::text, 'R8'::text, 'R9'::text, 'R10'::text, 'R11'::text, 'R12'::text, 'R13'::text, 'R14'::text])))
+);
+
+
+--
+-- Name: checklist_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.checklist_items_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: checklist_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.checklist_items_id_seq OWNED BY public.checklist_items.id;
+
+
+--
+-- Name: compliance_checklists; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.compliance_checklists (
+    id integer NOT NULL,
+    author text NOT NULL,
+    title character varying(255) NOT NULL,
+    description text NOT NULL,
+    code_name character varying(255) NOT NULL,
+    url text NOT NULL,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: compliance_checklists_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.compliance_checklists_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: compliance_checklists_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.compliance_checklists_id_seq OWNED BY public.compliance_checklists.id;
+
+
+--
 -- Name: compliance_checks; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -43,14 +116,11 @@ CREATE TABLE public.compliance_checks (
     id integer NOT NULL,
     title character varying(255) NOT NULL,
     description text NOT NULL,
-    section_number character varying(255) NOT NULL,
-    section_name character varying(255) NOT NULL,
+    default_section_number character varying(255) NOT NULL,
+    default_section_name character varying(255) NOT NULL,
     code_name character varying(255) NOT NULL,
-    priority_group character varying(255) NOT NULL,
+    default_priority_group text NOT NULL,
     is_c_scrm boolean DEFAULT false NOT NULL,
-    level_incubating_status text NOT NULL,
-    level_active_status text NOT NULL,
-    level_retiring_status text NOT NULL,
     mitre_url character varying(255),
     mitre_description character varying(255),
     how_to_url character varying(255),
@@ -65,9 +135,7 @@ CREATE TABLE public.compliance_checks (
     updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT compliance_checks_implementation_status_check CHECK ((implementation_status = ANY (ARRAY['pending'::text, 'completed'::text]))),
     CONSTRAINT compliance_checks_implementation_type_check CHECK ((implementation_type = ANY (ARRAY['manual'::text, 'computed'::text]))),
-    CONSTRAINT compliance_checks_level_active_status_check CHECK ((level_active_status = ANY (ARRAY['n/a'::text, 'deferrable'::text, 'expected'::text, 'recommended'::text]))),
-    CONSTRAINT compliance_checks_level_incubating_status_check CHECK ((level_incubating_status = ANY (ARRAY['n/a'::text, 'deferrable'::text, 'expected'::text, 'recommended'::text]))),
-    CONSTRAINT compliance_checks_level_retiring_status_check CHECK ((level_retiring_status = ANY (ARRAY['n/a'::text, 'deferrable'::text, 'expected'::text, 'recommended'::text])))
+    CONSTRAINT compliance_checks_priority_group_check CHECK ((default_priority_group = ANY (ARRAY['P0'::text, 'P1'::text, 'P2'::text, 'P3'::text, 'P4'::text, 'P5'::text, 'P6'::text, 'P7'::text, 'P8'::text, 'P9'::text, 'P10'::text, 'P11'::text, 'P12'::text, 'P13'::text, 'P14'::text, 'R0'::text, 'R1'::text, 'R2'::text, 'R3'::text, 'R4'::text, 'R5'::text, 'R6'::text, 'R7'::text, 'R8'::text, 'R9'::text, 'R10'::text, 'R11'::text, 'R12'::text, 'R13'::text, 'R14'::text])))
 );
 
 
@@ -642,6 +710,20 @@ ALTER SEQUENCE public.software_design_training_id_seq OWNED BY public.software_d
 
 
 --
+-- Name: checklist_items id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.checklist_items ALTER COLUMN id SET DEFAULT nextval('public.checklist_items_id_seq'::regclass);
+
+
+--
+-- Name: compliance_checklists id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.compliance_checklists ALTER COLUMN id SET DEFAULT nextval('public.compliance_checklists_id_seq'::regclass);
+
+
+--
 -- Name: compliance_checks id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -716,6 +798,22 @@ ALTER TABLE ONLY public.projects ALTER COLUMN id SET DEFAULT nextval('public.pro
 --
 
 ALTER TABLE ONLY public.software_design_training ALTER COLUMN id SET DEFAULT nextval('public.software_design_training_id_seq'::regclass);
+
+
+--
+-- Name: checklist_items checklist_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.checklist_items
+    ADD CONSTRAINT checklist_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: compliance_checklists compliance_checklists_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.compliance_checklists
+    ADD CONSTRAINT compliance_checklists_pkey PRIMARY KEY (id);
 
 
 --
@@ -847,6 +945,20 @@ ALTER TABLE ONLY public.software_design_training
 
 
 --
+-- Name: checklist_items set_updated_at_checklist_items; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER set_updated_at_checklist_items BEFORE UPDATE ON public.checklist_items FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+
+--
+-- Name: compliance_checklists set_updated_at_compliance_checklists; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER set_updated_at_compliance_checklists BEFORE UPDATE ON public.compliance_checklists FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+
+--
 -- Name: compliance_checks set_updated_at_compliance_checks; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -907,6 +1019,22 @@ CREATE TRIGGER set_updated_at_projects BEFORE UPDATE ON public.projects FOR EACH
 --
 
 CREATE TRIGGER set_updated_at_software_design_training BEFORE UPDATE ON public.software_design_training FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+
+--
+-- Name: checklist_items checklist_items_checklist_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.checklist_items
+    ADD CONSTRAINT checklist_items_checklist_id_foreign FOREIGN KEY (checklist_id) REFERENCES public.compliance_checklists(id) ON DELETE CASCADE;
+
+
+--
+-- Name: checklist_items checklist_items_compliance_check_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.checklist_items
+    ADD CONSTRAINT checklist_items_compliance_check_id_foreign FOREIGN KEY (compliance_check_id) REFERENCES public.compliance_checks(id) ON DELETE CASCADE;
 
 
 --

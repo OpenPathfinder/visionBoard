@@ -26,7 +26,6 @@ You can find more details in [the contributing guide](/CONTRIBUTING.md#current-i
 - [ ] **3. Implement the Business Logic [Validator Example](https://github.com/OpenPathfinder/visionBoard/commit/44c41d119f0daefb7b2e496ba35d5ab65bcc319b) and [Check Example](https://github.com/OpenPathfinder/visionBoard/commit/6f1e16129ee0d01a1b9b536cd2dc6090b048b71f)**
   - [ ] Add the specific validator in `src/checks/validators/index.js`
   - [ ] Add the check logic in `src/checks/complianceChecks`
-  - [ ] Ensure that the check is in scope for the organization (use `isCheckApplicableToProjectCategory`)
   - [ ] Ensure that the `severity` value is well calculated (use `getSeverityFromPriorityGroup`)
   - [ ] Add the alert row in the `compliance_checks_alerts` table when is needed.
   - [ ] Add the task row in the `compliance_checks_tasks` table when is needed.

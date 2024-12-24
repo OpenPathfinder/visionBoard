@@ -1,5 +1,5 @@
 const debug = require('debug')('checks:validator:softwareDesignTraining')
-const { isCheckApplicableToProjectCategory, getSeverityFromPriorityGroup, isDateWithinPolicy } = require('../../utils')
+const { getSeverityFromPriorityGroup, isDateWithinPolicy } = require('../../utils')
 
 const expirationPolicy = '6m'
 
@@ -11,13 +11,6 @@ module.exports = ({ trainings = [], check, projects = [] }) => {
 
   debug('Processing Projects...')
   projects.forEach(project => {
-    const isInScope = isCheckApplicableToProjectCategory(check, project)
-    // If the check is not in scope, skip it.
-    if (!isInScope) {
-      debug(`This check is not in scope for project (${project.id})`)
-      return
-    }
-
     const baseData = {
       project_id: project.id,
       compliance_check_id: check.id,

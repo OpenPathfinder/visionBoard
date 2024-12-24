@@ -15,7 +15,7 @@ const list = [
     sources_url: 'https://www.bestpractices.dev/en/criteria?details=true&rationale=true#0.know_secure_design',
     sources_description: 'OpenSSF Best Practices Badge Passing Level [know_secure_design]',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/softwareDesignTraining'
+    details_url: 'https://openpathfinder.com/docs/checks/softwareDesignTraining'
   },
   {
     title: 'Training on OWASP Top 10 or equivalent',
@@ -33,7 +33,7 @@ const list = [
     sources_url: 'https://www.bestpractices.dev/en/criteria?details=true&rationale=true#0.know_common_errors',
     sources_description: 'OpenSSF Best Practices Badge Passing Level [know_common_errors]',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/owaspTop10Training'
+    details_url: 'https://openpathfinder.com/docs/checks/owaspTop10Training'
   },
   {
     title: 'Enforce MFA in GitHub organization(s)',
@@ -53,7 +53,7 @@ const list = [
     sources_url: 'https://best.openssf.org/SCM-BestPractices/github/enterprise/enterprise_enforce_two_factor_authentication.html',
     sources_description: 'OpenSSF SCM Best PracticesOpenSSF Best Practices Badge Gold Level [require_2FA]',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/githubOrgMFA'
+    details_url: 'https://openpathfinder.com/docs/checks/githubOrgMFA'
   },
   {
     title: 'Enforce MFA in npm organization(s)',
@@ -73,7 +73,7 @@ const list = [
     sources_url: 'https://github.com/ossf/package-manager-best-practices/blob/main/published/npm.md',
     sources_description: 'OpenSSF npm Best Practices',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/npmOrgMFA'
+    details_url: 'https://openpathfinder.com/docs/checks/npmOrgMFA'
   },
   {
     title: 'Enforce MFA in all the tools',
@@ -91,7 +91,7 @@ const list = [
     sources_url: 'https://github.com/cncf/tag-security/blob/main/security-whitepaper/v2/cloud-native-security-whitepaper.md',
     sources_description: 'CNCF CNSWP v1.0',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/orgToolingMFA'
+    details_url: 'https://openpathfinder.com/docs/checks/orgToolingMFA'
   },
   {
     title: 'Use MFA against impersonation',
@@ -111,7 +111,7 @@ const list = [
     sources_url: 'https://www.bestpractices.dev/en/criteria/2#2.secure_2FA',
     sources_description: 'OpenSSF Best Practices Badge Gold Level [secure_2FA]',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/MFAImpersonationDefense'
+    details_url: 'https://openpathfinder.com/docs/checks/MFAImpersonationDefense'
   },
   {
     title: 'Check sensitive information',
@@ -131,7 +131,7 @@ const list = [
     sources_url: 'https://www.bestpractices.dev/en/criteria#0.no_leaked_credentials',
     sources_description: 'OpenSSF Best Practices Badge Passing Level [no_leaked_credentials]',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/noSensitiveInfoInRepositories'
+    details_url: 'https://openpathfinder.com/docs/checks/noSensitiveInfoInRepositories'
   },
   {
     title: 'Ensure that the secrets are injected at runtime',
@@ -151,7 +151,7 @@ const list = [
     sources_url: 'https://github.com/cncf/tag-security/blob/main/security-whitepaper/v2/cloud-native-security-whitepaper.md#secrets-encryption',
     sources_description: 'CNCF CNSWP 2.0 #195',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/injectedSecretsAtRuntime'
+    details_url: 'https://openpathfinder.com/docs/checks/injectedSecretsAtRuntime'
   },
   {
     title: 'Ensure that all the commits are scanned',
@@ -171,7 +171,7 @@ const list = [
     sources_url: 'https://github.com/cncf/tag-security/blob/main/supply-chain-security/supply-chain-security-paper/sscsp.md#user-content-fnref-21-4e56305414bd02da4843ec1d7d856144',
     sources_description: 'CNCF SSCP v1.0 #184',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/scanCommitsForSensitiveInfo'
+    details_url: 'https://openpathfinder.com/docs/checks/scanCommitsForSensitiveInfo'
   },
   {
     title: 'Block new commits with secrets or credentials',
@@ -191,7 +191,7 @@ const list = [
     sources_url: 'https://www.bestpractices.dev/en/criteria#0.no_leaked_credentials',
     sources_description: 'OpenSSF Best Practices Badge Passing Level [no_leaked_credentials]',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/preventLandingSensitiveCommits'
+    details_url: 'https://openpathfinder.com/docs/checks/preventLandingSensitiveCommits'
   },
   {
     title: 'Use SSH keys with passphrases for repository access',
@@ -211,7 +211,7 @@ const list = [
     sources_url: 'https://github.com/cncf/tag-security/blob/main/supply-chain-security/supply-chain-security-paper/sscsp.md#use-ssh-keys-to-provide-developers-access-to-source-code-repositories',
     sources_description: 'CNCF SSCP v1.0 #192',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/SSHKeysRequired'
+    details_url: 'https://openpathfinder.com/docs/checks/SSHKeysRequired'
   },
   {
     title: 'Publish to npm using MFA-Enabled accounts',
@@ -229,7 +229,7 @@ const list = [
     sources_url: 'https://docs.npmjs.com/creating-and-viewing-access-tokens',
     sources_description: 'npm Docs',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/npmPublicationMFA'
+    details_url: 'https://openpathfinder.com/docs/checks/npmPublicationMFA'
   },
   {
     title: 'Secure GitHub Webhooks with secrets',
@@ -249,7 +249,7 @@ const list = [
     sources_url: 'https://github.com/ossf/scorecard/blob/main/docs/checks.md#webhooks',
     sources_description: 'OpenSSF Scorecard',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/githubWebhookSecrets'
+    details_url: 'https://openpathfinder.com/docs/checks/githubWebhookSecrets'
   },
   {
     title: 'Restrict default GitHub Org member permissions',
@@ -269,7 +269,7 @@ const list = [
     sources_url: 'https://best.openssf.org/SCM-BestPractices/github/organization/default_repository_permission_is_not_none.html',
     sources_description: 'OpenSSF SCM Best Practices',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/restrictedOrgPermissions'
+    details_url: 'https://openpathfinder.com/docs/checks/restrictedOrgPermissions'
   },
   {
     title: 'Allow only admins to create public repositories',
@@ -289,7 +289,7 @@ const list = [
     sources_url: 'https://best.openssf.org/SCM-BestPractices/github/organization/non_admins_can_create_public_repositories.html',
     sources_description: 'OpenSSF SCM Best Practices',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/adminRepoCreationOnly'
+    details_url: 'https://openpathfinder.com/docs/checks/adminRepoCreationOnly'
   },
   {
     title: 'Prevent admins from bypassing branch protection',
@@ -309,7 +309,7 @@ const list = [
     sources_url: 'https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches',
     sources_description: 'Github Supply Chain Security Best Practices',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/preventBranchProtectionBypass'
+    details_url: 'https://openpathfinder.com/docs/checks/preventBranchProtectionBypass'
   },
   {
     title: 'Define roles aligned to functional responsibilities',
@@ -329,7 +329,7 @@ const list = [
     sources_url: 'https://github.com/cncf/tag-security/blob/main/supply-chain-security/supply-chain-security-paper/sscsp.md#define-roles-aligned-to-functional-responsibilities',
     sources_description: 'CNCF SSCP v1.0 #188',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/defineFunctionalRoles'
+    details_url: 'https://openpathfinder.com/docs/checks/defineFunctionalRoles'
   },
   {
     title: 'Define teams/individuals with write access to repositories',
@@ -349,7 +349,7 @@ const list = [
     sources_url: 'https://github.com/cncf/tag-security/blob/main/supply-chain-security/supply-chain-security-paper/sscsp.md#define-individualsteams-that-are-responsible-for-code-in-a-repository-and-associated-coding-conventions',
     sources_description: 'CNCF SSCP v1.0 #185',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/githubWriteAccessRoles'
+    details_url: 'https://openpathfinder.com/docs/checks/githubWriteAccessRoles'
   },
   {
     title: 'Configure two or more owners for access continuity',
@@ -369,7 +369,7 @@ const list = [
     sources_url: 'https://www.bestpractices.dev/en/criteria?details=true&rationale=true#1.access_continuity',
     sources_description: 'OpenSSF Best Practices Badge Silver Level [access_continuity]',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/twoOrMoreOwnersForAccess'
+    details_url: 'https://openpathfinder.com/docs/checks/twoOrMoreOwnersForAccess'
   },
   {
     title: 'Patch actively exploited critical vulnerabilities within 30 Days',
@@ -385,7 +385,7 @@ const list = [
     sources_url: 'https://www.bestpractices.dev/en/criteria#0.vulnerabilities_critical_fixed',
     sources_description: 'OpenSSF Best Practices Badge Passing Level [vulnerabilities_critical_fixed]',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/patchCriticalVulns30Days'
+    details_url: 'https://openpathfinder.com/docs/checks/patchCriticalVulns30Days'
   },
   {
     title: 'Patch non-critical vulnerabilities within 90 days',
@@ -401,7 +401,7 @@ const list = [
     sources_url: 'https://googleprojectzero.blogspot.com/p/vulnerability-disclosure-policy.html',
     sources_description: 'Google Project Zero Vulnerability Disclosure Policy',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/patchNonCriticalVulns90Days'
+    details_url: 'https://openpathfinder.com/docs/checks/patchNonCriticalVulns90Days'
   },
   {
     title: 'Automate dependency vulnerability identification',
@@ -421,7 +421,7 @@ const list = [
     sources_url: 'https://scvs.owasp.org/scvs/v5-component-analysis/',
     sources_description: 'OWASP SCVS L1 5.4',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/automateVulnDetection'
+    details_url: 'https://openpathfinder.com/docs/checks/automateVulnDetection'
   },
   {
     title: 'Use automated static code analysis tools',
@@ -441,7 +441,7 @@ const list = [
     sources_url: 'https://scvs.owasp.org/scvs/v5-component-analysis/',
     sources_description: 'OWASP SCVS L1 5.1',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/staticCodeAnalysis'
+    details_url: 'https://openpathfinder.com/docs/checks/staticCodeAnalysis'
   },
   {
     title: 'Address compiler and linter warnings before merging',
@@ -461,7 +461,7 @@ const list = [
     sources_url: 'https://www.bestpractices.dev/en/criteria?details=true&rationale=true#1.warnings_strict',
     sources_description: 'OpenSSF Best Practices Badge Silver Level [warnings_strict]',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/resolveLinterWarnings'
+    details_url: 'https://openpathfinder.com/docs/checks/resolveLinterWarnings'
   },
   {
     title: 'Use static application security testing for all commits',
@@ -481,7 +481,7 @@ const list = [
     sources_url: 'https://github.com/ossf/scorecard/blob/main/docs/checks.md#sast',
     sources_description: 'OWASP SCVS L1 6.6OpenSSF Scorecard',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/staticAppSecTesting'
+    details_url: 'https://openpathfinder.com/docs/checks/staticAppSecTesting'
   },
   {
     title: 'Require commit status checks to pass before merging',
@@ -501,7 +501,7 @@ const list = [
     sources_url: 'https://github.com/ossf/scorecard/blob/main/docs/checks.md#branch-protection',
     sources_description: 'OpenSSF Scorecard',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/commitStatusChecks'
+    details_url: 'https://openpathfinder.com/docs/checks/commitStatusChecks'
   },
   {
     title: 'Ensure Security.md meets OpenJS CVD guidelines',
@@ -517,7 +517,7 @@ const list = [
     sources_url: 'https://github.com/ossf/scorecard/blob/main/docs/checks.md#security-policy',
     sources_description: 'OpenSSF Scorecard',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/securityMdMeetsOpenJSCVD'
+    details_url: 'https://openpathfinder.com/docs/checks/securityMdMeetsOpenJSCVD'
   },
   {
     title: 'Use CVD tools to manage vulnerability reports',
@@ -535,7 +535,7 @@ const list = [
     sources_url: 'https://www.bestpractices.dev/en/criteria?details=true&rationale=true#0.vulnerability_report_private',
     sources_description: 'OpenSSF Best Practices Badge Passing Level [vulnerability_report_private]',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/useCVDToolForVulns'
+    details_url: 'https://openpathfinder.com/docs/checks/useCVDToolForVulns'
   },
   {
     title: 'Respond to external vulnerability reports in under 14 days',
@@ -551,7 +551,7 @@ const list = [
     sources_url: 'https://www.bestpractices.dev/en/criteria#0.vulnerability_report_response',
     sources_description: 'OpenSSF Best Practices Badge Passing Level [vulnerability_report_response]',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/vulnResponse14Days'
+    details_url: 'https://openpathfinder.com/docs/checks/vulnResponse14Days'
   },
   {
     title: 'Define clear communication and incident response plans',
@@ -567,7 +567,7 @@ const list = [
     sources_url: 'https://best.openssf.org/SCM-BestPractices/#operations',
     sources_description: 'OpenSSF SCM Best Practices',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/incidentResponsePlan'
+    details_url: 'https://openpathfinder.com/docs/checks/incidentResponsePlan'
   },
   {
     title: 'Assign CVEs to all known security vulnerabilities',
@@ -583,7 +583,7 @@ const list = [
     sources_url: 'https://www.bestpractices.dev/en/criteria?details=true&rationale=true#0.release_notes_vulns',
     sources_description: 'OpenSSF Best Practices Badge Passing Level [release_notes_vulns]',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/assignCVEForKnownVulns'
+    details_url: 'https://openpathfinder.com/docs/checks/assignCVEForKnownVulns'
   },
   {
     title: 'Include CVE IDs in release notes for security fixes',
@@ -599,7 +599,7 @@ const list = [
     sources_url: 'https://www.bestpractices.dev/en/criteria?details=true&rationale=true#0.release_notes_vulns',
     sources_description: 'OpenSSF Best Practices Badge Passing Level [release_notes_vulns]',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/includeCVEInReleaseNotes'
+    details_url: 'https://openpathfinder.com/docs/checks/includeCVEInReleaseNotes'
   },
   {
     title: 'Create regression tests for bugs and security vulnerabilities',
@@ -615,7 +615,7 @@ const list = [
     sources_url: 'https://www.bestpractices.dev/en/criteria?details=true&rationale=true#1.regression_tests_added50',
     sources_description: 'OpenSSF Best Practices Badge Silver Level [regression_tests_added50]',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/regressionTestsForVulns'
+    details_url: 'https://openpathfinder.com/docs/checks/regressionTestsForVulns'
   },
   {
     title: 'Set default GitHub workflow token permissions to read-only',
@@ -631,7 +631,7 @@ const list = [
     mitre_url: 'https://cwe.mitre.org/data/definitions/250.html',
     mitre_description: 'CWE-250',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/defaultTokenPermissionsReadOnly'
+    details_url: 'https://openpathfinder.com/docs/checks/defaultTokenPermissionsReadOnly'
   },
   {
     title: 'Prevent workflows from creating or approving PRs',
@@ -651,7 +651,7 @@ const list = [
     sources_url: 'https://github.com/ossf/scorecard/blob/main/docs/checks.md#token-permissions',
     sources_description: 'OpenSSF Scorecard',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/blockWorkflowPRApproval'
+    details_url: 'https://openpathfinder.com/docs/checks/blockWorkflowPRApproval'
   },
   {
     title: 'Disable force push on default branch',
@@ -669,7 +669,7 @@ const list = [
     sources_url: 'https://github.com/ossf/scorecard/blob/main/docs/checks.md#branch-protection',
     sources_description: 'OpenSSF Scorecard',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/noForcePushDefaultBranch'
+    details_url: 'https://openpathfinder.com/docs/checks/noForcePushDefaultBranch'
   },
   {
     title: 'Prevent deletion of default branch',
@@ -689,7 +689,7 @@ const list = [
     sources_url: 'https://github.com/ossf/scorecard/blob/main/docs/checks.md#branch-protection',
     sources_description: 'OpenSSF Scorecard',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/preventDeletionDefaultBranch'
+    details_url: 'https://openpathfinder.com/docs/checks/preventDeletionDefaultBranch'
   },
   {
     title: 'Require default branch updates before merging',
@@ -707,7 +707,7 @@ const list = [
     sources_url: 'https://github.com/ossf/scorecard/blob/main/docs/checks.md#branch-protection',
     sources_description: 'OpenSSF Scorecard',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/upToDateDefaultBranchBeforeMerge'
+    details_url: 'https://openpathfinder.com/docs/checks/upToDateDefaultBranchBeforeMerge'
   },
   {
     title: 'Restrict GitHub organization secrets to specific repositories',
@@ -727,7 +727,7 @@ const list = [
     sources_url: 'https://best.openssf.org/SCM-BestPractices/github/actions/all_repositories_can_run_github_actions.html',
     sources_description: 'OpenSSF SCM Best Practices',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/restrictOrgSecrets'
+    details_url: 'https://openpathfinder.com/docs/checks/restrictOrgSecrets'
   },
   {
     title: 'Limit GitHub Actions to verified or trusted actions',
@@ -747,7 +747,7 @@ const list = [
     sources_url: 'https://best.openssf.org/SCM-BestPractices/github/actions/all_github_actions_are_allowed.html',
     sources_description: 'OpenSSF SCM Best Practices',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/verifiedActionsOnly'
+    details_url: 'https://openpathfinder.com/docs/checks/verifiedActionsOnly'
   },
   {
     title: 'Disable self-hosted runners in GitHub organization',
@@ -767,7 +767,7 @@ const list = [
     sources_url: 'https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#hardening-for-self-hosted-runners',
     sources_description: 'Github Action Hardening Docs',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/noSelfHostedRunners'
+    details_url: 'https://openpathfinder.com/docs/checks/noSelfHostedRunners'
   },
   {
     title: 'Restrict build pipeline code execution to build scripts',
@@ -785,7 +785,7 @@ const list = [
     sources_url: 'https://github.com/ossf/scorecard/blob/main/docs/checks.md#dangerous-workflow',
     sources_description: 'OpenSSF Scorecard',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/noArbitraryCodeInPipeline'
+    details_url: 'https://openpathfinder.com/docs/checks/noArbitraryCodeInPipeline'
   },
   {
     title: 'Limit workflow write permissions to job level',
@@ -805,7 +805,7 @@ const list = [
     sources_url: 'https://github.com/ossf/scorecard/blob/main/docs/checks.md#token-permissions',
     sources_description: 'OpenSSF Scorecard',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/limitWorkflowWritePermissions'
+    details_url: 'https://openpathfinder.com/docs/checks/limitWorkflowWritePermissions'
   },
   {
     title: 'Avoid script injection from untrusted variables',
@@ -825,7 +825,7 @@ const list = [
     sources_url: 'https://github.com/ossf/scorecard/blob/main/docs/checks.md#dangerous-workflow',
     sources_description: 'OpenSSF Scorecard',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/preventScriptInjection'
+    details_url: 'https://openpathfinder.com/docs/checks/preventScriptInjection'
   },
   {
     title: 'Document consistent and automated build processes',
@@ -841,7 +841,7 @@ const list = [
     mitre_url: 'https://cwe.mitre.org/data/definitions/1068.html',
     mitre_description: 'CWE-1068',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/consistentBuildProcessDocs'
+    details_url: 'https://openpathfinder.com/docs/checks/consistentBuildProcessDocs'
   },
   {
     title: 'Support older versions or provide upgrade paths',
@@ -857,7 +857,7 @@ const list = [
     sources_url: 'https://www.bestpractices.dev/en/criteria?details=true&rationale=true#1.maintenance_or_update',
     sources_description: 'OpenSSF Best Practices Badge Silver Level [maintenance_or_update]',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/upgradePathDocs'
+    details_url: 'https://openpathfinder.com/docs/checks/upgradePathDocs'
   },
   {
     title: 'Document software architecture',
@@ -875,7 +875,7 @@ const list = [
     sources_url: 'https://www.bestpractices.dev/en/criteria?details=true&rationale=true#1.documentation_architecture',
     sources_description: 'OpenSSF Best Practices Badge Silver Level [documentation_architecture]',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/softwareArchitectureDocs'
+    details_url: 'https://openpathfinder.com/docs/checks/softwareArchitectureDocs'
   },
   {
     title: 'Automate CI/CD steps in code-based pipelines',
@@ -893,7 +893,7 @@ const list = [
     sources_url: 'https://github.com/cncf/tag-security/blob/main/supply-chain-security/supply-chain-security-paper/sscsp.md#build-and-related-continuous-integrationcontinuous-delivery-steps-should-all-be-automated-through-a-pipeline-defined-as-code',
     sources_description: 'CNCF SSCP 1.0 #158',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/ciAndCdPipelineAsCode'
+    details_url: 'https://openpathfinder.com/docs/checks/ciAndCdPipelineAsCode'
   },
   {
     title: 'Pin actions with secrets to full-length commit SHAs',
@@ -911,7 +911,7 @@ const list = [
     sources_url: 'https://securitylab.github.com/research/github-actions-building-blocks/',
     sources_description: 'Github Docs',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/pinActionsToSHA'
+    details_url: 'https://openpathfinder.com/docs/checks/pinActionsToSHA'
   },
   {
     title: 'Automate monitoring of outdated dependencies',
@@ -929,7 +929,7 @@ const list = [
     sources_url: 'https://scvs.owasp.org/scvs/v5-component-analysis/',
     sources_description: 'OWASP SCVS L1 5.7',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/automateDependencyManagement'
+    details_url: 'https://openpathfinder.com/docs/checks/automateDependencyManagement'
   },
   {
     title: 'Provide machine-readable dependency lists',
@@ -947,7 +947,7 @@ const list = [
     sources_url: 'https://scvs.owasp.org/scvs/v1-inventory/#verification-requirements',
     sources_description: 'OWASP SCVS L1 1.3',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/machineReadableDependencies'
+    details_url: 'https://openpathfinder.com/docs/checks/machineReadableDependencies'
   },
   {
     title: 'Uniquely identify modified dependencies',
@@ -963,7 +963,7 @@ const list = [
     sources_url: 'https://scvs.owasp.org/scvs/v6-pedigree-and-provenance/',
     sources_description: 'OWASP SCVS L2 6.5',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/identifyModifiedDependencies'
+    details_url: 'https://openpathfinder.com/docs/checks/identifyModifiedDependencies'
   },
   {
     title: 'Refresh dependencies with annual releases',
@@ -979,7 +979,7 @@ const list = [
     sources_url: 'https://www.bestpractices.dev/en/criteria?details=true&rationale=true#0.maintained',
     sources_description: 'OpenSSF Best Practices Badge Passing Level [maintained]',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/annualDependencyRefresh'
+    details_url: 'https://openpathfinder.com/docs/checks/annualDependencyRefresh'
   },
   {
     title: 'Use AAL2/3 passkeys for GitHub access',
@@ -999,7 +999,7 @@ const list = [
     sources_url: 'https://github.com/ossf/great-mfa-project/blob/main/security-rationale.md',
     sources_description: 'OpenSSF Great MFA Project Security Rationale',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/useHwKeyGithubAccess'
+    details_url: 'https://openpathfinder.com/docs/checks/useHwKeyGithubAccess'
   },
   {
     title: 'Use AAL2/3 passkeys for non-interactive GitHub access',
@@ -1019,7 +1019,7 @@ const list = [
     sources_url: 'https://github.com/ossf/great-mfa-project/blob/main/security-rationale.md',
     sources_description: 'OpenSSF Great MFA Project Security Rationale',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/useHwKeyGithubNonInteractive'
+    details_url: 'https://openpathfinder.com/docs/checks/useHwKeyGithubNonInteractive'
   },
   {
     title: 'Use AAL2/3 passkeys in all other contexts',
@@ -1037,7 +1037,7 @@ const list = [
     sources_url: 'https://github.com/ossf/great-mfa-project/blob/main/security-rationale.md',
     sources_description: 'OpenSSF Great MFA Project Security Rationale',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/useHwKeyOtherContexts'
+    details_url: 'https://openpathfinder.com/docs/checks/useHwKeyOtherContexts'
   },
   {
     title: 'Require approval for forked workflow changes',
@@ -1055,7 +1055,7 @@ const list = [
     sources_url: 'https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/enabling-features-for-your-repository/managing-github-actions-settings-for-a-repository#controlling-changes-from-forks-to-workflows-in-public-repositories',
     sources_description: 'Github Docs',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/forkWorkflowApproval'
+    details_url: 'https://openpathfinder.com/docs/checks/forkWorkflowApproval'
   },
   {
     title: 'Use workflow security scanners',
@@ -1075,7 +1075,7 @@ const list = [
     sources_url: 'https://github.com/ossf/scorecard/blob/main/docs/checks.md#token-permissions',
     sources_description: 'OpenSSF Scorecard',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/workflowSecurityScanner'
+    details_url: 'https://openpathfinder.com/docs/checks/workflowSecurityScanner'
   },
   {
     title: 'Use GitHub runner security scanners',
@@ -1095,7 +1095,7 @@ const list = [
     sources_url: 'https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#hardening-for-self-hosted-runners',
     sources_description: 'Github Action Hardening Docs',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/runnerSecurityScanner'
+    details_url: 'https://openpathfinder.com/docs/checks/runnerSecurityScanner'
   },
   {
     title: 'Require active admins in GitHub organization (activity in 6 months)',
@@ -1113,7 +1113,7 @@ const list = [
     sources_url: 'https://best.openssf.org/SCM-BestPractices/github/member/stale_admin_found.html',
     sources_description: 'OpenSSF SCM Best Practices',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/activeAdminsSixMonths'
+    details_url: 'https://openpathfinder.com/docs/checks/activeAdminsSixMonths'
   },
   {
     title: 'Require active members with write access (activity in 6 months)',
@@ -1131,7 +1131,7 @@ const list = [
     sources_url: 'https://best.openssf.org/SCM-BestPractices/github/member/stale_member_found.html',
     sources_description: 'OpenSSF SCM Best Practices',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/activeWritersSixMonths'
+    details_url: 'https://openpathfinder.com/docs/checks/activeWritersSixMonths'
   },
   {
     title: 'Require pull requests before merging',
@@ -1151,7 +1151,7 @@ const list = [
     sources_url: 'https://github.com/ossf/scorecard/blob/main/docs/checks.md#branch-protection',
     sources_description: 'OpenSSF Scorecard',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/PRsBeforeMerge'
+    details_url: 'https://openpathfinder.com/docs/checks/PRsBeforeMerge'
   },
   {
     title: 'Enforce commit sign-off for web based commits',
@@ -1169,7 +1169,7 @@ const list = [
     sources_url: 'https://github.com/cncf/tag-security/blob/main/supply-chain-security/supply-chain-security-paper/sscsp.md#require-signed-commits',
     sources_description: 'CNCF SSCP 1.0 #325',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/commitSignoffForWeb'
+    details_url: 'https://openpathfinder.com/docs/checks/commitSignoffForWeb'
   },
   {
     title: 'Require signed commits',
@@ -1187,7 +1187,7 @@ const list = [
     sources_url: 'https://github.com/cncf/tag-security/blob/main/supply-chain-security/supply-chain-security-paper/sscsp.md#require-signed-commits',
     sources_description: 'CNCF SSCP 1.0 #325',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/requireSignedCommits'
+    details_url: 'https://openpathfinder.com/docs/checks/requireSignedCommits'
   },
   {
     title: 'Include package-lock.json in releases',
@@ -1205,7 +1205,7 @@ const list = [
     sources_url: 'https://github.com/ossf/scorecard/blob/main/docs/checks.md#sbom',
     sources_description: 'OpenSSF Scorecard',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/includePackageLock'
+    details_url: 'https://openpathfinder.com/docs/checks/includePackageLock'
   },
   {
     title: 'Require two-party review',
@@ -1225,7 +1225,7 @@ const list = [
     sources_url: 'https://github.com/ossf/scorecard/blob/main/docs/checks.md#code-review',
     sources_description: 'OpenSSF Scorecard',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/requireTwoPartyReview'
+    details_url: 'https://openpathfinder.com/docs/checks/requireTwoPartyReview'
   },
   {
     title: 'Require code owners review',
@@ -1245,7 +1245,7 @@ const list = [
     sources_url: 'https://github.com/ossf/scorecard/blob/main/docs/checks.md#code-review',
     sources_description: 'OpenSSF Scorecard',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/requireCodeOwnersReviewForLargeTeams'
+    details_url: 'https://openpathfinder.com/docs/checks/requireCodeOwnersReviewForLargeTeams'
   },
   {
     title: 'Require approved PRs for mainline commits',
@@ -1265,7 +1265,7 @@ const list = [
     sources_url: 'https://github.com/ossf/scorecard/blob/main/docs/checks.md#branch-protection',
     sources_description: 'OpenSSF Scorecard',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/requirePRApprovalForMainline'
+    details_url: 'https://openpathfinder.com/docs/checks/requirePRApprovalForMainline'
   },
   {
     title: 'Limit GitHub org owners to fewer than three',
@@ -1283,7 +1283,7 @@ const list = [
     sources_url: 'https://best.openssf.org/SCM-BestPractices/github/member/organization_has_too_many_admins.html',
     sources_description: 'OpenSSF SCM Best Practices',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/limitOrgOwners'
+    details_url: 'https://openpathfinder.com/docs/checks/limitOrgOwners'
   },
   {
     title: 'Limit GitHub repo admins to fewer than three',
@@ -1301,7 +1301,7 @@ const list = [
     sources_url: 'https://best.openssf.org/SCM-BestPractices/github/repository/repository_has_too_many_admins.html',
     sources_description: 'OpenSSF SCM Best Practices',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/limitRepoAdmins'
+    details_url: 'https://openpathfinder.com/docs/checks/limitRepoAdmins'
   },
   {
     title: 'Patch critical/high vulnerabilities in 14 Days',
@@ -1317,7 +1317,7 @@ const list = [
     sources_url: 'https://www.bestpractices.dev/en/criteria#0.vulnerabilities_critical_fixed',
     sources_description: 'OpenSSF Best Practices Badge Passing Level [vulnerabilities_critical_fixed]',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/patchExploitableHighVulns14Days'
+    details_url: 'https://openpathfinder.com/docs/checks/patchExploitableHighVulns14Days'
   },
   {
     title: 'Patch non-critical vulnerabilities in 60 Days',
@@ -1333,7 +1333,7 @@ const list = [
     sources_url: 'https://www.bestpractices.dev/en/criteria#0.vulnerabilities_fixed_60_days',
     sources_description: 'OpenSSF Best Practices Badge Silver Level [vulnerabilities_fixed_60_days]',
     implementation_status: 'pending',
-    details_url: 'https://openjs-security-program-standards.netlify.app/details/patchExploitableNoncCriticalVulns60Days'
+    details_url: 'https://openpathfinder.com/docs/checks/patchExploitableNoncCriticalVulns60Days'
   }
 ]
 exports.up = async (knex) => {

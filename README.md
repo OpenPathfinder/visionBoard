@@ -151,6 +151,27 @@ There is an specific workflow that runs all the checks sequentially:
 node index.js workflow run run-all-checks
 ```
 
+### Checklist
+
+The checklist are collections of checks. You can list the available list by running:
+
+```bash
+node index.js checklist list
+```
+
+Run a specific checklist:
+
+```bash
+node index.js checklist run [--name <name>]
+```
+
+
+It is possible also to define a project scope:
+
+```bash
+node index.js checklist run [--name <name>] [--project-scope <name1,name2,...>]
+```
+
 ## Database Management
 
 ### Migrations

@@ -2,12 +2,14 @@ const { Command } = require('commander')
 const { getConfig } = require('./src/config')
 const { projectCategories, dbSettings } = getConfig()
 const { logger } = require('./src/utils')
-const { runAddProjectCommand, runWorkflowCommand, listWorkflowCommand, listCheckCommand, runCheckCommand } = require('./src/cli')
+const { runAddProjectCommand, runWorkflowCommand, listWorkflowCommand, listCheckCommand, runCheckCommand, runChecklist, listChecklist } = require('./src/cli')
 const knex = require('knex')(dbSettings)
 
 const program = new Command()
 
-const project = program.command('project').description('Manage projects')
+const project = program
+  .command('project')
+  .description('Manage projects')
 
 // Project related commands
 project
@@ -28,7 +30,9 @@ project
   })
 
 // Workflows related commands
-const workflow = program.command('workflow').description('Manage workflows')
+const workflow = program
+  .command('workflow')
+  .description('Manage workflows')
 
 workflow
   .command('run')
@@ -53,7 +57,9 @@ workflow
   })
 
 // Checks related commands
-const check = program.command('check').description('Manage checks')
+const check = program
+  .command('check')
+  .description('Manage checks')
 
 check
   .command('list')
@@ -76,6 +82,41 @@ check
   .action(async (options) => {
     try {
       await runCheckCommand(knex, options)
+    } catch (error) {
+      logger.error(error)
+      process.exit(1)
+    } finally {
+      await knex.destroy()
+    }
+  })
+
+// Checklists related commands
+const checklist = program
+  .command('checklist')
+  .description('Manage checklists')
+
+checklist
+  .command('list')
+  .description('List all available checklists')
+  .action(async (options) => {
+    try {
+      await listChecklist(knex, options)
+    } catch (error) {
+      logger.error(error)
+      process.exit(1)
+    } finally {
+      await knex.destroy()
+    }
+  })
+
+checklist
+  .command('run')
+  .description('Run a checklist')
+  .option('--name <name>', 'Name of the checklist')
+  .option('--project-scope <projects...>', 'Scope of the checklist')
+  .action(async (options) => {
+    try {
+      await runChecklist(knex, options)
     } catch (error) {
       logger.error(error)
       process.exit(1)

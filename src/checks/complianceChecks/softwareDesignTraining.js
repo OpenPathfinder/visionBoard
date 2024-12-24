@@ -2,16 +2,19 @@ const validators = require('../validators')
 const { initializeStore } = require('../../store')
 const debug = require('debug')('checks:softwareDesignTraining')
 
-module.exports = async (knex) => {
+module.exports = async (knex, { projects } = {}) => {
   const {
-    getAllSSoftwareDesignTrainings, getCheckByCodeName,
+    getAllSSoftwareDesignTrainingsByProjectIds, getCheckByCodeName,
     getAllProjects, addAlert, addTask, upsertComplianceCheckResult,
     deleteAlertsByComplianceCheckId, deleteTasksByComplianceCheckId
   } = initializeStore(knex)
   debug('Collecting relevant data...')
   const check = await getCheckByCodeName('softwareDesignTraining')
-  const trainings = await getAllSSoftwareDesignTrainings()
-  const projects = await getAllProjects()
+  if (!projects || (Array.isArray(projects) && projects.length === 0)) {
+    projects = await getAllProjects()
+  }
+
+  const trainings = await getAllSSoftwareDesignTrainingsByProjectIds(projects.map(project => project.id))
 
   debug('Extracting the validation results...')
   const analysis = validators.softwareDesignTraining({ trainings, check, projects })

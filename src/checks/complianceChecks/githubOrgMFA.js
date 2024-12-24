@@ -2,16 +2,18 @@ const validators = require('../validators')
 const { initializeStore } = require('../../store')
 const debug = require('debug')('checks:githubOrgMFA')
 
-module.exports = async (knex) => {
+module.exports = async (knex, { projects } = {}) => {
   const {
-    getAllGithubOrganizations, getCheckByCodeName,
+    getAllGithubOrganizationsByProjectsId, getCheckByCodeName,
     getAllProjects, addAlert, addTask, upsertComplianceCheckResult,
     deleteAlertsByComplianceCheckId, deleteTasksByComplianceCheckId
   } = initializeStore(knex)
   debug('Collecting relevant data...')
   const check = await getCheckByCodeName('githubOrgMFA')
-  const organizations = await getAllGithubOrganizations()
-  const projects = await getAllProjects()
+  if (!projects || (Array.isArray(projects) && projects.length === 0)) {
+    projects = await getAllProjects()
+  }
+  const organizations = await getAllGithubOrganizationsByProjectsId(projects.map(p => p.id))
 
   debug('Extracting the validation results...')
   const analysis = validators.githubOrgMFA({ organizations, check, projects })

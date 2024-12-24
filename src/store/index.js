@@ -93,6 +93,27 @@ const upsertGithubRepository = (knex) => (repository, orgId) => upsertRecord({
   data: { ...repository, github_organization_id: orgId }
 })
 
+const getAllChecksInChecklistById = (knex, checklistId) =>
+  debug(`Fetching all checks in checklist by id (${checklistId})...`) ||
+  knex('checklist_items')
+    .join('compliance_checks', 'compliance_checks.id', 'checklist_items.compliance_check_id')
+    .where('checklist_items.checklist_id', checklistId)
+    .select('compliance_checks.*')
+
+const getAllGithubOrganizationsByProjectsId = (knex, projectIds) => {
+  debug(`Fetching all github organizations by projects id (${projectIds})...`)
+  return knex('github_organizations')
+    .whereIn('github_organizations.project_id', projectIds)
+    .select('*')
+}
+
+const getAllSSoftwareDesignTrainingsByProjectIds = (knex, projectIds) => {
+  debug(`Fetching all software design trainings by project ids (${projectIds})...`)
+  return knex('software_design_training')
+    .whereIn('software_design_training.project_id', projectIds)
+    .select('*')
+}
+
 const initializeStore = (knex) => {
   debug('Initializing store...')
   const getAll = getAllFn(knex)
@@ -113,6 +134,10 @@ const initializeStore = (knex) => {
     upsertComplianceCheckResult: upsertComplianceCheckResult(knex),
     getAllSSoftwareDesignTrainings: () => getAll('software_design_training'),
     getAllGithubRepositories: () => getAll('github_repositories'),
+    getAllChecklists: () => getAll('compliance_checklists'),
+    getAllChecksInChecklistById,
+    getAllGithubOrganizationsByProjectsId: (projectIds) => getAllGithubOrganizationsByProjectsId(knex, projectIds),
+    getAllSSoftwareDesignTrainingsByProjectIds: (projectIds) => getAllSSoftwareDesignTrainingsByProjectIds(knex, projectIds),
     upsertOSSFScorecard: upsertOSSFScorecard(knex)
   }
 }

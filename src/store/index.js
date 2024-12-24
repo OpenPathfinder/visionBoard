@@ -107,6 +107,13 @@ const getAllGithubOrganizationsByProjectsId = (knex, projectIds) => {
     .select('*')
 }
 
+const getAllSSoftwareDesignTrainingsByProjectIds = (knex, projectIds) => {
+  debug(`Fetching all software design trainings by project ids (${projectIds})...`)
+  return knex('software_design_training')
+    .whereIn('software_design_training.project_id', projectIds)
+    .select('*')
+}
+
 const initializeStore = (knex) => {
   debug('Initializing store...')
   const getAll = getAllFn(knex)
@@ -130,6 +137,7 @@ const initializeStore = (knex) => {
     getAllChecklists: () => getAll('compliance_checklists'),
     getAllChecksInChecklistById,
     getAllGithubOrganizationsByProjectsId: (projectIds) => getAllGithubOrganizationsByProjectsId(knex, projectIds),
+    getAllSSoftwareDesignTrainingsByProjectIds: (projectIds) => getAllSSoftwareDesignTrainingsByProjectIds(knex, projectIds),
     upsertOSSFScorecard: upsertOSSFScorecard(knex)
   }
 }

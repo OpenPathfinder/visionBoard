@@ -1,7 +1,7 @@
 const list = [
   {
-    title: 'Training on Secure Software Design',
-    description: 'At least One Primary Maintainer has taken TBD Training on Secure Software Design',
+    title: 'Training on secure software design',
+    description: 'At least one primary maintainer has taken the training on Secure Software Design',
     section_number: '7',
     section_name: 'code quality',
     code_name: 'softwareDesignTraining',
@@ -18,8 +18,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/softwareDesignTraining'
   },
   {
-    title: 'Training on OWASP Top 10 or Equivalent',
-    description: 'At least One Primary Maintainer has taken TBD Training on OWASP Top 10 or Equivalent',
+    title: 'Training on OWASP Top 10 or equivalent',
+    description: 'At least one primary maintainer has taken the training on OWASP Top 10 or Equivalent',
     section_number: '7',
     section_name: 'code quality',
     code_name: 'owaspTop10Training',
@@ -36,8 +36,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/owaspTop10Training'
   },
   {
-    title: 'Enforce MFA in GitHub Organization(s)',
-    description: 'Multi Factor Authentication (MFA) Enforced Across the Github Organization',
+    title: 'Enforce MFA in GitHub organization(s)',
+    description: 'Multi Factor authentication (MFA) enforced across the Github Organization(s)',
     section_number: '1',
     section_name: 'user authentication',
     code_name: 'githubOrgMFA',
@@ -56,8 +56,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/githubOrgMFA'
   },
   {
-    title: 'Enforce MFA in npm Organization(s)',
-    description: 'Multi Factor Authentication (MFA) Enforced Across the npm Organization',
+    title: 'Enforce MFA in npm organization(s)',
+    description: 'Multi Factor Authentication (MFA) enforced across the npm organization(s)',
     section_number: '1',
     section_name: 'user authentication',
     code_name: 'npmOrgMFA',
@@ -77,7 +77,7 @@ const list = [
   },
   {
     title: 'Enforce MFA in all the tools',
-    description: 'Multi Factor Authentication (MFA) Enforced in All Tools Wherever Techncially Feasible',
+    description: 'Multi Factor Authentication (MFA) enforced in all tools wherever technically feasible',
     section_number: '1',
     section_name: 'user authentication',
     code_name: 'orgToolingMFA',
@@ -95,7 +95,7 @@ const list = [
   },
   {
     title: 'Use MFA against impersonation',
-    description: 'Use Multi Factor Authentication (MFA) Methods that Defend Against Impersonation when Available ',
+    description: 'Use Multi Factor Authentication (MFA) methods that defend against impersonation when available ',
     section_number: '1',
     section_name: 'user authentication',
     code_name: 'MFAImpersonationDefense',
@@ -115,7 +115,7 @@ const list = [
   },
   {
     title: 'Check sensitive information',
-    description: 'No Secrets and Credentials in Source Code',
+    description: 'No secrets or credentials are included in the source code',
     section_number: '3',
     section_name: 'service authentication',
     code_name: 'noSensitiveInfoInRepositories',
@@ -155,7 +155,7 @@ const list = [
   },
   {
     title: 'Ensure that all the commits are scanned',
-    description: 'All Commits are Scanned for Secrets and Credentials ',
+    description: 'All commits are scanned for secrets and credentials ',
     section_number: '7',
     section_name: 'code quality',
     code_name: 'scanCommitsForSensitiveInfo',
@@ -174,8 +174,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/scanCommitsForSensitiveInfo'
   },
   {
-    title: 'Block New Commits with Secrets or Credentials',
-    description: 'New Commits Containing Secrets or Credentials are Blocked from Merging',
+    title: 'Block new commits with secrets or credentials',
+    description: 'New commits containing secrets or credentials are blocked from merging',
     section_number: '7',
     section_name: 'code quality',
     code_name: 'preventLandingSensitiveCommits',
@@ -194,7 +194,7 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/preventLandingSensitiveCommits'
   },
   {
-    title: 'Use SSH Keys with Passphrases for Repository Access',
+    title: 'Use SSH keys with passphrases for repository access',
     description: 'Use SSH keys for developer access to source code repositories and use a passphrase',
     section_number: '1',
     section_name: 'user authentication',
@@ -214,7 +214,7 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/SSHKeysRequired'
   },
   {
-    title: 'Publish to npm Using MFA-Enabled Accounts',
+    title: 'Publish to npm using MFA-Enabled accounts',
     description: 'Publish to npm using an MFA-enabled account rather than single factor legacy or granular access tokens',
     section_number: '3',
     section_name: 'service authentication',
@@ -232,8 +232,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/npmPublicationMFA'
   },
   {
-    title: 'Secure GitHub Webhooks with Secrets',
-    description: 'Github Webhooks Use Secrets',
+    title: 'Secure GitHub Webhooks with secrets',
+    description: 'Ensure that Github Webhooks use secrets',
     section_number: '3',
     section_name: 'service authentication',
     code_name: 'githubWebhookSecrets',
@@ -252,8 +252,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/githubWebhookSecrets'
   },
   {
-    title: 'Restrict Default GitHub Org Member Permissions',
-    description: 'Default Github Org Member Permissions Should Be Restricted',
+    title: 'Restrict default GitHub Org member permissions',
+    description: 'Default GitHub organization member permissions should be restricted',
     section_number: '2',
     section_name: 'user account permissions',
     code_name: 'restrictedOrgPermissions',
@@ -272,8 +272,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/restrictedOrgPermissions'
   },
   {
-    title: 'Allow Only Admins to Create Public Repositories',
-    description: 'Only Admins Should Be Able To Create Public Repositories',
+    title: 'Allow only admins to create public repositories',
+    description: 'Only admins should be able to create public repositories',
     section_number: '2',
     section_name: 'user account permissions',
     code_name: 'adminRepoCreationOnly',
@@ -292,8 +292,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/adminRepoCreationOnly'
   },
   {
-    title: 'Prevent Admins from Bypassing Branch Protection',
-    description: '[For Projects with Two or more Admins] Do not allow Admins to Bypass Branch Protection Settings',
+    title: 'Prevent admins from bypassing branch protection',
+    description: 'Do not allow admins to bypass branch protection settings',
     section_number: '2',
     section_name: 'user account permissions',
     code_name: 'preventBranchProtectionBypass',
@@ -312,7 +312,7 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/preventBranchProtectionBypass'
   },
   {
-    title: 'Define Roles Aligned to Functional Responsibilities',
+    title: 'Define roles aligned to functional responsibilities',
     description: 'Define roles aligned to functional responsibilities',
     section_number: '2',
     section_name: 'user account permissions',
@@ -332,8 +332,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/defineFunctionalRoles'
   },
   {
-    title: 'Define Teams/Individuals with Write Access to Repositories',
-    description: 'Define Individuals/Teams who Write Access to a Github Repo',
+    title: 'Define teams/individuals with write access to repositories',
+    description: 'Define individuals/teams who write access to a GitHub Repository',
     section_number: '2',
     section_name: 'user account permissions',
     code_name: 'githubWriteAccessRoles',
@@ -352,8 +352,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/githubWriteAccessRoles'
   },
   {
-    title: 'Configure Two or more Owners for Access Continuity',
-    description: '[For Projects with Two or more Owners] Have at least Two Owners Configured for Access Continuity',
+    title: 'Configure two or more owners for access continuity',
+    description: 'Have at least two owners configured for access continuity',
     section_number: '2',
     section_name: 'user account permissions',
     code_name: 'twoOrMoreOwnersForAccess',
@@ -372,8 +372,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/twoOrMoreOwnersForAccess'
   },
   {
-    title: 'Patch Actively Exploited Critical Vulnerabilities within 30 Days',
-    description: 'Actively Exploited Critical Vulnerabilities Patched within 30 Days',
+    title: 'Patch actively exploited critical vulnerabilities within 30 Days',
+    description: 'Actively exploited critical vulnerabilities patched within 30 Days',
     section_number: '5',
     section_name: 'vulnerability management',
     code_name: 'patchCriticalVulns30Days',
@@ -388,8 +388,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/patchCriticalVulns30Days'
   },
   {
-    title: 'Patch Non-Critical Vulnerabilities within 90 Days',
-    description: 'Non-Critical Exploitable Vulnerabilities Patched within 90 Days',
+    title: 'Patch non-critical vulnerabilities within 90 days',
+    description: 'Ensure non-critical exploitable vulnerabilities are patched within 90 days',
     section_number: '5',
     section_name: 'vulnerability management',
     code_name: 'patchNonCriticalVulns90Days',
@@ -404,8 +404,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/patchNonCriticalVulns90Days'
   },
   {
-    title: 'Automate Dependency Vulnerability Identification',
-    description: 'An automated process to identify dependencies with publicly disclosed vulnerabilities',
+    title: 'Automate dependency vulnerability identification',
+    description: 'Implement an automated process to identify dependencies with publicly disclosed vulnerabilities',
     section_number: '11',
     section_name: 'dependency management',
     code_name: 'automateVulnDetection',
@@ -424,8 +424,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/automateVulnDetection'
   },
   {
-    title: 'Use Automated Static Code Analysis Tools',
-    description: 'Use an Automated Static Code Analysis Tool (eg: ESLInt)',
+    title: 'Use automated static code analysis tools',
+    description: 'Implement automated static code analysis tools (e.g., ESLint)',
     section_number: '7',
     section_name: 'code quality',
     code_name: 'staticCodeAnalysis',
@@ -444,8 +444,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/staticCodeAnalysis'
   },
   {
-    title: 'Address Compiler/Linter Warnings Before Merging',
-    description: 'Compilers/Linter Warnings Addressed in order to Merge',
+    title: 'Address compiler and linter warnings before merging',
+    description: 'Ensure all compiler and linter warnings are resolved before merging',
     section_number: '7',
     section_name: 'code quality',
     code_name: 'resolveLinterWarnings',
@@ -464,8 +464,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/resolveLinterWarnings'
   },
   {
-    title: 'Use Static Application Security Testing for All Commits',
-    description: 'All Commits are Scanned by a Static Application Security Testing Tool',
+    title: 'Use static application security testing for all commits',
+    description: 'Ensure all commits are scanned by a static application security testing tool',
     section_number: '7',
     section_name: 'code quality',
     code_name: 'staticAppSecTesting',
@@ -484,8 +484,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/staticAppSecTesting'
   },
   {
-    title: 'Require Commit Status Checks to Pass Before Merging',
-    description: 'All Required Commit Status Checks must pass before Merging',
+    title: 'Require commit status checks to pass before merging',
+    description: 'Ensure all required commit status checks pass before merging',
     section_number: '7',
     section_name: 'code quality',
     code_name: 'commitStatusChecks',
@@ -504,8 +504,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/commitStatusChecks'
   },
   {
-    title: 'Ensure Security.md Meets OpenJS CVD Guidelines',
-    description: 'Security.md Meets OpenJS CVD Guidelines ',
+    title: 'Ensure Security.md meets OpenJS CVD guidelines',
+    description: 'Verify that Security.md complies with OpenJS CVD guidelines',
     section_number: '6',
     section_name: 'coordinated vulnerability disclosure',
     code_name: 'securityMdMeetsOpenJSCVD',
@@ -520,8 +520,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/securityMdMeetsOpenJSCVD'
   },
   {
-    title: 'Use CVD Tools to Manage Vulnerability Reports',
-    description: 'Project Leverages a CVD Tool to Privately Receive/Manage External Vulnerability Reports (eg: H1/GH PVR)',
+    title: 'Use CVD tools to manage vulnerability reports',
+    description: 'Ensure the project utilizes a CVD tool to privately receive and manage external vulnerability reports (e.g., HackerOne, GitHub PVR)',
     section_number: '6',
     section_name: 'coordinated vulnerability disclosure',
     code_name: 'useCVDToolForVulns',
@@ -538,8 +538,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/useCVDToolForVulns'
   },
   {
-    title: 'Respond to External Vulnerability Reports in Under 14 Days',
-    description: 'All External Vulnerability Reports Responded to <14 Days',
+    title: 'Respond to external vulnerability reports in under 14 days',
+    description: 'Ensure all external vulnerability reports are addressed within 14 days',
     section_number: '6',
     section_name: 'coordinated vulnerability disclosure',
     code_name: 'vulnResponse14Days',
@@ -554,8 +554,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/vulnResponse14Days'
   },
   {
-    title: 'Define Clear Communication and Incident Response Plans',
-    description: 'Establish a Clear Communication and Incident Response Plan',
+    title: 'Define clear communication and incident response plans',
+    description: 'Establish clear communication and incident response plans',
     section_number: '6',
     section_name: 'coordinated vulnerability disclosure',
     code_name: 'incidentResponsePlan',
@@ -570,8 +570,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/incidentResponsePlan'
   },
   {
-    title: 'Assign CVEs to All Known Security Vulnerabilities',
-    description: 'All Known Security Vulnerabilities are Issued a CVE',
+    title: 'Assign CVEs to all known security vulnerabilities',
+    description: 'Ensure all known security vulnerabilities are issued a CVE',
     section_number: '6',
     section_name: 'coordinated vulnerability disclosure',
     code_name: 'assignCVEForKnownVulns',
@@ -586,8 +586,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/assignCVEForKnownVulns'
   },
   {
-    title: 'Include CVE IDs in Release Notes for Security Fixes',
-    description: 'Release Notes must Include the CVE ID of Patched Security Vulnerabilities',
+    title: 'Include CVE IDs in release notes for security fixes',
+    description: 'Ensure release notes include the CVE ID for patched security vulnerabilities',
     section_number: '6',
     section_name: 'coordinated vulnerability disclosure',
     code_name: 'includeCVEInReleaseNotes',
@@ -602,8 +602,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/includeCVEInReleaseNotes'
   },
   {
-    title: 'Create Regression Tests for Bugs and Security Vulnerabilities',
-    description: 'Regression Tests for => 50% of Bugs and 100% of Security Vulns',
+    title: 'Create regression tests for bugs and security vulnerabilities',
+    description: 'Ensure regression tests cover at least 50% of bugs and 100% of security vulnerabilities',
     section_number: '7',
     section_name: 'code quality',
     code_name: 'regressionTestsForVulns',
@@ -618,8 +618,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/regressionTestsForVulns'
   },
   {
-    title: 'Set Default GitHub Workflow Token Permissions to Read Only',
-    description: 'Github Org Default Workflow Token Permissions are Set to Read Only',
+    title: 'Set default GitHub workflow token permissions to read-only',
+    description: 'Ensure GitHub organization default workflow token permissions are set to read-only',
     section_number: '4',
     section_name: 'github workflow permissions',
     code_name: 'defaultTokenPermissionsReadOnly',
@@ -634,8 +634,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/defaultTokenPermissionsReadOnly'
   },
   {
-    title: 'Prevent Workflows from Creating or Approving PRs',
-    description: 'Workflows are not Allowed To Create or Approve Pull Requests',
+    title: 'Prevent workflows from creating or approving PRs',
+    description: 'Ensure workflows are not allowed to create or approve pull requests',
     section_number: '4',
     section_name: 'github workflow permissions',
     code_name: 'blockWorkflowPRApproval',
@@ -654,8 +654,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/blockWorkflowPRApproval'
   },
   {
-    title: 'Disable Force Push on Default Branch',
-    description: 'Prevent Force Push on Default Branch',
+    title: 'Disable force push on default branch',
+    description: 'Ensure force push is disabled on the default branch',
     section_number: '9',
     section_name: 'source control',
     code_name: 'noForcePushDefaultBranch',
@@ -672,8 +672,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/noForcePushDefaultBranch'
   },
   {
-    title: 'Prevent Deletion of Default Branch',
-    description: 'Prevent Default Branch Deletion',
+    title: 'Prevent deletion of default branch',
+    description: 'Ensure the default branch cannot be deleted',
     section_number: '9',
     section_name: 'source control',
     code_name: 'preventDeletionDefaultBranch',
@@ -692,8 +692,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/preventDeletionDefaultBranch'
   },
   {
-    title: 'Require Default Branch Updates Before Merging',
-    description: 'Default Branch must be Up to Date before Merging',
+    title: 'Require default branch updates before merging',
+    description: 'Ensure the default branch is up to date before allowing merges',
     section_number: '9',
     section_name: 'source control',
     code_name: 'upToDateDefaultBranchBeforeMerge',
@@ -710,8 +710,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/upToDateDefaultBranchBeforeMerge'
   },
   {
-    title: 'Restrict GitHub Org Secrets to Specific Repositories',
-    description: 'GitHub Organization Secrets are Restricted to Selected Repositories',
+    title: 'Restrict GitHub organization secrets to specific repositories',
+    description: 'Limit GitHub organization secrets to only be accessible by selected repositories',
     section_number: '4',
     section_name: 'github workflows',
     code_name: 'restrictOrgSecrets',
@@ -730,8 +730,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/restrictOrgSecrets'
   },
   {
-    title: 'Limit GitHub Actions to Verified or Trusted Actions',
-    description: 'GitHub Actions Should Be Limited To Verified or Explicitly Trusted Actions',
+    title: 'Limit GitHub Actions to verified or trusted actions',
+    description: 'Ensure GitHub Actions are limited to verified or explicitly trusted actions',
     section_number: '4',
     section_name: 'github workflows',
     code_name: 'verifiedActionsOnly',
@@ -750,8 +750,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/verifiedActionsOnly'
   },
   {
-    title: 'Disable Self-Hosted Runners in GitHub Org',
-    description: 'Disable use of Self-Hosted Runners in Github Org',
+    title: 'Disable self-hosted runners in GitHub organization',
+    description: 'Ensure the use of self-hosted runners is disabled in the GitHub organization',
     section_number: '4',
     section_name: 'github workflows',
     code_name: 'noSelfHostedRunners',
@@ -770,8 +770,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/noSelfHostedRunners'
   },
   {
-    title: 'Restrict Build Pipeline Code Execution to Build Scripts',
-    description: 'Build Pipeline Cannot Execute Arbitrary Code from Outside of a Build Script',
+    title: 'Restrict build pipeline code execution to build scripts',
+    description: 'Ensure the build pipeline cannot execute arbitrary code outside of a build script',
     section_number: '4',
     section_name: 'github workflows',
     code_name: 'noArbitraryCodeInPipeline',
@@ -788,8 +788,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/noArbitraryCodeInPipeline'
   },
   {
-    title: 'Limit Workflow Write Permissions to Job-Level',
-    description: 'Only Allow Workflows Write Permissions at the Job-Level',
+    title: 'Limit workflow write permissions to job level',
+    description: 'Ensure workflows are granted write permissions only at the job level',
     section_number: '4',
     section_name: 'github workflows',
     code_name: 'limitWorkflowWritePermissions',
@@ -808,8 +808,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/limitWorkflowWritePermissions'
   },
   {
-    title: 'Avoid Script Injection from Untrusted Variables',
-    description: 'Avoid Script Injection from Untrusted Context Variables',
+    title: 'Avoid script injection from untrusted variables',
+    description: 'Ensure script injection is prevented by avoiding untrusted context variables',
     section_number: '4',
     section_name: 'github workflows',
     code_name: 'preventScriptInjection',
@@ -828,8 +828,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/preventScriptInjection'
   },
   {
-    title: 'Document Consistent and Automated Build Processes',
-    description: 'Consistent and Automated Build Process is Documented and Used',
+    title: 'Document consistent and automated build processes',
+    description: 'Ensure a consistent and automated build process is documented and followed',
     section_number: '4',
     section_name: 'github workflows',
     code_name: 'consistentBuildProcessDocs',
@@ -844,8 +844,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/consistentBuildProcessDocs'
   },
   {
-    title: 'Support Older Versions or Provide Upgrade Paths',
-    description: 'Commonly Used Older Versions Supported or Upgrade Path Provided/Documented',
+    title: 'Support older versions or provide upgrade paths',
+    description: 'Ensure commonly used older versions are supported or an upgrade path is documented and provided',
     section_number: '5',
     section_name: 'vulnerability management',
     code_name: 'upgradePathDocs',
@@ -860,8 +860,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/upgradePathDocs'
   },
   {
-    title: 'Document Software Architecture',
-    description: '[For Projects with Two or more Maintainers] Document Software Architecture',
+    title: 'Document software architecture',
+    description: 'Ensure the software architecture is clearly documented',
     section_number: '8',
     section_name: 'code review',
     code_name: 'softwareArchitectureDocs',
@@ -878,8 +878,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/softwareArchitectureDocs'
   },
   {
-    title: 'Automate CI/CD Steps in Code-Based Pipelines',
-    description: 'CI/CD steps should all be automated through a pipeline defined as code',
+    title: 'Automate CI/CD steps in code-based pipelines',
+    description: 'Ensure all CI/CD steps are automated through pipelines defined as code',
     section_number: '9',
     section_name: 'source control',
     code_name: 'ciAndCdPipelineAsCode',
@@ -896,8 +896,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/ciAndCdPipelineAsCode'
   },
   {
-    title: 'Pin Actions with Secrets to Full-Length Commit SHAs',
-    description: 'Pin Actions with Access to Secrets to a Full Length Commit SHA',
+    title: 'Pin actions with secrets to full-length commit SHAs',
+    description: 'Ensure actions with access to secrets are pinned to a full-length commit SHA',
     section_number: '4',
     section_name: 'github workflows',
     code_name: 'pinActionsToSHA',
@@ -914,8 +914,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/pinActionsToSHA'
   },
   {
-    title: 'Automate Monitoring of Outdated Dependencies',
-    description: 'Automated Process is Used to Monitor for and Maintain a List of Out of Date Dependencies',
+    title: 'Automate monitoring of outdated dependencies',
+    description: 'Ensure an automated process is in place to monitor and maintain a list of outdated dependencies',
     section_number: '10',
     section_name: 'dependency inventory',
     code_name: 'automateDependencyManagement',
@@ -932,8 +932,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/automateDependencyManagement'
   },
   {
-    title: 'Provide Machine-Readable Dependency Lists',
-    description: '[Freestanding Applications Only] A Machine Readable List of all Direct and Transitive Dependencies is Available for the Software',
+    title: 'Provide machine-readable dependency lists',
+    description: 'Ensure a machine-readable list of all direct and transitive dependencies is available for the software',
     section_number: '10',
     section_name: 'dependency inventory',
     code_name: 'machineReadableDependencies',
@@ -950,8 +950,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/machineReadableDependencies'
   },
   {
-    title: 'Uniquely Identify Modified Dependencies',
-    description: 'Modified dependencies are uniquely identified and distinct from origin dependency',
+    title: 'Uniquely identify modified dependencies',
+    description: 'Ensure modified dependencies are uniquely identified and clearly distinguished from the original dependency',
     section_number: '10',
     section_name: 'dependency inventory',
     code_name: 'identifyModifiedDependencies',
@@ -966,8 +966,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/identifyModifiedDependencies'
   },
   {
-    title: 'Refresh Dependencies with Annual Releases',
-    description: 'A new release to refresh dependencies occurs at least annually',
+    title: 'Refresh dependencies with annual releases',
+    description: 'Ensure dependencies are refreshed through a new release at least once annually',
     section_number: '5',
     section_name: 'vulnerability management',
     code_name: 'annualDependencyRefresh',
@@ -982,11 +982,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/annualDependencyRefresh'
   },
   {
-    title: 'Use AAL2/3 Passkeys for GitHub Access',
-    description: {
-      url: 'http://github.com/',
-      description: 'Github.com'
-    },
+    title: 'Use AAL2/3 passkeys for GitHub access',
+    description: 'Ensure GitHub access utilizes a passkey (AAL2) or hardware key (AAL3) activated by a password or biometrics',
     section_number: '1',
     section_name: 'user authentication',
     code_name: 'useHwKeyGithubAccess',
@@ -1005,8 +1002,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/useHwKeyGithubAccess'
   },
   {
-    title: 'Use AAL2/3 Passkeys for Non-Interactive GitHub Access',
-    description: 'Non-Interactive Github: Use a passkey (AAL2) or hardware key (AAL3) that activates using a password or biometrics',
+    title: 'Use AAL2/3 passkeys for non-interactive GitHub access',
+    description: 'Ensure non-interactive GitHub access uses a passkey (AAL2) or hardware key (AAL3) activated by a password or biometrics',
     section_number: '1',
     section_name: 'user authentication',
     code_name: 'useHwKeyGithubNonInteractive',
@@ -1025,8 +1022,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/useHwKeyGithubNonInteractive'
   },
   {
-    title: 'Use AAL2/3 Passkeys in All Other Contexts',
-    description: 'All Other Contexts: Use a passkey (AAL2) or hardware key (AAL3) that activates using a password or biometrics',
+    title: 'Use AAL2/3 passkeys in all other contexts',
+    description: 'Ensure all other contexts use a passkey (AAL2) or hardware key (AAL3) activated by a password or biometrics',
     section_number: '1',
     section_name: 'user authentication',
     code_name: 'useHwKeyOtherContexts',
@@ -1043,8 +1040,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/useHwKeyOtherContexts'
   },
   {
-    title: 'Require Approval for Forked Workflow Changes',
-    description: 'Limit changes from forks to workflows by requiring approval for all outside collaborators',
+    title: 'Require approval for forked workflow changes',
+    description: 'Ensure changes to workflows from forks require approval for all outside collaborators',
     section_number: '4',
     section_name: 'github workflows',
     code_name: 'forkWorkflowApproval',
@@ -1061,8 +1058,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/forkWorkflowApproval'
   },
   {
-    title: 'Use Workflow Security Scanners',
-    description: 'Use a Workflow Security Scanner',
+    title: 'Use workflow security scanners',
+    description: 'Ensure a workflow security scanner is utilized',
     section_number: '4',
     section_name: 'github workflows',
     code_name: 'workflowSecurityScanner',
@@ -1081,8 +1078,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/workflowSecurityScanner'
   },
   {
-    title: 'Use GitHub Runner Security Scanners',
-    description: 'Use a Github Runner Security Scanner',
+    title: 'Use GitHub runner security scanners',
+    description: 'Ensure a GitHub runner security scanner is utilized',
     section_number: '4',
     section_name: 'github workflows',
     code_name: 'runnerSecurityScanner',
@@ -1101,8 +1098,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/runnerSecurityScanner'
   },
   {
-    title: 'Require Active Admins in GitHub Org (Activity in 6 Months)',
-    description: 'Github Organization Admins Should Have Activity In The Last 6 Months',
+    title: 'Require active admins in GitHub organization (activity in 6 months)',
+    description: 'Ensure GitHub organization admins have been active within the last 6 months',
     section_number: '2',
     section_name: 'user account permissions',
     code_name: 'activeAdminsSixMonths',
@@ -1119,8 +1116,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/activeAdminsSixMonths'
   },
   {
-    title: 'Require Active Members with Write Access (Activity in 6 Months)',
-    description: 'Github Organization Members with Write Permissions Should Have Activity In The Last 6 Months',
+    title: 'Require active members with write access (activity in 6 months)',
+    description: 'Ensure GitHub organization members with write permissions have been active within the last 6 months',
     section_number: '2',
     section_name: 'user account permissions',
     code_name: 'activeWritersSixMonths',
@@ -1137,8 +1134,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/activeWritersSixMonths'
   },
   {
-    title: 'Require Pull Requests Before Merging',
-    description: 'Require Pull Requests before Merging',
+    title: 'Require pull requests before merging',
+    description: 'Require pull requests before merging',
     section_number: '9',
     section_name: 'source control',
     code_name: 'PRsBeforeMerge',
@@ -1157,8 +1154,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/PRsBeforeMerge'
   },
   {
-    title: 'Enforce Commit Signoff for Web-Based Commits',
-    description: 'Github Org Requires Commit Signoff for Web-Based Commits',
+    title: 'Enforce commit sign-off for web based commits',
+    description: 'GitHub org requires commit sign-off for web-based commits',
     section_number: '9',
     section_name: 'source control',
     code_name: 'commitSignoffForWeb',
@@ -1175,8 +1172,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/commitSignoffForWeb'
   },
   {
-    title: 'Require Signed Commits',
-    description: 'Require Signed Commits',
+    title: 'Require signed commits',
+    description: 'Require signed commits',
     section_number: '9',
     section_name: 'source control',
     code_name: 'requireSignedCommits',
@@ -1193,8 +1190,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/requireSignedCommits'
   },
   {
-    title: 'Include package-lock.json in Releases (Freestanding Apps)',
-    description: '[Freestanding Applications Only] Commit a package-lock.json file with each release',
+    title: 'Include package-lock.json in releases',
+    description: 'Commit a package-lock.json file with each release',
     section_number: '10',
     section_name: 'dependency inventory',
     code_name: 'includePackageLock',
@@ -1211,8 +1208,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/includePackageLock'
   },
   {
-    title: 'Require Two-Party Review (Two+ Maintainers)',
-    description: '[For Projects with Two or more Maintainers] Require Two Party Review',
+    title: 'Require two-party review',
+    description: 'Require two party review',
     section_number: '8',
     section_name: 'code review',
     code_name: 'requireTwoPartyReview',
@@ -1231,8 +1228,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/requireTwoPartyReview'
   },
   {
-    title: 'Require Code Owners Review (Four+ Maintainers)',
-    description: '[For Projects with Four or more Maintainers] Require Code Owners Review',
+    title: 'Require code owners review',
+    description: 'Require code owners review',
     section_number: '8',
     section_name: 'code review',
     code_name: 'requireCodeOwnersReviewForLargeTeams',
@@ -1251,8 +1248,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/requireCodeOwnersReviewForLargeTeams'
   },
   {
-    title: 'Require Approved PRs for Mainline Commits (Two+ Maintainers)',
-    description: '[For Projects with Two or more Maintainers] Require Approved PRs for all commits to mainline branches',
+    title: 'Require approved PRs for mainline commits',
+    description: 'Require approved PRs for all commits to mainline branches',
     section_number: '9',
     section_name: 'source control',
     code_name: 'requirePRApprovalForMainline',
@@ -1271,8 +1268,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/requirePRApprovalForMainline'
   },
   {
-    title: 'Limit GitHub Org Owners to Fewer Than Three',
-    description: 'Limit Number of Github Org Owners (ideally Fewer Than Three)',
+    title: 'Limit GitHub org owners to fewer than three',
+    description: 'Limit the number of GitHub org owners (ideally fewer than three)',
     section_number: '2',
     section_name: 'user account permissions',
     code_name: 'limitOrgOwners',
@@ -1289,8 +1286,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/limitOrgOwners'
   },
   {
-    title: 'Limit GitHub Repo Admins to Fewer Than Three',
-    description: 'Limit Number of Github Repository Admins (ideally Fewer Than Three)',
+    title: 'Limit GitHub repo admins to fewer than three',
+    description: 'Limit number of GitHub repository admins (ideally fewer than three)',
     section_number: '2',
     section_name: 'user account permissions',
     code_name: 'limitRepoAdmins',
@@ -1307,8 +1304,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/limitRepoAdmins'
   },
   {
-    title: 'Patch Critical/High Vulnerabilities in 14 Days',
-    description: 'Actively Exploited Critical and High Vulnerabilities Patched within 14 Days',
+    title: 'Patch critical/high vulnerabilities in 14 Days',
+    description: 'Actively exploited critical and high vulnerabilities patched within 14 Days',
     section_number: '5',
     section_name: 'vulnerability management',
     code_name: 'patchExploitableHighVulns14Days',
@@ -1323,8 +1320,8 @@ const list = [
     details_url: 'https://openjs-security-program-standards.netlify.app/details/patchExploitableHighVulns14Days'
   },
   {
-    title: 'Patch Non-Critical Vulnerabilities in 60 Days',
-    description: 'Non-Critical Expoitable Vulnerabilities Patched within 60 Days',
+    title: 'Patch non-critical vulnerabilities in 60 Days',
+    description: 'Non-critical exploitable vulnerabilities patched within 60 Days',
     section_number: '5',
     section_name: 'vulnerability management',
     code_name: 'patchExploitableNoncCriticalVulns60Days',

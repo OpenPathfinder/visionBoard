@@ -15,6 +15,7 @@
     "db:rollback": "knex migrate:rollback",
     "db:generate-schema": "docker-compose run schema-dump",
     "db:export-checks": "node scripts/export-checks.js",
+    "db:export-checklists": "node scripts/export-checklists.js",
     "db:seed": "knex seed:run"
   },
   "keywords": [],

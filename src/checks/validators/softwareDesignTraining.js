@@ -14,7 +14,7 @@ module.exports = ({ trainings = [], check, projects = [] }) => {
     const baseData = {
       project_id: project.id,
       compliance_check_id: check.id,
-      severity: getSeverityFromPriorityGroup(check.priority_group)
+      severity: getSeverityFromPriorityGroup(check.default_priority_group)
     }
 
     const result = { ...baseData }

@@ -23,8 +23,8 @@ describe('githubOrgMFA', () => {
 
     check = {
       id: 1,
-      priority_group: 'P1',
-      details_url: 'https://example.com',
+      default_priority_group: 'P1',
+      details_url: 'https://example.com'
     }
 
     projects = [
@@ -148,8 +148,8 @@ describe('softwareDesignTraining', () => {
 
     check = {
       id: 1,
-      priority_group: 'P1',
-      details_url: 'https://example.com',
+      default_priority_group: 'P1',
+      details_url: 'https://example.com'
     }
 
     projects = [

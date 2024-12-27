@@ -121,26 +121,34 @@ const initializeStore = (knex) => {
   return {
     addProject: addProject(knex),
     addGithubOrganization: addGithubOrganization(knex),
-    getAllGithubOrganizations: () => getAll('github_organizations'),
     updateGithubOrganization: updateGithubOrganization(knex),
     upsertGithubRepository: upsertGithubRepository(knex),
+    getAllGithubOrganizations: () => getAll('github_organizations'),
     getAllComplianceChecks: () => getAll('compliance_checks'),
-    getCheckByCodeName: getCheckByCodeName(knex),
     getAllProjects: () => getAll('projects'),
+    getAllSSoftwareDesignTrainings: () => getAll('software_design_training'),
+    getAllGithubRepositories: () => getAll('github_repositories'),
+    getAllChecklists: () => getAll('compliance_checklists'),
+    getAllResults: () => getAll('compliance_checks_results'),
+    getAllTasks: () => getAll('compliance_checks_tasks'),
+    getAllAlerts: () => getAll('compliance_checks_alerts'),
+    getAllChecksInChecklistById,
+    getAllGithubOrganizationsByProjectsId: (projectIds) => getAllGithubOrganizationsByProjectsId(knex, projectIds),
+    getAllSSoftwareDesignTrainingsByProjectIds: (projectIds) => getAllSSoftwareDesignTrainingsByProjectIds(knex, projectIds),
+    getCheckByCodeName: getCheckByCodeName(knex),
     deleteTasksByComplianceCheckId: deleteTasksByComplianceCheckId(knex),
     deleteAlertsByComplianceCheckId: deleteAlertsByComplianceCheckId(knex),
     addAlert: (alert) => addTo('compliance_checks_alerts', alert),
     addTask: (task) => addTo('compliance_checks_tasks', task),
+    addResult: (result) => addTo('compliance_checks_results', result),
+    addSSoftwareDesignTraining: (data) => addTo('software_design_training', data),
+    addGithubRepo: (repo) => addTo('github_repositories', repo),
+    addGithubOrg: (org) => addTo('github_organizations', org),
     upsertComplianceCheckResult: upsertComplianceCheckResult(knex),
-    getAllSSoftwareDesignTrainings: () => getAll('software_design_training'),
-    getAllGithubRepositories: () => getAll('github_repositories'),
-    getAllChecklists: () => getAll('compliance_checklists'),
-    getAllChecksInChecklistById,
-    getAllGithubOrganizationsByProjectsId: (projectIds) => getAllGithubOrganizationsByProjectsId(knex, projectIds),
-    getAllSSoftwareDesignTrainingsByProjectIds: (projectIds) => getAllSSoftwareDesignTrainingsByProjectIds(knex, projectIds),
     upsertOSSFScorecard: upsertOSSFScorecard(knex)
   }
 }
+
 
 module.exports = {
   initializeStore

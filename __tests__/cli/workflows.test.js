@@ -3,16 +3,30 @@ const knexInit = require('knex')
 const { simplifyObject } = require('@ulisesgascon/simplify-object')
 const { getConfig } = require('../../src/config')
 const { runWorkflowCommand, listWorkflowCommand } = require('../../src/cli')
-const { resetDatabase, getAllProjects, getAllGithubOrgs, addGithubOrg, addProject, getAllGithubRepos, addGithubRepo } = require('../../__utils__')
+const { resetDatabase, initializeStore } = require('../../__utils__')
 const { github } = require('../../src/providers')
 const { sampleGithubOrg, sampleGithubListOrgRepos, sampleGithubRepository } = require('../../__fixtures__')
 
 const { dbSettings } = getConfig('test')
 
 let knex
+let getAllProjects,
+  getAllGithubOrgs,
+  addGithubOrg,
+  addProject,
+  getAllGithubRepos,
+  addGithubRepo
 
 beforeAll(() => {
-  knex = knexInit(dbSettings)
+  knex = knexInit(dbSettings);
+  ({
+    getAllProjects,
+    getAllGithubOrganizations: getAllGithubOrgs,
+    addGithubOrg,
+    addProject,
+    getAllGithubRepositories: getAllGithubRepos,
+    addGithubRepo,
+  } = initializeStore(knex));
 })
 beforeEach(async () => {
   await resetDatabase(knex)
@@ -49,9 +63,9 @@ describe('run GENERIC - Non-Interactive Mode', () => {
 
 describe('run update-github-orgs', () => {
   test('Should throw an error when no Github orgs are stored in the database', async () => {
-    const projects = await getAllProjects(knex)
+    const projects = await getAllProjects()
     expect(projects.length).toBe(0)
-    const githubOrgs = await getAllGithubOrgs(knex)
+    const githubOrgs = await getAllGithubOrgs()
     expect(githubOrgs.length).toBe(0)
     await expect(runWorkflowCommand(knex, { name: 'update-github-orgs' }))
       .rejects
@@ -60,18 +74,18 @@ describe('run update-github-orgs', () => {
 
   test('Should update the project with new information available', async () => {
     // Prepare the database
-    const project = await addProject(knex, { name: sampleGithubOrg.login, category: 'impact' })
-    await addGithubOrg(knex, { login: sampleGithubOrg.login, html_url: sampleGithubOrg.html_url, project_id: project.id })
-    const projects = await getAllProjects(knex)
+    const [project] = await addProject({ name: sampleGithubOrg.login, category: 'impact' })
+    await addGithubOrg({ login: sampleGithubOrg.login, html_url: sampleGithubOrg.html_url, project_id: project.id })
+    const projects = await getAllProjects()
     expect(projects.length).toBe(1)
-    let githubOrgs = await getAllGithubOrgs(knex)
+    let githubOrgs = await getAllGithubOrgs()
     expect(githubOrgs.length).toBe(1)
     expect(githubOrgs[0].description).toBe(null)
     // Mock the fetchOrgByLogin method
     jest.spyOn(github, 'fetchOrgByLogin').mockResolvedValue(sampleGithubOrg)
     await runWorkflowCommand(knex, { name: 'update-github-orgs' })
     // Check the database changes
-    githubOrgs = await getAllGithubOrgs(knex)
+    githubOrgs = await getAllGithubOrgs()
     expect(githubOrgs.length).toBe(1)
     expect(githubOrgs[0].description).toBe(sampleGithubOrg.description)
   })
@@ -81,9 +95,9 @@ describe('run update-github-orgs', () => {
 
 describe('run upsert-github-repositories', () => {
   test('Should throw an error when no Github orgs are stored in the database', async () => {
-    const projects = await getAllProjects(knex)
+    const projects = await getAllProjects()
     expect(projects.length).toBe(0)
-    const githubOrgs = await getAllGithubOrgs(knex)
+    const githubOrgs = await getAllGithubOrgs()
     expect(githubOrgs.length).toBe(0)
     await expect(runWorkflowCommand(knex, { name: 'upsert-github-repositories' }))
       .rejects
@@ -91,38 +105,37 @@ describe('run upsert-github-repositories', () => {
   })
   test('Should add the repositories related to the organization', async () => {
     // Prepare the database
-    const project = await addProject(knex, { name: sampleGithubOrg.login, category: 'impact' })
-    await addGithubOrg(knex, { login: sampleGithubOrg.login, html_url: sampleGithubOrg.html_url, project_id: project.id })
-    const projects = await getAllProjects(knex)
+    const [project] = await addProject({ name: sampleGithubOrg.login, category: 'impact' })
+    await addGithubOrg({ login: sampleGithubOrg.login, html_url: sampleGithubOrg.html_url, project_id: project.id })
+    const projects = await getAllProjects()
     expect(projects.length).toBe(1)
-    const githubOrgs = await getAllGithubOrgs(knex)
+    const githubOrgs = await getAllGithubOrgs()
     expect(githubOrgs.length).toBe(1)
-    let githubRepos = await getAllGithubRepos(knex)
+    let githubRepos = await getAllGithubRepos()
     expect(githubRepos.length).toBe(0)
     // Mock the github methods used
     jest.spyOn(github, 'fetchOrgReposListByLogin').mockResolvedValue(sampleGithubListOrgRepos)
     jest.spyOn(github, 'fetchRepoByFullName').mockResolvedValue(sampleGithubRepository)
     await runWorkflowCommand(knex, { name: 'upsert-github-repositories' })
     // Check the database changes
-    githubRepos = await getAllGithubRepos(knex)
+    githubRepos = await getAllGithubRepos()
     expect(githubRepos.length).toBe(1)
     expect(githubRepos[0].description).toBe(sampleGithubRepository.description)
   })
   test('Should update the repositories related to the organization', async () => {
-    // Prepare the database
-    const project = await addProject(knex, { name: sampleGithubOrg.login, category: 'impact' })
-    const org = await addGithubOrg(knex, { login: sampleGithubOrg.login, html_url: sampleGithubOrg.html_url, project_id: project.id })
+    const [project] = await addProject({ name: sampleGithubOrg.login, category: 'impact' })
+    const [org] = await addGithubOrg({ login: sampleGithubOrg.login, html_url: sampleGithubOrg.html_url, project_id: project.id })
     const githubRepoData = simplifyObject(sampleGithubRepository, {
       include: ['node_id', 'name', 'full_name', 'html_url', 'url', 'git_url', 'ssh_url', 'clone_url', 'visibility', 'default_branch']
     })
     githubRepoData.github_organization_id = org.id
     githubRepoData.description = 'existing data'
-    await addGithubRepo(knex, githubRepoData)
-    const projects = await getAllProjects(knex)
+    await addGithubRepo(githubRepoData)
+    const projects = await getAllProjects()
     expect(projects.length).toBe(1)
-    const githubOrgs = await getAllGithubOrgs(knex)
+    const githubOrgs = await getAllGithubOrgs()
     expect(githubOrgs.length).toBe(1)
-    let githubRepos = await getAllGithubRepos(knex)
+    let githubRepos = await getAllGithubRepos()
     expect(githubRepos.length).toBe(1)
     expect(githubRepos[0].description).toBe('existing data')
     // Mock the github methods used
@@ -130,7 +143,7 @@ describe('run upsert-github-repositories', () => {
     jest.spyOn(github, 'fetchRepoByFullName').mockResolvedValue(sampleGithubRepository)
     await runWorkflowCommand(knex, { name: 'upsert-github-repositories' })
     // Check the database changes
-    githubRepos = await getAllGithubRepos(knex)
+    githubRepos = await getAllGithubRepos()
     expect(githubRepos.length).toBe(1)
     expect(githubRepos[0].description).toBe(sampleGithubRepository.description)
   })

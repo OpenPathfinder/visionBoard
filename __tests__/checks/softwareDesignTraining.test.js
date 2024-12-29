@@ -26,7 +26,6 @@ beforeAll(async () => {
   knex = knexInit(dbSettings);
   ({
     addProject,
-    addGithubOrganization: addGithubOrg,
     addSSoftwareDesignTraining,
     getAllSSoftwareDesignTrainings,
     getAllResults,
@@ -35,7 +34,6 @@ beforeAll(async () => {
     addAlert,
     addTask,
     addResult,
-    getAllGithubOrganizations,
     getCheckByCodeName
   } = initializeStore(knex))
   check = await getCheckByCodeName('softwareDesignTraining')

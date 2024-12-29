@@ -33,7 +33,6 @@ beforeAll(async () => {
     addAlert,
     addTask,
     addResult,
-    getAllGithubOrganizations,
     getCheckByCodeName
   } = initializeStore(knex))
   check = await getCheckByCodeName('githubOrgMFA')

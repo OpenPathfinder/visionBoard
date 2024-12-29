@@ -143,9 +143,9 @@ const initializeStore = (knex) => {
     addResult: (result) => addTo('compliance_checks_results', result),
     addSSoftwareDesignTraining: (data) => addTo('software_design_training', data),
     addGithubRepo: (repo) => addTo('github_repositories', repo),
-    addGithubOrg: (org) => addTo('github_organizations', org),
-    upsertComplianceCheckResult: upsertComplianceCheckResult(knex),
-    upsertOSSFScorecard: upsertOSSFScorecard(knex)
+    addOSSFScorecardResult: (ossf) => addTo('ossf_scorecard_results', ossf),
+    upsertOSSFScorecard: upsertOSSFScorecard(knex),
+    upsertComplianceCheckResult: upsertComplianceCheckResult(knex)
   }
 }
 

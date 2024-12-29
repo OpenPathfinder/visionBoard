@@ -22,11 +22,11 @@ beforeAll(() => {
   ({
     getAllProjects,
     getAllGithubOrganizations: getAllGithubOrgs,
-    addGithubOrg,
+    addGithubOrganization: addGithubOrg,
     addProject,
     getAllGithubRepositories: getAllGithubRepos,
-    addGithubRepo
-  } = initializeStore(knex))
+    addGithubRepo,
+  } = initializeStore(knex));
 })
 beforeEach(async () => {
   await resetDatabase(knex)

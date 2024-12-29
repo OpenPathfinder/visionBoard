@@ -16,8 +16,8 @@ exports.seed = async (knex) => {
     addProject,
     addGithubOrganization: addGithubOrg,
     addGithubRepo,
-    addOSSFScorecardResult,
-  } = initializeStore(knex);
+    addOSSFScorecardResult
+  } = initializeStore(knex)
 
   // Add a project
   const [project] = await addProject({

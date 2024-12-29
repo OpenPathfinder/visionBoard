@@ -20,7 +20,7 @@ let addProject,
   addResult,
   getCheckByCodeName,
   addSSoftwareDesignTraining,
-  getAllSSoftwareDesignTrainings;
+  getAllSSoftwareDesignTrainings
 
 beforeAll(async () => {
   knex = knexInit(dbSettings);
@@ -36,8 +36,8 @@ beforeAll(async () => {
     addTask,
     addResult,
     getAllGithubOrganizations,
-    getCheckByCodeName,
-  } = initializeStore(knex));
+    getCheckByCodeName
+  } = initializeStore(knex))
   check = await getCheckByCodeName('softwareDesignTraining')
 })
 
@@ -66,7 +66,7 @@ describe('Integration: softwareDesignTraining', () => {
     // Run the check
     await expect(softwareDesignTraining(knex)).resolves.toBeUndefined()
     // Check that the database has the expected results
-    trainings = await getAllSSoftwareDesignTrainings();
+    trainings = await getAllSSoftwareDesignTrainings()
     expect(trainings.length).toBe(1)
     results = await getAllResults()
     expect(results.length).toBe(1)

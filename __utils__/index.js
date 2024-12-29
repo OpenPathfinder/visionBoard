@@ -12,4 +12,4 @@ const resetDatabase = async (knex) => {
 module.exports = {
   resetDatabase,
   initializeStore
-};
+}

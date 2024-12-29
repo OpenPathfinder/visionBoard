@@ -20,7 +20,7 @@ let addProject,
   addAlert,
   addTask,
   addResult,
-  getCheckByCodeName;
+  getCheckByCodeName
 
 beforeAll(async () => {
   knex = knexInit(dbSettings);
@@ -34,8 +34,8 @@ beforeAll(async () => {
     addTask,
     addResult,
     getAllGithubOrganizations,
-    getCheckByCodeName,
-  } = initializeStore(knex));
+    getCheckByCodeName
+  } = initializeStore(knex))
   check = await getCheckByCodeName('githubOrgMFA')
 })
 

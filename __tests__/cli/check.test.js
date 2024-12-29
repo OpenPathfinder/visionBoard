@@ -15,7 +15,6 @@ beforeAll(() => {
   ({
     getAllComplianceChecks
   } = initializeStore(knex))
-
 })
 beforeEach(async () => {
   await resetDatabase(knex)

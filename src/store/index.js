@@ -149,7 +149,6 @@ const initializeStore = (knex) => {
   }
 }
 
-
 module.exports = {
   initializeStore
 }

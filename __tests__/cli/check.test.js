@@ -3,14 +3,18 @@ const knexInit = require('knex')
 const { getConfig } = require('../../src/config')
 
 const { listCheckCommand } = require('../../src/cli')
-const { resetDatabase, getAllComplianceChecks } = require('../../__utils__')
+const { resetDatabase, initializeStore } = require('../../__utils__')
 
 const { dbSettings } = getConfig('test')
 
 let knex
+let getAllComplianceChecks
 
 beforeAll(() => {
-  knex = knexInit(dbSettings)
+  knex = knexInit(dbSettings);
+  ({
+    getAllComplianceChecks
+  } = initializeStore(knex))
 })
 beforeEach(async () => {
   await resetDatabase(knex)
@@ -25,7 +29,7 @@ describe('list - Non-Interactive Mode', () => {
   jest.spyOn(inquirer, 'prompt').mockImplementation(async () => ({}))
 
   test('Should provide a list of available workflows', async () => {
-    const checks = await getAllComplianceChecks(knex)
+    const checks = await getAllComplianceChecks()
     // Ensure that there are checks available
     expect(checks.length).not.toBe(0)
     // Filter relevant checks

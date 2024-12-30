@@ -2,7 +2,7 @@ const inquirer = require('inquirer').default
 const knexInit = require('knex')
 const { getConfig } = require('../../src/config')
 const { runAddProjectCommand } = require('../../src/cli')
-const { resetDatabase, getAllProjects, getAllGithubOrgs } = require('../../__utils__')
+const { resetDatabase, initializeStore } = require('../../__utils__')
 
 const { dbSettings } = getConfig('test')
 
@@ -20,9 +20,14 @@ jest.spyOn(inquirer, 'prompt').mockImplementation(async (questions) => {
 })
 
 let knex
+let getAllProjects, getAllGithubOrgs
 
 beforeAll(() => {
-  knex = knexInit(dbSettings)
+  knex = knexInit(dbSettings);
+  ({
+    getAllGithubOrganizations: getAllGithubOrgs,
+    getAllProjects
+  } = initializeStore(knex))
 })
 beforeEach(async () => {
   await resetDatabase(knex)
@@ -35,54 +40,54 @@ afterAll(async () => {
 
 describe('Interactive Mode', () => {
   test('Add a project with name, GitHub URLs, and category', async () => {
-    let projects = await getAllProjects(knex)
+    let projects = await getAllProjects()
     expect(projects.length).toBe(0)
-    let githubOrgs = await getAllGithubOrgs(knex)
+    let githubOrgs = await getAllGithubOrgs()
     expect(githubOrgs.length).toBe(0)
     await runAddProjectCommand(knex, {})
-    projects = await getAllProjects(knex)
+    projects = await getAllProjects()
     expect(projects.length).toBe(1)
     expect(projects[0].name).toBe('eslint')
     expect(projects[0].category).toBe('impact')
-    githubOrgs = await getAllGithubOrgs(knex)
+    githubOrgs = await getAllGithubOrgs()
     expect(githubOrgs.length).toBe(1)
     expect(githubOrgs[0].login).toBe('eslint')
     expect(githubOrgs[0].html_url).toBe('https://github.com/eslint')
   })
 
   test('Prevent to add a project that already exists', async () => {
-    let projects = await getAllProjects(knex)
+    let projects = await getAllProjects()
     expect(projects.length).toBe(0)
     await runAddProjectCommand(knex, {})
-    projects = await getAllProjects(knex)
+    projects = await getAllProjects()
     expect(projects.length).toBe(1)
     await expect(runAddProjectCommand(knex, {}))
       .rejects
       .toThrow('Project with name (eslint) already exists')
-    projects = await getAllProjects(knex)
+    projects = await getAllProjects()
     expect(projects.length).toBe(1)
   })
 })
 
 describe('Non-Interactive Mode', () => {
   test('Add a project with name, GitHub URLs, and category', async () => {
-    let projects = await getAllProjects(knex)
+    let projects = await getAllProjects()
     expect(projects.length).toBe(0)
-    let githubOrgs = await getAllGithubOrgs(knex)
+    let githubOrgs = await getAllGithubOrgs()
     expect(githubOrgs.length).toBe(0)
     await runAddProjectCommand(knex, { name: 'eslint', githubUrls: ['https://github.com/eslint'], category: 'impact' })
-    projects = await getAllProjects(knex)
+    projects = await getAllProjects()
     expect(projects.length).toBe(1)
     expect(projects[0].name).toBe('eslint')
     expect(projects[0].category).toBe('impact')
-    githubOrgs = await getAllGithubOrgs(knex)
+    githubOrgs = await getAllGithubOrgs()
     expect(githubOrgs.length).toBe(1)
     expect(githubOrgs[0].login).toBe('eslint')
     expect(githubOrgs[0].html_url).toBe('https://github.com/eslint')
   })
 
   test('Prevent to add a project that already exists', async () => {
-    let projects = await getAllProjects(knex)
+    let projects = await getAllProjects()
     expect(projects.length).toBe(0)
     await runAddProjectCommand(knex, { name: 'eslint', githubUrls: ['https://github.com/eslint'], category: 'impact' })
     projects = await getAllProjects(knex)

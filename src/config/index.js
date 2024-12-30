@@ -26,16 +26,22 @@ const ossfScorecardSettings = {
   dockerImage: 'ghcr.io/ossf/scorecard/v5:ea7e27ed41b76ab879c862fa0ca4cc9c61764ee4',
   parallelJobs: 5
 }
+const staticServer = {
+  ip: process.env.IP || 'localhost',
+  port: process.env.PORT || 3000
+}
 
 const defaultValues = {
   projectCategories,
   ossfScorecardSettings,
-  dbSettings
+  dbSettings,
+  staticServer
 }
 const testEnvironment = {
   projectCategories,
   ossfScorecardSettings,
-  dbSettings
+  dbSettings,
+  staticServer
 }
 
 const getConfig = env => {

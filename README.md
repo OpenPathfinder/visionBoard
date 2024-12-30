@@ -21,16 +21,17 @@ This project aims to provide a secure and user-friendly dashboard for managing a
    - [Projects](#projects)
    - [Workflows](#workflows)
    - [Checks](#checks)
-4. [Database Management](#database-management)
+4. [Report Management](#report-management)
+5. [Database Management](#database-management)
    - [Migrations](#migrations)
    - [Seeding](#seeding)
    - [Schema Management](#schema-management)
-5. [Development](#development)
+6. [Development](#development)
    - [Debugging](#debugging)
    - [Linting](#linting)
    - [Testing](#testing)
-6. [Community Guidelines](#community-guidelines)
-7. [License](#license)
+7. [Community Guidelines](#community-guidelines)
+8. [License](#license)
 
 ---
 
@@ -171,6 +172,25 @@ It is possible also to define a project scope:
 ```bash
 node index.js checklist run [--name <name>] [--project-scope <name1,name2,...>]
 ```
+
+## Report Management
+
+visionBoard has the capability of generating reports that can be used to analyze data.
+
+### Generate the Reports
+
+_Not yet implemented_
+
+### Showcase the Reports
+
+The simplest option is to run the workflow `show-reports`, which will start an HTTP server that lists the content in the `output` folder. Any asset previously generated can be accessed via a web browser using this approach. You can start the server by running:
+
+```bash
+node index.js workflow run --name show-reports
+```
+
+You can customize the IP and port using the environment variables `PORT` and `IP`. By default, it uses `localhost:3000`.
+
 
 ## Database Management
 

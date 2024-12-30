@@ -22,5 +22,10 @@ exports[`list - Non-Interactive Mode Should provide a list of available workflow
     "name": "upsert-ossf-scorecard",
     "workflow": [Function],
   },
+  {
+    "description": "Starts a http server that shows all the files and folders in the output directory.",
+    "name": "show-reports",
+    "workflow": [Function],
+  },
 ]
 `;

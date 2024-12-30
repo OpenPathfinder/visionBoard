@@ -19,6 +19,10 @@ const commandList = [{
   name: 'upsert-ossf-scorecard',
   description: 'Upsert the OSSF Scorecard scoring by running and checking every repository in the database.',
   workflow: upsertOSSFScorecardAnalysis
+}, {
+  name: 'show-reports',
+  description: 'Starts a http server that shows all the files and folders in the output directory.',
+  workflow: require('../httpServer')
 }]
 
 const validCommandNames = commandList.map(({ name }) => name)

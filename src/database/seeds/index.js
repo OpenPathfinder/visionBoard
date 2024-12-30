@@ -21,8 +21,7 @@ exports.seed = async (knex) => {
 
   // Add a project
   const project = await addProject({
-    name: 'github',
-    category: 'impact'
+    name: 'github'
   })
 
   // Add a GitHub organization

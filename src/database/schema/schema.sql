@@ -646,10 +646,8 @@ ALTER SEQUENCE public.ossf_scorecard_results_id_seq OWNED BY public.ossf_scoreca
 CREATE TABLE public.projects (
     id integer NOT NULL,
     name character varying(255) NOT NULL,
-    category text NOT NULL,
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    CONSTRAINT projects_category_check CHECK ((category = ANY (ARRAY['impact'::text, 'at-large'::text, 'incubation'::text, 'emeritus'::text])))
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 

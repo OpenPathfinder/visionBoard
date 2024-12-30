@@ -1,5 +1,4 @@
 const { normalizeBoolean } = require('@ulisesgascon/normalize-boolean')
-const projectCategories = ['impact', 'at-large', 'incubation', 'emeritus']
 
 const dbSettings = {
   client: 'pg',
@@ -32,13 +31,11 @@ const staticServer = {
 }
 
 const defaultValues = {
-  projectCategories,
   ossfScorecardSettings,
   dbSettings,
   staticServer
 }
 const testEnvironment = {
-  projectCategories,
   ossfScorecardSettings,
   dbSettings,
   staticServer

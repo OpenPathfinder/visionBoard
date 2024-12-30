@@ -40,7 +40,7 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   await resetDatabase(knex)
-  project = await addProject({ name: sampleGithubOrg.login, category: 'impact' })
+  project = await addProject({ name: sampleGithubOrg.login })
 })
 
 afterAll(async () => {

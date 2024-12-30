@@ -110,13 +110,13 @@ node --env-file=.env index.js workflow run --name populate-repos-list
 Add a new project:
 
 ```bash
-node index.js project add [--name <name>] [--github-urls <urls...>] [--category <category>]
+node index.js project add [--name <name>] [--github-urls <urls...>]
 ```
 
 Example:
 
 ```bash
-node index.js project add --name express --github-urls https://github.com/expressjs https://github.com/pillarjs https://github.com/jshttp --category impact
+node index.js project add --name express --github-urls https://github.com/expressjs https://github.com/pillarjs https://github.com/jshttp
 ```
 
 ### Workflows

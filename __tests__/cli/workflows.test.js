@@ -74,7 +74,7 @@ describe('run update-github-orgs', () => {
 
   test('Should update the project with new information available', async () => {
     // Prepare the database
-    const project = await addProject({ name: sampleGithubOrg.login, category: 'impact' })
+    const project = await addProject({ name: sampleGithubOrg.login })
     await addGithubOrg({ login: sampleGithubOrg.login, html_url: sampleGithubOrg.html_url, project_id: project.id })
     const projects = await getAllProjects()
     expect(projects.length).toBe(1)
@@ -105,7 +105,7 @@ describe('run upsert-github-repositories', () => {
   })
   test('Should add the repositories related to the organization', async () => {
     // Prepare the database
-    const project = await addProject({ name: sampleGithubOrg.login, category: 'impact' })
+    const project = await addProject({ name: sampleGithubOrg.login })
     await addGithubOrg({ login: sampleGithubOrg.login, html_url: sampleGithubOrg.html_url, project_id: project.id })
     const projects = await getAllProjects()
     expect(projects.length).toBe(1)
@@ -123,7 +123,7 @@ describe('run upsert-github-repositories', () => {
     expect(githubRepos[0].description).toBe(sampleGithubRepository.description)
   })
   test('Should update the repositories related to the organization', async () => {
-    const project = await addProject({ name: sampleGithubOrg.login, category: 'impact' })
+    const project = await addProject({ name: sampleGithubOrg.login })
     const org = await addGithubOrg({ login: sampleGithubOrg.login, html_url: sampleGithubOrg.html_url, project_id: project.id })
     const githubRepoData = simplifyObject(sampleGithubRepository, {
       include: ['node_id', 'name', 'full_name', 'html_url', 'url', 'git_url', 'ssh_url', 'clone_url', 'visibility', 'default_branch']
@@ -156,8 +156,4 @@ describe('run run-all-checks', () => {
 
 describe('run upsert-ossf-scorecard', () => {
   test.todo('Should upsert the OSSF Scorecard scoring by running and checking every repository in the database')
-})
-
-describe('run show-reports', () => {
-  test.todo('Should start a http server that shows all the files and folders in the output directory')
 })

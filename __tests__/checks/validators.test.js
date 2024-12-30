@@ -29,12 +29,10 @@ describe('githubOrgMFA', () => {
 
     projects = [
       {
-        id: 1,
-        category: 'impact'
+        id: 1
       },
       {
-        id: 2,
-        category: 'at-large'
+        id: 2
       }
     ]
   })
@@ -154,12 +152,10 @@ describe('softwareDesignTraining', () => {
 
     projects = [
       {
-        id: 1,
-        category: 'impact'
+        id: 1
       },
       {
-        id: 2,
-        category: 'at-large'
+        id: 2
       }
     ]
   })

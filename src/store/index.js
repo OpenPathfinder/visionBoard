@@ -38,7 +38,7 @@ const addGithubOrganization = knex => async (organization) => {
 }
 
 const addProject = knex => async (project) => {
-  const { name, category } = project
+  const { name } = project
   const projectExists = await knex('projects').where({ name }).first()
   debug(`Checking if project (${name}) exists...`)
   if (projectExists) {
@@ -46,8 +46,7 @@ const addProject = knex => async (project) => {
   }
   debug(`Inserting project (${name})...`)
   return knex('projects').insert({
-    name,
-    category
+    name
   }).returning('*').then(results => results[0])
 }
 

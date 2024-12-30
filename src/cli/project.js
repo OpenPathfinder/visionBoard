@@ -2,11 +2,8 @@ const inquirer = require('inquirer').default
 const { stringToArray } = require('@ulisesgascon/string-to-array')
 const isSlug = require('validator/lib/isSlug.js')
 const debug = require('debug')('cli')
-const { getConfig } = require('../config')
 const { validateGithubUrl, logger } = require('../utils')
 const { initializeStore } = require('../store')
-
-const { projectCategories } = getConfig()
 
 async function runAddProjectCommand (knex, options = {}) {
   const { addProject, addGithubOrganization } = initializeStore(knex)
@@ -18,14 +15,6 @@ async function runAddProjectCommand (knex, options = {}) {
 
     if (!options.githubUrls?.length) {
       throw new Error('GitHub URLs are required')
-    }
-
-    if (!options.category) {
-      throw new Error('Category is required')
-    }
-
-    if (!projectCategories.includes(options.category)) {
-      throw new Error(`Invalid category, use one of the following: ${projectCategories.join(', ')}`)
     }
 
     if (options.githubUrls) {
@@ -41,7 +30,7 @@ async function runAddProjectCommand (knex, options = {}) {
     }
   }
 
-  const answers = options.name && options.githubUrls && options.category
+  const answers = options.name && options.githubUrls
     ? options
     : await inquirer.prompt([
       {
@@ -76,21 +65,13 @@ async function runAddProjectCommand (knex, options = {}) {
           return true
         },
         when: () => !options.githubUrls
-      },
-      {
-        type: 'list',
-        name: 'category',
-        message: 'Select a category:',
-        choices: projectCategories,
-        when: () => !options.category
       }
     ])
 
   answers.githubUrls = Array.isArray(answers.githubUrls) ? answers.githubUrls : stringToArray(answers.githubUrls)
 
   const project = await addProject({
-    name: answers.name.toLowerCase(),
-    category: answers.category
+    name: answers.name.toLowerCase()
   })
 
   debug(`Project (${answers.name}) added successfully!`)

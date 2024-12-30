@@ -88,7 +88,7 @@ async function runAddProjectCommand (knex, options = {}) {
 
   answers.githubUrls = Array.isArray(answers.githubUrls) ? answers.githubUrls : stringToArray(answers.githubUrls)
 
-  const [project] = await addProject({
+  const project = await addProject({
     name: answers.name.toLowerCase(),
     category: answers.category
   })

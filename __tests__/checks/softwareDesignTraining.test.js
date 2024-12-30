@@ -40,8 +40,8 @@ beforeAll(async () => {
 })
 
 beforeEach(async () => {
-  await resetDatabase(knex);
-  [project] = await addProject({ name: 'project', category: 'impact' })
+  await resetDatabase(knex)
+  project = await addProject({ name: 'project', category: 'impact' })
 })
 
 afterAll(async () => {

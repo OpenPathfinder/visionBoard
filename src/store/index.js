@@ -7,7 +7,7 @@ const getAllFn = knex => (table) => {
 
 const addFn = knex => (table, record) => {
   debug(`Inserting ${record} in ${table}`)
-  return knex(table).insert(record).returning('*')
+  return knex(table).insert(record).returning('*').then(results => results[0])
 }
 
 const upsertRecord = async ({ knex, table, uniqueCriteria, data }) => {
@@ -34,7 +34,7 @@ const addGithubOrganization = knex => async (organization) => {
     throw new Error(`Organization with login (${organization.login}) already exists`)
   }
   debug(`Inserting organization (${organization.login})...`)
-  return knex('github_organizations').insert(organization).returning('*')
+  return knex('github_organizations').insert(organization).returning('*').then(results => results[0])
 }
 
 const addProject = knex => async (project) => {
@@ -48,7 +48,7 @@ const addProject = knex => async (project) => {
   return knex('projects').insert({
     name,
     category
-  }).returning('*')
+  }).returning('*').then(results => results[0])
 }
 
 const getCheckByCodeName = knex => (codeName) => {

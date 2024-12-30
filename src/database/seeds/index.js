@@ -20,16 +20,16 @@ exports.seed = async (knex) => {
   } = initializeStore(knex)
 
   // Add a project
-  const [project] = await addProject({
+  const project = await addProject({
     name: 'github',
     category: 'impact'
   })
 
   // Add a GitHub organization
-  const [githubOrg] = await addGithubOrg({ ...github.mappers.org(sampleGithubOrg), project_id: project.id })
+  const githubOrg = await addGithubOrg({ ...github.mappers.org(sampleGithubOrg), project_id: project.id })
 
   // Add GitHub repository
-  const [githubRepo] = await addGithubRepo({ ...github.mappers.repo(sampleGithubRepository), github_organization_id: githubOrg.id })
+  const githubRepo = await addGithubRepo({ ...github.mappers.repo(sampleGithubRepository), github_organization_id: githubOrg.id })
 
   // Add OSSF Scorecard results
   await addOSSFScorecardResult({ ...ossf.mappers.result(sampleOSSFScorecardResult), github_repository_id: githubRepo.id, analysis_execution_time: 19123 })

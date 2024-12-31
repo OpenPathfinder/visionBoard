@@ -133,3 +133,4 @@ dist
 # CUSTOM
 IGNORE/
 output
+.vscode

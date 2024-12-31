@@ -5,13 +5,17 @@
 Transforming Data into Actionable insights
 
 ---
+**[visionBoard](https://openpathfinder.com/docs/visionBoard)** helps organizations transform raw data into actionable insights. [Created to support OpenJS Foundation projects](https://openpathfinder.com/docs/history), it simplifies the complex task of monitoring security and operational health.
 
-This project aims to provide a secure and user-friendly dashboard for managing and monitoring projects under the OpenJS Foundation. It evolves from [this proof of concept (POC)](https://github.com/UlisesGascon/poc-openjs-security-program-standards-dashboard) and currently we are developing an MVP version ([milestone roadmap](https://github.com/OpenPathfinder/visionBoard/issues/30)).
+- **Customizable [Checks](https://openpathfinder.com/docs/visionBoard/Checks) and [Checklists](https://openpathfinder.com/docs/visionBoard/checklists)**: Automates compliance with security standards, such as the [OpenJS Security Compliance Guide](https://openpathfinder.com/docs/visionBoard/checklists#official-checklists). Offers flexibility to define checks tailored to your project needs.
+- **Integration with Tools**: Connects to GitHub APIs, OSSF Scorecard, and other external sources to enrich and analyze data. This ensures up-to-date and comprehensive insights.
+- **Intuitive Dashboards**: Offers visual insights into the state of your projects, making it easier to identify trends, risks, and areas for improvement.
+
+---
 
 ## Table of Contents
 
 1. [Context](https://openpathfinder.com/docs/getting-started)
-    - [Key Feature](https://openpathfinder.com/docs/visionBoard#key-features)
     - [Demo Walkthrough](https://openpathfinder.com/docs/visionBoard#demo-walkthrough)
     - [Why visionBoard?](https://openpathfinder.com/docs/visionBoard#why-visionboard)
     - [History](https://openpathfinder.com/docs/history)

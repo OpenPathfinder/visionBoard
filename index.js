@@ -1,4 +1,5 @@
 const { Command } = require('commander')
+const pkg = require('./package.json')
 const { getConfig } = require('./src/config')
 const { dbSettings } = getConfig()
 const { logger } = require('./src/utils')
@@ -122,6 +123,14 @@ checklist
     } finally {
       await knex.destroy()
     }
+  })
+
+// @TODO: Include tests for this command
+program
+  .command('version')
+  .description('Show version information')
+  .action(() => {
+    logger.info(`${pkg.name}@${pkg.version} (${pkg.license})`)
   })
 
 program.parse(process.argv)

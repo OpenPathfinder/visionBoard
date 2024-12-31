@@ -1,8 +1,10 @@
 {
   "name": "visionBoard",
-  "version": "1.0.0",
+  "version": "0.1.0-beta2",
   "description": "Transforming Data into Actionable insights",
-  "main": "index.js",
+  "bin": {
+    "visionBoard": "visionboard.js"
+  },
   "scripts": {
     "lint": "standard",
     "lint:fix": "standard --fix",
@@ -18,7 +20,14 @@
     "db:export-checklists": "node scripts/export-checklists.js",
     "db:seed": "knex seed:run"
   },
-  "keywords": [],
+  "keywords": [
+    "security", 
+    "CLI"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpenPathfinder/visionBoard"
+  },
   "author": "Ulises Gascón",
   "license": "MIT",
   "standard": {

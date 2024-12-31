@@ -1,4 +1,4 @@
-![VisionBoard logo with a gold compass emblem and the tagline 'Transforming Data into Actionable Insights' on a black background](.github/OTHER/header.png)
+![VisionBoard logo with a gold compass emblem and the tagline 'Transforming Data into Actionable Insights' on a black background](https://raw.githubusercontent.com/OpenPathfinder/branding/refs/heads/main/visionBoard/variation_header.png)
 
 # VisionBoard
 
@@ -100,7 +100,7 @@ GITHUB_TOKEN=your_github_token_here
 Then load it using:
 
 ```bash
-node --env-file=.env index.js workflow run --name populate-repos-list
+node --env-file=.env visionboard.js workflow run --name populate-repos-list
 ```
 
 ## Usage
@@ -110,13 +110,13 @@ node --env-file=.env index.js workflow run --name populate-repos-list
 Add a new project:
 
 ```bash
-node index.js project add [--name <name>] [--github-urls <urls...>]
+node visionboard.js project add [--name <name>] [--github-urls <urls...>]
 ```
 
 Example:
 
 ```bash
-node index.js project add --name express --github-urls https://github.com/expressjs https://github.com/pillarjs https://github.com/jshttp
+node visionboard.js project add --name express --github-urls https://github.com/expressjs https://github.com/pillarjs https://github.com/jshttp
 ```
 
 ### Workflows
@@ -124,13 +124,13 @@ node index.js project add --name express --github-urls https://github.com/expres
 Run a workflow:
 
 ```bash
-node index.js workflow run [--name <name>]
+node visionboard.js workflow run [--name <name>]
 ```
 
 List workflows:
 
 ```bash
-node index.js workflow list
+node visionboard.js workflow list
 ```
 
 ### Checks
@@ -138,18 +138,18 @@ node index.js workflow list
 List all checks:
 
 ```bash
-node index.js check list
+node visionboard.js check list
 ```
 Run a specific check:
 
 ```bash
-node index.js check run [--name <name>]
+node visionboard.js check run [--name <name>]
 ```
 
 There is an specific workflow that runs all the checks sequentially:
 
 ```bash
-node index.js workflow run run-all-checks
+node visionboard.js workflow run run-all-checks
 ```
 
 ### Checklist
@@ -157,20 +157,20 @@ node index.js workflow run run-all-checks
 The checklist are collections of checks. You can list the available list by running:
 
 ```bash
-node index.js checklist list
+node visionboard.js checklist list
 ```
 
 Run a specific checklist:
 
 ```bash
-node index.js checklist run [--name <name>]
+node visionboard.js checklist run [--name <name>]
 ```
 
 
 It is possible also to define a project scope:
 
 ```bash
-node index.js checklist run [--name <name>] [--project-scope <name1,name2,...>]
+node visionboard.js checklist run [--name <name>] [--project-scope <name1,name2,...>]
 ```
 
 ## Report Management
@@ -186,7 +186,7 @@ _Not yet implemented_
 The simplest option is to run the workflow `show-reports`, which will start an HTTP server that lists the content in the `output` folder. Any asset previously generated can be accessed via a web browser using this approach. You can start the server by running:
 
 ```bash
-node index.js workflow run --name show-reports
+node visionboard.js workflow run --name show-reports
 ```
 
 You can customize the IP and port using the environment variables `PORT` and `IP`. By default, it uses `localhost:3000`.
@@ -235,7 +235,7 @@ npm run db:generate-schema
 Enable debug logs using the `DEBUG` environment variable:
 
 ```bash
-DEBUG=* node index.js
+DEBUG=* node visionboard.js
 ```
 
 ### Linting

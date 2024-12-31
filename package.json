@@ -2,7 +2,9 @@
   "name": "visionBoard",
   "version": "1.0.0",
   "description": "Transforming Data into Actionable insights",
-  "main": "index.js",
+  "bin": {
+    "visionBoard": "visionboard.js"
+  },
   "scripts": {
     "lint": "standard",
     "lint:fix": "standard --fix",

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const { Command } = require('commander')
 const pkg = require('./package.json')
 const { getConfig } = require('./src/config')

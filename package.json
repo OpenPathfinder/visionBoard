@@ -20,7 +20,14 @@
     "db:export-checklists": "node scripts/export-checklists.js",
     "db:seed": "knex seed:run"
   },
-  "keywords": [],
+  "keywords": [
+    "security", 
+    "CLI"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpenPathfinder/visionBoard"
+  },
   "author": "Ulises Gascón",
   "license": "MIT",
   "standard": {

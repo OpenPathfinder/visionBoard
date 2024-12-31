@@ -1,4 +1,4 @@
-![VisionBoard logo with a gold compass emblem and the tagline 'Transforming Data into Actionable Insights' on a black background](.github/OTHER/header.png)
+![VisionBoard logo with a gold compass emblem and the tagline 'Transforming Data into Actionable Insights' on a black background](https://raw.githubusercontent.com/OpenPathfinder/branding/refs/heads/main/visionBoard/variation_header.png)
 
 # VisionBoard
 

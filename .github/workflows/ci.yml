@@ -50,3 +50,6 @@ jobs:
 
     - name: Run tests
       run: npm run test:ci
+
+    - name: Build Docker image
+      run: docker build -t visionboard .

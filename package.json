@@ -21,7 +21,7 @@
     "db:seed": "knex seed:run"
   },
   "keywords": [
-    "security", 
+    "security",
     "CLI"
   ],
   "repository": {

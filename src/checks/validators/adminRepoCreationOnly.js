@@ -28,10 +28,10 @@ module.exports = ({ organizations = [], check, projects = [] }) => {
     const task = { ...baseData }
     const alert = { ...baseData }
 
-    const failedOrgs = projectOrgs.filter(org => org.members_can_create_public_repositories === false).map(org => org.login)
+    const failedOrgs = projectOrgs.filter(org => org.members_can_create_public_repositories === true).map(org => org.login)
     const unknownOrgs = projectOrgs.filter(org => org.members_can_create_public_repositories === null).map(org => org.login)
 
-    if (projectOrgs.every(org => org.members_can_create_public_repositories === true)) {
+    if (projectOrgs.every(org => org.members_can_create_public_repositories === false)) {
       result.status = 'passed'
       result.rationale = 'Only Admins can create public repositories in the organization(s)'
     } else if (failedOrgs.length) {

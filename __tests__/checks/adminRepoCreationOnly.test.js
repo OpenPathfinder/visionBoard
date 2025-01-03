@@ -54,7 +54,7 @@ describe('Integration: adminRepoCreationOnly', () => {
       login: sampleGithubOrg.login,
       html_url: sampleGithubOrg.html_url,
       project_id: project.id,
-      members_can_create_public_repositories: true
+      members_can_create_public_repositories: false
     })
     // Check that the database is empty
     let results = await getAllResults()
@@ -82,7 +82,7 @@ describe('Integration: adminRepoCreationOnly', () => {
       login: sampleGithubOrg.login,
       html_url: sampleGithubOrg.html_url,
       project_id: project.id,
-      members_can_create_public_repositories: true
+      members_can_create_public_repositories: false
     })
     await addAlert({ compliance_check_id: check.id, project_id: project.id, title: 'existing', description: 'existing', severity: 'critical' })
     await addTask({ compliance_check_id: check.id, project_id: project.id, title: 'existing', description: 'existing', severity: 'critical' })
@@ -108,7 +108,7 @@ describe('Integration: adminRepoCreationOnly', () => {
   })
   test('Should add (alerts and tasks) and update results', async () => {
     // Prepare the Scenario
-    await addGithubOrg({ login: sampleGithubOrg.login, html_url: sampleGithubOrg.html_url, project_id: project.id, members_can_create_public_repositories: false })
+    await addGithubOrg({ login: sampleGithubOrg.login, html_url: sampleGithubOrg.html_url, project_id: project.id, members_can_create_public_repositories: true })
     await addResult({ compliance_check_id: check.id, project_id: project.id, status: 'passed', rationale: 'failed previously', severity: 'critical' })
     // Check that the database has the expected results
     let results = await getAllResults()

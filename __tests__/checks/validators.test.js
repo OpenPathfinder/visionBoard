@@ -286,17 +286,17 @@ describe('adminRepoCreationOnly', () => {
       {
         project_id: 1,
         login: 'org1',
-        members_can_create_public_repositories: true
+        members_can_create_public_repositories: false
       },
       {
         project_id: 1,
         login: 'org2',
-        members_can_create_public_repositories: true
+        members_can_create_public_repositories: false
       },
       {
         project_id: 2,
         login: 'org3',
-        members_can_create_public_repositories: true
+        members_can_create_public_repositories: false
       }
     ]
 
@@ -340,7 +340,7 @@ describe('adminRepoCreationOnly', () => {
   })
 
   it('should generate a failed result if some organizations have mixed permissions', () => {
-    organizations[0].members_can_create_public_repositories = false
+    organizations[0].members_can_create_public_repositories = true
     // IMPORTANT: If one organization fails, the whole project fails no matter how other organizations are in the project
     organizations[1].members_can_create_public_repositories = null
 

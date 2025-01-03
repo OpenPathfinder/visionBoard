@@ -27,5 +27,10 @@ exports[`list - Non-Interactive Mode Should provide a list of available workflow
     "name": "show-reports",
     "workflow": [Function],
   },
+  {
+    "description": "Generate the reports for the stored data.",
+    "name": "generate-reports",
+    "workflow": [Function],
+  },
 ]
 `;

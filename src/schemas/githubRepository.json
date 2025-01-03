@@ -68,7 +68,7 @@
           "type": "string",
           "format": "uri",
           "examples": [
-            "https://github.com/images/error/octocat_happy.gif"
+            "https://avatars.githubusercontent.com/u/9919?v=4"
           ]
         },
         "gravatar_id": {
@@ -804,7 +804,7 @@
                   "type": "string",
                   "format": "uri",
                   "examples": [
-                    "https://github.com/images/error/octocat_happy.gif"
+                    "https://avatars.githubusercontent.com/u/9919?v=4"
                   ]
                 },
                 "gravatar_id": {
@@ -1713,7 +1713,7 @@
               "type": "string",
               "format": "uri",
               "examples": [
-                "https://github.com/images/error/octocat_happy.gif"
+                "https://avatars.githubusercontent.com/u/9919?v=4"
               ]
             },
             "gravatar_id": {
@@ -1973,7 +1973,7 @@
               "type": "string",
               "format": "uri",
               "examples": [
-                "https://github.com/images/error/octocat_happy.gif"
+                "https://avatars.githubusercontent.com/u/9919?v=4"
               ]
             },
             "gravatar_id": {
@@ -2818,7 +2818,7 @@
               "type": "string",
               "format": "uri",
               "examples": [
-                "https://github.com/images/error/octocat_happy.gif"
+                "https://avatars.githubusercontent.com/u/9919?v=4"
               ]
             },
             "gravatar_id": {

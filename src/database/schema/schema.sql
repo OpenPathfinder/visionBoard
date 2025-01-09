@@ -645,10 +645,13 @@ ALTER SEQUENCE public.ossf_scorecard_results_id_seq OWNED BY public.ossf_scoreca
 
 CREATE TABLE public.owasp_training (
     id integer NOT NULL,
+    description text NOT NULL,
+    implementation_status text DEFAULT 'pending'::text NOT NULL,
     training_date character varying(255) DEFAULT CURRENT_TIMESTAMP NOT NULL,
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    project_id integer NOT NULL
+    project_id integer NOT NULL,
+    CONSTRAINT owasp_training_implementation_status_check CHECK ((implementation_status = ANY (ARRAY['unknown'::text, 'pending'::text, 'completed'::text])))
 );
 
 

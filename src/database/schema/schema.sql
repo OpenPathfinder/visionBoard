@@ -640,6 +640,39 @@ ALTER SEQUENCE public.ossf_scorecard_results_id_seq OWNED BY public.ossf_scoreca
 
 
 --
+-- Name: owasp_training; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.owasp_training (
+    id integer NOT NULL,
+    training_date character varying(255) DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    project_id integer NOT NULL
+);
+
+
+--
+-- Name: owasp_training_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.owasp_training_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: owasp_training_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.owasp_training_id_seq OWNED BY public.owasp_training.id;
+
+
+--
 -- Name: projects; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -785,6 +818,13 @@ ALTER TABLE ONLY public.ossf_scorecard_results ALTER COLUMN id SET DEFAULT nextv
 
 
 --
+-- Name: owasp_training id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.owasp_training ALTER COLUMN id SET DEFAULT nextval('public.owasp_training_id_seq'::regclass);
+
+
+--
 -- Name: projects id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -927,6 +967,14 @@ ALTER TABLE ONLY public.ossf_scorecard_results
 
 
 --
+-- Name: owasp_training owasp_training_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.owasp_training
+    ADD CONSTRAINT owasp_training_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: projects projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1003,6 +1051,13 @@ CREATE TRIGGER set_updated_at_github_repositories BEFORE UPDATE ON public.github
 --
 
 CREATE TRIGGER set_updated_at_ossf_scorecard_results BEFORE UPDATE ON public.ossf_scorecard_results FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+
+--
+-- Name: owasp_training set_updated_at_owasp_training; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER set_updated_at_owasp_training BEFORE UPDATE ON public.owasp_training FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 
 --
@@ -1105,6 +1160,14 @@ ALTER TABLE ONLY public.github_repositories
 
 ALTER TABLE ONLY public.ossf_scorecard_results
     ADD CONSTRAINT ossf_scorecard_results_github_repository_id_foreign FOREIGN KEY (github_repository_id) REFERENCES public.github_repositories(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: owasp_training owasp_training_project_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.owasp_training
+    ADD CONSTRAINT owasp_training_project_id_foreign FOREIGN KEY (project_id) REFERENCES public.projects(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

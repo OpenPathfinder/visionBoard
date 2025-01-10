@@ -69,7 +69,7 @@
       "avatar_url": {
         "type": "string",
         "examples": [
-          "https://github.com/images/error/octocat_happy.gif"
+          "https://avatars.githubusercontent.com/u/9919?v=4"
         ]
       },
       "description": {

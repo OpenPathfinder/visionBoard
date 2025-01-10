@@ -3,7 +3,7 @@
 exports[`GitHub Provider mappers Should map organization data correctly 1`] = `
 {
   "advanced_security_enabled_for_new_repositories": false,
-  "avatar_url": "https://github.com/images/error/octocat_happy.gif",
+  "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
   "blog": "https://github.com/blog",
   "collaborators": 8,
   "company": "GitHub",

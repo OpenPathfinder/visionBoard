@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VisionBoard Reports</title>
+  <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 h-screen">
+  <!-- Header -->
+  <header class="bg-zinc-950 text-white">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex">
+      <h1 class="text-amber-400 text-xl font-semibold">VisionBoard Reports</h1>
+    </div>
+  </header>
+  <div class="flex h-full">
+    <main class="flex-1 p-6">
+      <h1 class="text-2xl font-bold mb-4">
+        <%= project.name %> Report
+      </h1>
+      <p class="text-gray-700 mb-4">In this dashboard, you can find the relevant information for the project <span
+          class="font-bold">
+          <%= project.name %>
+        </span> including results, tasks, and alerts.
+      </p>
+
+      <p class="text-gray-700 mb-4">In order to elaborate this report we have analyzed <span
+        class="font-bold">
+        <%= githubOrgs.length %> GitHub org(s) 
+      </span> and <span
+      class="font-bold">
+      <%= githubRepos.length %> repositories
+    </span>.</p>
+
+      <!-- Alerts -->
+      <h2 class="text-2xl font-bold mb-4">Alerts</h2>
+      <div class="mb-6">
+        <% if (alerts && alerts.length > 0) { %>
+          <ul class="space-y-4">
+            <% alerts.forEach(alert => { %>
+              <li class="p-4 border-l-4 
+                  <% if (alert.severity === 'critical') { %> border-red-600 bg-red-50 <% } %>
+                  <% if (alert.severity === 'warning') { %> border-yellow-600 bg-yellow-50 <% } %>
+                  <% if (alert.severity === 'info') { %> border-blue-600 bg-blue-50 <% } %>
+                  rounded-md shadow">
+                <h3 class="text-lg font-semibold">
+                  <%= alert.title %>
+                </h3>
+                <p class="text-gray-700 mb-2">
+                  <%= alert.description %>
+                </p>
+                <a target="_blank" href="<%= checks.filter(i => i.id === alert.compliance_check_id)[0].details_url %>" class="text-blue-500 underline">View details</a>
+              </li>
+            <% }) %>
+          </ul>
+        <% } else { %>
+          <p class="text-gray-700">No alerts available.</p>
+        <% } %>
+      </div>
+
+      <!-- Results -->
+      <h2 class="text-2xl font-bold mb-4">Results</h2>
+      <% if (tasks && tasks.length > 0) { %>
+
+      <table class="w-full border border-gray-300 border-collapse mb-6">
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="border border-gray-300 px-4 py-2 text-left">Check Name</th>
+            <th class="border border-gray-300 px-4 py-2 text-left">Rationale</th>
+            <th class="border border-gray-300 px-4 py-2 text-left">Severity</th>
+            <th class="border border-gray-300 px-4 py-2 text-left">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% results.forEach(item => { %>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">
+                <a target="_blank" href="<%= checks.filter(i => i.id === item.compliance_check_id)[0].details_url %>" class="text-blue-500 underline font-bold">
+                  <%= checks.filter(i => i.id === item.compliance_check_id)[0].code_name %>
+                </a>
+              </td>
+              <td class="border border-gray-300 px-4 py-2">
+                <%= item.rationale %>
+              </td>
+              <td class="border border-gray-300 px-4 py-2 font-bold">
+                <%= item.severity %>
+              </td>
+              <td class="border border-gray-300 px-4 py-2 font-bold
+                  <% if (item.status === 'passed') { %> bg-green-50 text-green-600 <% } %>
+                  <% if (item.status === 'failed') { %> bg-red-50 text-red-600 <% } %>
+                  <% if (item.status === 'unknown') { %> bg-gray-50 text-gray-600 <% } %>">
+                <%= item.status %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% } else { %>
+        <p class="text-gray-700">No results available.</p>
+      <% } %>
+
+      <!-- Tasks -->
+      <h2 class="text-2xl font-bold mb-4">Tasks</h2>
+      <div class="mb-6">
+        <% if (tasks && tasks.length > 0) { %>
+          <% tasks.forEach(task => { %>
+            <div class="flex items-start p-4 border-l-4 space-x-4">
+              
+              <!-- Checkbox -->
+              <input type="checkbox" class="mt-1 w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring focus:ring-blue-500" />
+
+              <!-- Task Details -->
+              <div>
+                <p class="text-lg font-bold mb-1">
+                  <%= task.title %> (<a target="_blank" href="<%= checks.filter(i => i.id === task.compliance_check_id)[0].details_url %>" class="text-blue-500 underline">
+                    View details
+                  </a>)
+                </p>                
+              </div>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <div class="text-center bg-green-50 border-l-4 border-green-600 rounded-md p-6 shadow">
+            <p class="text-2xl font-bold text-green-600">🎉 All tasks completed! Great job! 🎉</p>
+          </div>
+        <% } %>
+      </div>
+
+
+      <!-- OSSF Scorecard Analysis -->
+      <h2 class="text-2xl font-bold mb-4">OSSF Scorecard Analysis</h2>
+      <% if (ossfScorecardResults && ossfScorecardResults.length > 0) { %>
+
+        <table class="w-full border border-gray-300 border-collapse mb-6">
+          <thead>
+            <tr class="bg-gray-200">
+              <th class="border border-gray-300 px-4 py-2 text-left">Repository</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Commit</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Duration</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Date</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% ossfScorecardResults.forEach(item => { %>
+              <% currentRepo = githubRepos.filter(i => i.id === item.github_repository_id)[0] %>
+              <tr>
+                <td class="border border-gray-300 px-4 py-2">
+                  <a target="_blank" href="<%= currentRepo.html_url %>" class="text-blue-500 underline font-bold">
+                    <%= currentRepo.full_name %>
+                  </a>
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  <a target="_blank" href="<%= currentRepo.html_url %>/commit/<%= item.repo_commit %>" class="text-blue-500 underline">
+                    <%= item.repo_commit %>
+                  </a>
+                </td>
+                <td class="border border-gray-300 px-4 py-2 ">
+                  <%= item.analysis_execution_time / 1000 %>s
+                </td>
+                <td class="border border-gray-300 px-4 py-2 font-bold">
+                  <%= new Date(item.analysis_time).toISOString().slice(0, -5) %>
+                </td>
+                <td class="border border-gray-300 px-4 py-2 font-bold 
+                  <% if (item.analysis_score >= 8) { %> bg-green-50 text-green-700 <% } %>
+                  <% if (item.analysis_score >= 5 && item.analysis_score < 8) { %> bg-yellow-50 text-yellow-700 <% } %>
+                  <% if (item.analysis_score >= 0 && item.analysis_score < 5) { %> bg-red-50 text-red-700 <% } %>
+                  <% if (item.analysis_score < 0) { %> bg-gray-50 text-gray-700 <% } %>">
+                  <%= item.analysis_score %>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <% } else { %>
+          <p class="text-gray-700">No OSSF Scorecard Results available.</p>
+        <% } %>      
+
+
+      <!-- List all the organizations -->
+      <h2 class="text-2xl font-bold mb-4">GitHub Organizations in scope</h2>
+      <% if (githubOrgs && githubOrgs.length > 0) { %>
+        <ul class="space-y-4 mb-6">
+          <% githubOrgs.forEach(org => { %>
+            <li class="p-4 border border-gray-300 rounded-md shadow">
+              <img src="<%= org.avatar_url %>" alt="<%= org.name %> logo" class="w-12 h-12 rounded-full mb-2">
+              <h3 class="text-lg font-semibold">
+                <%= org.name %>
+              </h3>
+              <p class="text-gray-700 mb-2">
+                <%= org.description %>
+              </p>
+              <a target="_blank" href="<%= org.html_url %>" class="text-blue-500 underline">View on GitHub</a>
+            </li>
+          <% }) %>
+        </ul>
+        <% } else { %>
+          <p class="text-gray-700">No results available.</p>
+        <% } %>      
+
+
+      <!-- List all the repositories -->
+      <h2 class="text-2xl font-bold mb-4">GitHub repositories in scope</h2>
+
+      <% if (githubRepos && githubRepos.length > 0) { %>
+
+        <table class="w-full border border-gray-300 border-collapse mb-6">
+          <thead>
+            <tr class="bg-gray-200">
+              <th class="border border-gray-300 px-4 py-2 text-left">Repository</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Stars</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Forks</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Subscribers</th>
+              <th class="border border-gray-300 px-4 py-2 text-left">Open Issues</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% githubRepos.forEach(item => { %>
+              <tr>
+                <td class="border border-gray-300 px-4 py-2">
+                  <a target="_blank" href="<%= item.html_url %>" class="text-blue-500 underline font-bold">
+                    <%= item.full_name %>
+                  </a>
+                </td>
+                <td class="border border-gray-300 px-4 py-2 ">
+                  <%= item.stargazers_count %>
+                </td>
+                <td class="border border-gray-300 px-4 py-2 font-bold">
+                  <%= item.forks_count %>
+                </td>
+                <td class="border border-gray-300 px-4 py-2 font-bold">
+                  <%= item.subscribers_count %>
+                </td>
+                <td class="border border-gray-300 px-4 py-2 font-bold">
+                  <%= item.open_issues_count %>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <% } else { %>
+          <p class="text-gray-700">No OSSF Scorecard Results available.</p>
+        <% } %>      
+    </main>
+  </div>
+</body>
+</html>

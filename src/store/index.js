@@ -101,6 +101,9 @@ const getAllChecksInChecklistById = (knex, checklistId) =>
 
 const getAllGithubOrganizationsByProjectsId = (knex, projectIds) => {
   debug(`Fetching all github organizations by projects id (${projectIds})...`)
+  if (!Array.isArray(projectIds)) {
+    throw new Error('projectIds must be an array')
+  }
   return knex('github_organizations')
     .whereIn('github_organizations.project_id', projectIds)
     .select('*')
@@ -144,7 +147,8 @@ const initializeStore = (knex) => {
     addGithubRepo: (repo) => addTo('github_repositories', repo),
     addOSSFScorecardResult: (ossf) => addTo('ossf_scorecard_results', ossf),
     upsertOSSFScorecard: upsertOSSFScorecard(knex),
-    upsertComplianceCheckResult: upsertComplianceCheckResult(knex)
+    upsertComplianceCheckResult: upsertComplianceCheckResult(knex),
+    getAllOSSFResults: () => getAll('ossf_scorecard_results')
   }
 }
 

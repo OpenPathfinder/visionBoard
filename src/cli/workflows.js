@@ -1,6 +1,7 @@
 const inquirer = require('inquirer').default
 const debug = require('debug')('cli:workflows')
 const { updateGithubOrgs, upsertGithubRepositories, runAllTheComplianceChecks, upsertOSSFScorecardAnalysis } = require('../workflows')
+const { generateReports } = require('../reports')
 const { logger } = require('../utils')
 
 const commandList = [{
@@ -23,6 +24,10 @@ const commandList = [{
   name: 'show-reports',
   description: 'Starts a http server that shows all the files and folders in the output directory.',
   workflow: require('../httpServer')
+}, {
+  name: 'generate-reports',
+  description: 'Generate the reports for the stored data.',
+  workflow: generateReports
 }]
 
 const validCommandNames = commandList.map(({ name }) => name)

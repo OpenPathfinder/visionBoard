@@ -157,3 +157,10 @@ describe('run run-all-checks', () => {
 describe('run upsert-ossf-scorecard', () => {
   test.todo('Should upsert the OSSF Scorecard scoring by running and checking every repository in the database')
 })
+
+describe('run bulk-import', () => {
+  test.todo('Should bulk import data from a JSON file')
+  test.todo('Should throw an error when the file path is not provided')
+  test.todo('Should throw an error when the JSON file can\'t be parsed')
+  test.todo('Should throw an error when the JSON file is not valid due schema validation')
+})

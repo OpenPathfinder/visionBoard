@@ -2,6 +2,7 @@ const inquirer = require('inquirer').default
 const debug = require('debug')('cli:workflows')
 const { updateGithubOrgs, upsertGithubRepositories, runAllTheComplianceChecks, upsertOSSFScorecardAnalysis } = require('../workflows')
 const { generateReports } = require('../reports')
+const { bulkImport } = require('../importers')
 const { logger } = require('../utils')
 
 const commandList = [{
@@ -28,6 +29,10 @@ const commandList = [{
   name: 'generate-reports',
   description: 'Generate the reports for the stored data.',
   workflow: generateReports
+}, {
+  name: 'bulk-import',
+  description: 'Bulk import data from a CSV file.',
+  workflow: bulkImport
 }]
 
 const validCommandNames = commandList.map(({ name }) => name)
@@ -52,12 +57,17 @@ async function runWorkflowCommand (knex, options = {}) {
         message: 'What is the name of the workflow?',
         choices: validCommandNames,
         when: () => !options.name
+      }, {
+        type: 'input',
+        name: 'file',
+        message: 'Where is the input file for the workflow?',
+        when: ({ name }) => name === 'bulk-import'
       }
     ])
 
   const command = commandList.find(({ name }) => name === answers.name)
   debug(`Running workflow: ${command.name}`)
-  await command.workflow(knex)
+  await command.workflow(knex, answers.file)
 
   return answers
 }

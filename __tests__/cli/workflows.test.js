@@ -157,3 +157,11 @@ describe('run run-all-checks', () => {
 describe('run upsert-ossf-scorecard', () => {
   test.todo('Should upsert the OSSF Scorecard scoring by running and checking every repository in the database')
 })
+
+describe('run show-reports', () => {
+  test.todo('Should start a http server that shows all the files and folders in the output directory')
+})
+
+describe('run generate-reports', () => {
+  test.todo('Should generate the reports for the stored data')
+})

@@ -909,9 +909,17 @@ const sampleOSSFScorecardResult = {
   metadata: null
 }
 
+const sampleBulkImportFileContent = [{
+  type: 'softwareDesignTraining',
+  description: 'Course on software design principles done by the team',
+  project_id: 1,
+  implementation_status: 'completed'
+}]
+
 module.exports = {
   sampleGithubOrg,
   sampleGithubListOrgRepos,
   sampleGithubRepository,
-  sampleOSSFScorecardResult
+  sampleOSSFScorecardResult,
+  sampleBulkImportFileContent
 }

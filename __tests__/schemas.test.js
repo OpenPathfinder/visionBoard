@@ -1,5 +1,5 @@
-const { sampleGithubOrg, sampleGithubListOrgRepos, sampleGithubRepository, sampleOSSFScorecardResult } = require('../__fixtures__')
-const { validateGithubOrg, validateGithubListOrgRepos, validateGithubRepository, validateOSSFResult } = require('../src/schemas')
+const { sampleGithubOrg, sampleGithubListOrgRepos, sampleGithubRepository, sampleOSSFScorecardResult, sampleBulkImportFileContent } = require('../__fixtures__')
+const { validateGithubOrg, validateGithubListOrgRepos, validateGithubRepository, validateOSSFResult, validateBulkImport } = require('../src/schemas')
 
 describe('schemas', () => {
   describe('validateGithubOrg', () => {
@@ -66,6 +66,19 @@ describe('schemas', () => {
     test('Should throw an error with invalid data', () => {
       const invalidData = { ...sampleOSSFScorecardResult, score: '123' }
       expect(() => validateOSSFResult(invalidData)).toThrow()
+    })
+  })
+  describe('validateBulkImport', () => {
+    test('Should not throw an error with valid data', () => {
+      expect(() => validateBulkImport(sampleBulkImportFileContent)).not.toThrow()
+    })
+
+    test('Should throw an error with invalid data', () => {
+      const invalidData = [
+        ...sampleBulkImportFileContent,
+        { ...sampleBulkImportFileContent[0], type: 'invalidType' }
+      ]
+      expect(() => validateBulkImport(invalidData)).toThrow()
     })
   })
 })

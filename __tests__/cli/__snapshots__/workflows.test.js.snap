@@ -32,5 +32,10 @@ exports[`list - Non-Interactive Mode Should provide a list of available workflow
     "name": "generate-reports",
     "workflow": [Function],
   },
+  {
+    "description": "Bulk import data from a CSV file.",
+    "name": "bulk-import",
+    "workflow": [Function],
+  },
 ]
 `;

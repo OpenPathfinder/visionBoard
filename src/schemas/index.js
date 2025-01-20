@@ -4,6 +4,7 @@ const githubOrganizationSchema = require('./githubOrganization.json')
 const githubListOrgReposSchema = require('./githubListOrgRepos.json')
 const githubRepositorySchema = require('./githubRepository.json')
 const ossfScorecardResultSchema = require('./ossfScorecardResult.json')
+const bulkImportSchema = require('./bulkImport.json')
 
 const ajv = new Ajv()
 addFormats(ajv)
@@ -50,9 +51,20 @@ const validateOSSFResult = (data) => {
   return null
 }
 
+const validateBulkImport = (data) => {
+  const validate = ajv.compile(bulkImportSchema)
+  const valid = validate(data)
+  if (!valid) {
+    const readableErrors = getReadableErrors(validate)
+    throw new Error(`Error when validating the bulk import data: ${readableErrors}`)
+  }
+  return null
+}
+
 module.exports = {
   validateGithubOrg,
   validateGithubListOrgRepos,
   validateGithubRepository,
-  validateOSSFResult
+  validateOSSFResult,
+  validateBulkImport
 }

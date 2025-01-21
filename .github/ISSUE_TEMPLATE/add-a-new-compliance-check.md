@@ -35,6 +35,6 @@ You can find more details in [the contributing guide](/CONTRIBUTING.md#current-i
   - [ ] Add new integration test cases for this check.
   - [ ] Verify that all tests are passing.
   - [ ] Run the command `check run --name {check_code_name}` and verify the changes in the database. Update the seed script if needed (`npm run db:seed`)
-- [ ] **5. Update the website [Example](https://github.com/OpenPathfinder/website/pull/9)**
-  - [ ] Review the current content it in `https://openjs-security-program-standards.netlify.app/details/{check_code_name}`
-  - [ ] Create a PR in https://github.com/OpenPathfinder/website to include how we calculate this check and include additional information on the mitigation if needed.
+- [ ] **5. Update the website [Example](https://github.com/OpenPathfinder/openpathfinder.com/pull/20)**
+  - [ ] Review the current content it in `https://openpathfinder.com/docs/checks/{check_code_name}`
+  - [ ] Create a PR in https://github.com/OpenPathfinder/openpathfinder.com to include how we calculate this check and include additional information on the mitigation if needed.

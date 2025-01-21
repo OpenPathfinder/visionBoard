@@ -92,6 +92,15 @@ const upsertGithubRepository = (knex) => (repository, orgId) => upsertRecord({
   data: { ...repository, github_organization_id: orgId }
 })
 
+const upsertSoftwareDesignTraining = (knex) => (data) => upsertRecord({
+  table: 'software_design_training',
+  knex,
+  uniqueCriteria: {
+    project_id: data.project_id
+  },
+  data
+})
+
 const getAllChecksInChecklistById = (knex, checklistId) =>
   debug(`Fetching all checks in checklist by id (${checklistId})...`) ||
   knex('checklist_items')
@@ -158,6 +167,7 @@ const initializeStore = (knex) => {
     addOSSFScorecardResult: (ossf) => addTo('ossf_scorecard_results', ossf),
     upsertOSSFScorecard: upsertOSSFScorecard(knex),
     upsertComplianceCheckResult: upsertComplianceCheckResult(knex),
+    upsertSoftwareDesignTraining: upsertSoftwareDesignTraining(knex),
     getAllOSSFResults: () => getAll('ossf_scorecard_results')
   }
 }

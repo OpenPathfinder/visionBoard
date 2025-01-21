@@ -40,6 +40,7 @@ workflow
   .command('run')
   .description('Run a workflow')
   .option('--name <name>', 'Name of the workflow')
+  .option('--file <file>', 'Input file for the workflow')
   .action(async (options) => {
     try {
       await runWorkflowCommand(knex, options)

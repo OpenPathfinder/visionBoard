@@ -25,12 +25,15 @@ describe('Migrations', () => {
     const result = await knex.migrate.latest()
     expect(result).not.toBeNull()
     const complianceChecksCount = await knex('compliance_checks').count()
-    expect(complianceChecksCount.length).toBe(1)
+    expect(Number.parseInt(complianceChecksCount[0].count)).toBe(72)
   })
 
   it('should restore compliance_checks table after rolling back', async () => {
     const result = await knex.migrate.latest()
     expect(result).not.toBeNull()
+    const complianceChecksCount = await knex('compliance_checks').count()
+    expect(Number.parseInt(complianceChecksCount[0].count)).toBe(72)
+
     const complianceChecksCountBeforeRollback = await knex('compliance_checks')
       .select('*')
       .limit(1)
@@ -38,7 +41,7 @@ describe('Migrations', () => {
     expect(complianceChecksCountBeforeRollback[0]).not.toHaveProperty('mitre_url')
     expect(complianceChecksCountBeforeRollback[0]).not.toHaveProperty('mitre_description')
 
-    await knex.migrate.rollback()
+    await knex.migrate.down()
 
     const complianceChecksCountAfterRollback = await knex('compliance_checks')
       .select('*')

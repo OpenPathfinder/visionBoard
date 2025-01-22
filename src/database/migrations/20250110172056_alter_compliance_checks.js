@@ -27,7 +27,7 @@ exports.down = async (knex) => {
     })
 
   const groups = Object.groupBy(initialResources,
-    ({ compliance_check_id }) => compliance_check_id
+    ({ compliance_check_id }) => compliance_check_id // eslint-disable-line
   )
   const upsertData = Object.keys(groups).map((groupKey) => {
     const groupsKey = groups[groupKey]

@@ -33,7 +33,6 @@ exports.down = async (knex) => {
     table.string('sources_description').nullable()
   })
 
-  const checkResources = await knex.select('*').from('compliance_checks_resources')
   initialResources = await knex.select('*')
     .from('compliance_checks_resources')
     .join('resources_for_compliance_checks', function () {

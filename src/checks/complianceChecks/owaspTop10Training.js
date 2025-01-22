@@ -1,6 +1,6 @@
 const validators = require('../validators')
 const { initializeStore } = require('../../store')
-const debug = require('debug')('checks:softwareDesignTraining')
+const debug = require('debug')('checks:owaspTop10Training')
 
 module.exports = async (knex, { projects } = {}) => {
   const {

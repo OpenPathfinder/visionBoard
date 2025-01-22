@@ -125,6 +125,13 @@ const getAllSSoftwareDesignTrainingsByProjectIds = (knex, projectIds) => {
     .select('*')
 }
 
+const getAllOwaspTop10TrainingsByProjectIds = (knex, projectIds) => {
+  debug(`Fetching all owasp trainings by project ids (${projectIds})...`)
+  return knex('owasp_top10_training')
+    .whereIn('owasp_top10_training.project_id', projectIds)
+    .select('*')
+}
+
 const initializeStore = (knex) => {
   debug('Initializing store...')
   const getAll = getAllFn(knex)
@@ -138,6 +145,7 @@ const initializeStore = (knex) => {
     getAllComplianceChecks: () => getAll('compliance_checks'),
     getAllProjects: () => getAll('projects'),
     getAllSSoftwareDesignTrainings: () => getAll('software_design_training'),
+    getAllOwaspTop10Trainings: () => getAll('owasp_top10_training'),
     getAllGithubRepositories: () => getAll('github_repositories'),
     getAllChecklists: () => getAll('compliance_checklists'),
     getAllResults: () => getAll('compliance_checks_results'),
@@ -146,6 +154,7 @@ const initializeStore = (knex) => {
     getAllChecksInChecklistById,
     getAllGithubOrganizationsByProjectsId: (projectIds) => getAllGithubOrganizationsByProjectsId(knex, projectIds),
     getAllSSoftwareDesignTrainingsByProjectIds: (projectIds) => getAllSSoftwareDesignTrainingsByProjectIds(knex, projectIds),
+    getAllOwaspTop10TrainingsByProjectIds: (projectIds) => getAllOwaspTop10TrainingsByProjectIds(knex, projectIds),
     getCheckByCodeName: getCheckByCodeName(knex),
     deleteTasksByComplianceCheckId: deleteTasksByComplianceCheckId(knex),
     deleteAlertsByComplianceCheckId: deleteAlertsByComplianceCheckId(knex),
@@ -153,6 +162,7 @@ const initializeStore = (knex) => {
     addTask: (task) => addTo('compliance_checks_tasks', task),
     addResult: (result) => addTo('compliance_checks_results', result),
     addSSoftwareDesignTraining: (data) => addTo('software_design_training', data),
+    addOwaspTop10Training: (data) => addTo('owasp_top10_training', data),
     addGithubRepo: (repo) => addTo('github_repositories', repo),
     addOSSFScorecardResult: (ossf) => addTo('ossf_scorecard_results', ossf),
     upsertOSSFScorecard: upsertOSSFScorecard(knex),

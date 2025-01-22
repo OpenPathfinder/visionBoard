@@ -310,7 +310,7 @@ describe('owaspTop10Training', () => {
     ]
   })
 
-  it('Should generate a passed result if the project has a software design training and it is up to date', () => {
+  it('Should generate a passed result if the project has a OWASP TOP10 training and it is up to date', () => {
     const analysis = owaspTop10Training({ trainings, check, projects })
     expect(analysis).toEqual({
       alerts: [],
@@ -333,7 +333,7 @@ describe('owaspTop10Training', () => {
       tasks: []
     })
   })
-  it('Should generate a failed result if the project has a software design training but it is out of date', () => {
+  it('Should generate a failed result if the project has a OWASP TOP10 training but it is out of date', () => {
     trainings[0].training_date = '2019-01-01'
     const analysis = owaspTop10Training({ trainings, check, projects })
     expect(analysis).toEqual({
@@ -373,7 +373,7 @@ describe('owaspTop10Training', () => {
       ]
     })
   })
-  it('Should generate a failed result if the project does not have a software design training', () => {
+  it('Should generate a failed result if the project does not have a OWASP TOP10 training', () => {
     trainings = []
     const analysis = owaspTop10Training({ trainings, check, projects })
     expect(analysis).toEqual({

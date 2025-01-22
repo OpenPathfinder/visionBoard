@@ -1,4 +1,4 @@
-const { githubOrgMFA, softwareDesignTraining, adminRepoCreationOnly, owaspTraining } = require('../../src/checks/validators')
+const { githubOrgMFA, softwareDesignTraining, adminRepoCreationOnly, owaspTop10Training } = require('../../src/checks/validators')
 // @see: https://github.com/OpenPathfinder/visionBoard/issues/43
 describe('githubOrgMFA', () => {
   let organizations, check, projects
@@ -279,7 +279,7 @@ describe('softwareDesignTraining', () => {
   })
 })
 
-describe('owaspTraining', () => {
+describe('owaspTop10Training', () => {
   let trainings, check, projects
 
   beforeEach(() => {
@@ -311,7 +311,7 @@ describe('owaspTraining', () => {
   })
 
   it('Should generate a passed result if the project has a software design training and it is up to date', () => {
-    const analysis = owaspTraining({ trainings, check, projects })
+    const analysis = owaspTop10Training({ trainings, check, projects })
     expect(analysis).toEqual({
       alerts: [],
       results: [
@@ -335,7 +335,7 @@ describe('owaspTraining', () => {
   })
   it('Should generate a failed result if the project has a software design training but it is out of date', () => {
     trainings[0].training_date = '2019-01-01'
-    const analysis = owaspTraining({ trainings, check, projects })
+    const analysis = owaspTop10Training({ trainings, check, projects })
     expect(analysis).toEqual({
       alerts: [
         {
@@ -375,7 +375,7 @@ describe('owaspTraining', () => {
   })
   it('Should generate a failed result if the project does not have a software design training', () => {
     trainings = []
-    const analysis = owaspTraining({ trainings, check, projects })
+    const analysis = owaspTop10Training({ trainings, check, projects })
     expect(analysis).toEqual({
       alerts: [
         {

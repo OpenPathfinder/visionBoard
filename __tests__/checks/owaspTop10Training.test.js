@@ -12,7 +12,7 @@ let project
 let check
 
 let addProject,
-  addOwaspTraining,
+  addOwaspTop10Training,
   getAllResults,
   getAllTasks,
   getAllAlerts,
@@ -20,14 +20,14 @@ let addProject,
   addTask,
   addResult,
   getCheckByCodeName,
-  getAllOwaspTrainings
+  getAllOwaspTop10Trainings
 
 beforeAll(async () => {
   knex = knexInit(dbSettings);
   ({
     addProject,
-    addOwaspTraining,
-    getAllOwaspTrainings,
+    addOwaspTop10Training,
+    getAllOwaspTop10Trainings,
     getAllResults,
     getAllTasks,
     getAllAlerts,
@@ -51,8 +51,8 @@ afterAll(async () => {
 describe('Integration: owaspTop10Training', () => {
   test('Should add results without alerts or tasks', async () => {
     // Add a passed check scenario
-    await addOwaspTraining({ project_id: project.id, description: 'learning accomplished', training_date: new Date().toISOString() })
-    let trainings = await getAllOwaspTrainings()
+    await addOwaspTop10Training({ project_id: project.id, description: 'learning accomplished', training_date: new Date().toISOString() })
+    let trainings = await getAllOwaspTop10Trainings()
     expect(trainings.length).toBe(1)
     // Check that the database is empty
     let results = await getAllResults()
@@ -64,7 +64,7 @@ describe('Integration: owaspTop10Training', () => {
     // Run the check
     await expect(owaspTop10Training(knex)).resolves.toBeUndefined()
     // Check that the database has the expected results
-    trainings = await getAllOwaspTrainings()
+    trainings = await getAllOwaspTop10Trainings()
     expect(trainings.length).toBe(1)
     results = await getAllResults()
     expect(results.length).toBe(1)
@@ -78,12 +78,12 @@ describe('Integration: owaspTop10Training', () => {
 
   test('Should delete (previous alerts and tasks) and add results', async () => {
     // Add a passed check scenario
-    await addOwaspTraining({ project_id: project.id, description: 'learning accomplished', training_date: new Date().toISOString() })
+    await addOwaspTop10Training({ project_id: project.id, description: 'learning accomplished', training_date: new Date().toISOString() })
     // Add previous alerts and tasks
     await addAlert({ compliance_check_id: check.id, project_id: project.id, title: 'existing', description: 'existing', severity: 'critical' })
     await addTask({ compliance_check_id: check.id, project_id: project.id, title: 'existing', description: 'existing', severity: 'critical' })
     // Check that the database has the expected results
-    const trainings = await getAllOwaspTrainings()
+    const trainings = await getAllOwaspTop10Trainings()
     expect(trainings.length).toBe(1)
     let results = await getAllResults()
     expect(results.length).toBe(0)
@@ -112,7 +112,7 @@ describe('Integration: owaspTop10Training', () => {
     let results = await getAllResults()
     expect(results.length).toBe(1)
     expect(results[0].compliance_check_id).toBe(check.id)
-    let trainings = await getAllOwaspTrainings()
+    let trainings = await getAllOwaspTop10Trainings()
     expect(trainings.length).toBe(0)
     let alerts = await getAllAlerts()
     expect(alerts.length).toBe(0)
@@ -127,7 +127,7 @@ describe('Integration: owaspTop10Training', () => {
     expect(results[0].rationale).not.toBe('failed previously')
     expect(results[0].compliance_check_id).toBe(check.id)
 
-    trainings = await getAllOwaspTrainings()
+    trainings = await getAllOwaspTop10Trainings()
     expect(trainings.length).toBe(0)
     alerts = await getAllAlerts()
     expect(alerts.length).toBe(1)

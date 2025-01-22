@@ -4,7 +4,7 @@ const debug = require('debug')('checks:softwareDesignTraining')
 
 module.exports = async (knex, { projects } = {}) => {
   const {
-    getAllOwaspTrainingsByProjectIds, getCheckByCodeName,
+    getAllOwaspTop10TrainingsByProjectIds, getCheckByCodeName,
     getAllProjects, addAlert, addTask, upsertComplianceCheckResult,
     deleteAlertsByComplianceCheckId, deleteTasksByComplianceCheckId
   } = initializeStore(knex)
@@ -14,10 +14,10 @@ module.exports = async (knex, { projects } = {}) => {
   if (!projects || (Array.isArray(projects) && projects.length === 0)) {
     projects = await getAllProjects()
   }
-  const trainings = await getAllOwaspTrainingsByProjectIds(projects.map(project => project.id))
+  const trainings = await getAllOwaspTop10TrainingsByProjectIds(projects.map(project => project.id))
 
   debug('Extracting the validation results...')
-  const analysis = validators.owaspTraining({ trainings, check, projects })
+  const analysis = validators.owaspTop10Training({ trainings, check, projects })
   debug('Deleting previous alerts and tasks to avoid orphaned records...')
   await deleteAlertsByComplianceCheckId(check.id)
   await deleteTasksByComplianceCheckId(check.id)

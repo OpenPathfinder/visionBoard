@@ -1,4 +1,4 @@
-const debug = require('debug')('checks:validator:owaspTraining')
+const debug = require('debug')('checks:validator:owaspTop10Training')
 const { getSeverityFromPriorityGroup, isDateWithinPolicy } = require('../../utils')
 
 const expirationPolicy = '6m'

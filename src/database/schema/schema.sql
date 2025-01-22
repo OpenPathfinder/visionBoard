@@ -119,14 +119,8 @@ CREATE TABLE public.compliance_checks (
     default_section_number character varying(255) NOT NULL,
     default_section_name character varying(255) NOT NULL,
     code_name character varying(255) NOT NULL,
-    default_priority_group text NOT NULL,
+    default_priority_group character varying(255) NOT NULL,
     is_c_scrm boolean DEFAULT false NOT NULL,
-    mitre_url character varying(255),
-    mitre_description character varying(255),
-    how_to_url character varying(255),
-    how_to_description text,
-    sources_url character varying(255),
-    sources_description text,
     implementation_status text DEFAULT 'pending'::text NOT NULL,
     implementation_type text,
     implementation_details_reference text,
@@ -134,8 +128,7 @@ CREATE TABLE public.compliance_checks (
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     CONSTRAINT compliance_checks_implementation_status_check CHECK ((implementation_status = ANY (ARRAY['pending'::text, 'completed'::text]))),
-    CONSTRAINT compliance_checks_implementation_type_check CHECK ((implementation_type = ANY (ARRAY['manual'::text, 'computed'::text]))),
-    CONSTRAINT compliance_checks_priority_group_check CHECK ((default_priority_group = ANY (ARRAY['P0'::text, 'P1'::text, 'P2'::text, 'P3'::text, 'P4'::text, 'P5'::text, 'P6'::text, 'P7'::text, 'P8'::text, 'P9'::text, 'P10'::text, 'P11'::text, 'P12'::text, 'P13'::text, 'P14'::text, 'R0'::text, 'R1'::text, 'R2'::text, 'R3'::text, 'R4'::text, 'R5'::text, 'R6'::text, 'R7'::text, 'R8'::text, 'R9'::text, 'R10'::text, 'R11'::text, 'R12'::text, 'R13'::text, 'R14'::text])))
+    CONSTRAINT compliance_checks_implementation_type_check CHECK ((implementation_type = ANY (ARRAY['manual'::text, 'computed'::text])))
 );
 
 
@@ -194,6 +187,40 @@ CREATE SEQUENCE public.compliance_checks_id_seq
 --
 
 ALTER SEQUENCE public.compliance_checks_id_seq OWNED BY public.compliance_checks.id;
+
+
+--
+-- Name: compliance_checks_resources; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.compliance_checks_resources (
+    id integer NOT NULL,
+    url character varying(255) NOT NULL,
+    name character varying(255),
+    description text,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: compliance_checks_resources_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.compliance_checks_resources_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: compliance_checks_resources_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.compliance_checks_resources_id_seq OWNED BY public.compliance_checks_resources.id;
 
 
 --
@@ -672,6 +699,38 @@ ALTER SEQUENCE public.projects_id_seq OWNED BY public.projects.id;
 
 
 --
+-- Name: resources_for_compliance_checks; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.resources_for_compliance_checks (
+    id integer NOT NULL,
+    compliance_check_id integer NOT NULL,
+    compliance_check_resource_id integer NOT NULL,
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: resources_for_compliance_checks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.resources_for_compliance_checks_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: resources_for_compliance_checks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.resources_for_compliance_checks_id_seq OWNED BY public.resources_for_compliance_checks.id;
+
+
+--
 -- Name: software_design_training; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -736,6 +795,13 @@ ALTER TABLE ONLY public.compliance_checks_alerts ALTER COLUMN id SET DEFAULT nex
 
 
 --
+-- Name: compliance_checks_resources id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.compliance_checks_resources ALTER COLUMN id SET DEFAULT nextval('public.compliance_checks_resources_id_seq'::regclass);
+
+
+--
 -- Name: compliance_checks_results id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -792,6 +858,13 @@ ALTER TABLE ONLY public.projects ALTER COLUMN id SET DEFAULT nextval('public.pro
 
 
 --
+-- Name: resources_for_compliance_checks id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.resources_for_compliance_checks ALTER COLUMN id SET DEFAULT nextval('public.resources_for_compliance_checks_id_seq'::regclass);
+
+
+--
 -- Name: software_design_training id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -836,6 +909,14 @@ ALTER TABLE ONLY public.compliance_checks
 
 ALTER TABLE ONLY public.compliance_checks
     ADD CONSTRAINT compliance_checks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: compliance_checks_resources compliance_checks_resources_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.compliance_checks_resources
+    ADD CONSTRAINT compliance_checks_resources_pkey PRIMARY KEY (id);
 
 
 --
@@ -935,6 +1016,14 @@ ALTER TABLE ONLY public.projects
 
 
 --
+-- Name: resources_for_compliance_checks resources_for_compliance_checks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.resources_for_compliance_checks
+    ADD CONSTRAINT resources_for_compliance_checks_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: software_design_training software_design_training_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -968,6 +1057,13 @@ CREATE TRIGGER set_updated_at_compliance_checks BEFORE UPDATE ON public.complian
 --
 
 CREATE TRIGGER set_updated_at_compliance_checks_alerts BEFORE UPDATE ON public.compliance_checks_alerts FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+
+--
+-- Name: compliance_checks_resources set_updated_at_compliance_checks_resources; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER set_updated_at_compliance_checks_resources BEFORE UPDATE ON public.compliance_checks_resources FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 
 --
@@ -1105,6 +1201,22 @@ ALTER TABLE ONLY public.github_repositories
 
 ALTER TABLE ONLY public.ossf_scorecard_results
     ADD CONSTRAINT ossf_scorecard_results_github_repository_id_foreign FOREIGN KEY (github_repository_id) REFERENCES public.github_repositories(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: resources_for_compliance_checks resources_for_compliance_checks_compliance_check_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.resources_for_compliance_checks
+    ADD CONSTRAINT resources_for_compliance_checks_compliance_check_id_foreign FOREIGN KEY (compliance_check_id) REFERENCES public.compliance_checks(id);
+
+
+--
+-- Name: resources_for_compliance_checks resources_for_compliance_checks_compliance_check_resource_id_fo; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.resources_for_compliance_checks
+    ADD CONSTRAINT resources_for_compliance_checks_compliance_check_resource_id_fo FOREIGN KEY (compliance_check_resource_id) REFERENCES public.compliance_checks_resources(id);
 
 
 --

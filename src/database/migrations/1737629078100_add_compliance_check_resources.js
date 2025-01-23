@@ -4,10 +4,7 @@ exports.up = async (knex) => {
     table.string('url').notNullable()
     table.string('name')
     table.text('description')
-
-    table.integer('tmp_compliance_check_id')
-      .unsigned()
-      .notNullable()
+    table.enum('type', ['mitre', 'how_to', 'sources']).notNullable().defaultTo('pending')
 
     // Timestamps
     table.timestamp('created_at').defaultTo(knex.fn.now()).notNullable()

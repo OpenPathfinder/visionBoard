@@ -132,6 +132,19 @@ const getAllOwaspTop10TrainingsByProjectIds = (knex, projectIds) => {
     .select('*')
 }
 
+const getAllGithubRepositoriesAndOrganizationByProjectId = (knex, projectIds) => {
+  debug(`Fetching all github repositories by organization id (${projectIds})...`)
+  if (!Array.isArray(projectIds)) {
+    throw new Error('projectIds must be an array')
+  }
+
+  return knex('github_organizations')
+    .select('*')
+    .whereIn('github_organizations.project_id', projectIds)
+    .innerJoin('github_repositories', function() {
+      this.on("github_repositories.github_organization_id", "=", "github_organizations.id")})
+}
+
 const initializeStore = (knex) => {
   debug('Initializing store...')
   const getAll = getAllFn(knex)
@@ -147,6 +160,7 @@ const initializeStore = (knex) => {
     getAllSSoftwareDesignTrainings: () => getAll('software_design_training'),
     getAllOwaspTop10Trainings: () => getAll('owasp_top10_training'),
     getAllGithubRepositories: () => getAll('github_repositories'),
+    getAllGithubRepositoriesAndOrganizationByProjectId: (organizationId) => getAllGithubRepositoriesAndOrganizationByProjectId(knex, organizationId),
     getAllChecklists: () => getAll('compliance_checklists'),
     getAllResults: () => getAll('compliance_checks_results'),
     getAllTasks: () => getAll('compliance_checks_tasks'),

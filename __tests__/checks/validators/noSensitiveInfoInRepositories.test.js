@@ -1,9 +1,9 @@
 const { noSensitiveInfoInRepositories } = require('../../../src/checks/validators')
 
 describe('noSensitiveInfoInRepositories', () => {
-  let organizations, check, projects
+  let repositories, check, projects
   beforeEach(() => {
-    organizations = [
+    repositories = [
       {
         id: 1,
         project_id: 1,
@@ -59,7 +59,7 @@ describe('noSensitiveInfoInRepositories', () => {
   })
 
   it('Should generate a passed result if all organizations and repositories have secrect enabled', () => {
-    const analysis = noSensitiveInfoInRepositories({ organizations, check, projects })
+    const analysis = noSensitiveInfoInRepositories({ repositories, check, projects })
     expect(analysis).toEqual({
       alerts: [],
       results: [
@@ -83,18 +83,18 @@ describe('noSensitiveInfoInRepositories', () => {
   })
 
   it('should generate a failed result if some organizations do not have secret scanning enabled for new repositories, but existing repositories do have it enabled', () => {
-    organizations[0].secret_scanning_enabled_for_new_repositories = false
+    repositories[0].secret_scanning_enabled_for_new_repositories = false
     // IMPORTANT: If one organization fails, the whole project fails no matter how other organizations are in the project
-    organizations[1].secret_scanning_enabled_for_new_repositories = null
+    repositories[1].secret_scanning_enabled_for_new_repositories = null
 
-    const analysis = noSensitiveInfoInRepositories({ organizations, check, projects })
+    const analysis = noSensitiveInfoInRepositories({ repositories, check, projects })
     expect(analysis).toEqual({
       alerts: [
         {
           project_id: 1,
           compliance_check_id: 1,
           severity: 'critical',
-          title: 'The organization(s) has not enabled secret scanning by default. All repositories have the secret scanner enabled',
+          title: 'The organization(s) (org1) has not enabled secret scanning by default. All repositories have the secret scanner enabled',
           description: 'Check the details on https://example.com'
         }
       ],
@@ -104,7 +104,7 @@ describe('noSensitiveInfoInRepositories', () => {
           compliance_check_id: 1,
           severity: 'critical',
           status: 'failed',
-          rationale: 'The organization(s) has not enabled secret scanning by default. All repositories have the secret scanner enabled'
+          rationale: 'The organization(s) (org1) has not enabled secret scanning by default. All repositories have the secret scanner enabled'
         },
         {
           compliance_check_id: 1,
@@ -119,7 +119,7 @@ describe('noSensitiveInfoInRepositories', () => {
           project_id: 1,
           compliance_check_id: 1,
           severity: 'critical',
-          title: 'Enable secret scanning for new repositories for the organization(s)',
+          title: 'Enable secret scanning for new repositories for the organization(s) (org1)',
           description: 'Check the details on https://example.com'
         }
       ]
@@ -127,19 +127,19 @@ describe('noSensitiveInfoInRepositories', () => {
   })
 
   it('should generate a failed result if some organizations and repositories do not have secret scanning enabled for new repositories', () => {
-    organizations[0].secret_scanning_enabled_for_new_repositories = false
-    organizations[1].secret_scanning_enabled_for_new_repositories = false
-    organizations[1].secret_scanning_status = 'disabled'
-    organizations[0].secret_scanning_status = 'disabled'
+    repositories[0].secret_scanning_enabled_for_new_repositories = false
+    repositories[2].secret_scanning_enabled_for_new_repositories = false
+    repositories[2].secret_scanning_status = 'disabled'
+    repositories[0].secret_scanning_status = 'disabled'
 
-    const analysis = noSensitiveInfoInRepositories({ organizations, check, projects })
+    const analysis = noSensitiveInfoInRepositories({ repositories, check, projects })
     expect(analysis).toEqual({
       alerts: [
         {
           project_id: 1,
           compliance_check_id: 1,
           severity: 'critical',
-          title: 'The organization(s) has not enabled secret scanning by default. 2 repositories do not have the secret scanner enabled',
+          title: 'The organization(s) (org1,org2) has not enabled secret scanning by default. 2 repositories do not have the secret scanner enabled',
           description: 'Check the details on https://example.com'
         }
       ],
@@ -149,7 +149,7 @@ describe('noSensitiveInfoInRepositories', () => {
           compliance_check_id: 1,
           severity: 'critical',
           status: 'failed',
-          rationale: 'The organization(s) has not enabled secret scanning by default. 2 repositories do not have the secret scanner enabled'
+          rationale: 'The organization(s) (org1,org2) has not enabled secret scanning by default. 2 repositories do not have the secret scanner enabled'
         },
         {
           compliance_check_id: 1,
@@ -164,8 +164,8 @@ describe('noSensitiveInfoInRepositories', () => {
           project_id: 1,
           compliance_check_id: 1,
           severity: 'critical',
-          // TODO: Add org name and repos names
-          title: 'Enable secret scanning for new repositories for the organization(s) and the repositories',
+          // TODO: Add   repos names
+          title: 'Enable secret scanning for new repositories for the organization(s) (org1,org2) and the repositories',
           description: 'Check the details on https://example.com'
         }
       ]
@@ -173,9 +173,9 @@ describe('noSensitiveInfoInRepositories', () => {
   })
 
   it('should generate a failed result if some and repositories do not have secret scanning enabled for new repositories', () => {
-    organizations[2].secret_scanning_status = 'disabled'
+    repositories[2].secret_scanning_status = 'disabled'
 
-    const analysis = noSensitiveInfoInRepositories({ organizations, check, projects })
+    const analysis = noSensitiveInfoInRepositories({ repositories, check, projects })
     expect(analysis).toEqual({
       alerts: [
         {
@@ -215,8 +215,8 @@ describe('noSensitiveInfoInRepositories', () => {
   })
 
   it('should generate an unknown result if some organizations have unknown secret ennabled, but existing repositories do have it enabled', () => {
-    organizations[0].secret_scanning_enabled_for_new_repositories = null
-    const analysis = noSensitiveInfoInRepositories({ organizations, check, projects })
+    repositories[0].secret_scanning_enabled_for_new_repositories = null
+    const analysis = noSensitiveInfoInRepositories({ repositories, check, projects })
     expect(analysis).toEqual({
       alerts: [],
       results: [
@@ -225,7 +225,7 @@ describe('noSensitiveInfoInRepositories', () => {
           compliance_check_id: 1,
           severity: 'critical',
           status: 'unknown',
-          rationale: 'It was not possible to confirm if the organization(s) has enabled secret scanning for new repositories in the following () organization(s)'
+          rationale: 'It was not possible to confirm if the organization(s) has enabled secret scanning for new repositories in the following (org1) organization(s)'
         },
         {
           compliance_check_id: 1,
@@ -240,9 +240,9 @@ describe('noSensitiveInfoInRepositories', () => {
   })
 
   it('should generate an unknown result if all organizations have secret ennabled, but some repositories have unknow secret ennabled', () => {
-    organizations[0].secret_scanning_status = null
+    repositories[0].secret_scanning_status = null
 
-    const analysis = noSensitiveInfoInRepositories({ organizations, check, projects })
+    const analysis = noSensitiveInfoInRepositories({ repositories, check, projects })
     expect(analysis).toEqual({
       alerts: [],
       results: [
@@ -266,10 +266,10 @@ describe('noSensitiveInfoInRepositories', () => {
   })
 
   it('should generate an unknown result if some organizations and some repositories have unknow secret ennabled', () => {
-    organizations[0].secret_scanning_status = null
-    organizations[1].secret_scanning_enabled_for_new_repositories = null
+    repositories[0].secret_scanning_status = null
+    repositories[1].secret_scanning_enabled_for_new_repositories = null
 
-    const analysis = noSensitiveInfoInRepositories({ organizations, check, projects })
+    const analysis = noSensitiveInfoInRepositories({ repositories, check, projects })
     expect(analysis).toEqual({
       alerts: [],
       results: [

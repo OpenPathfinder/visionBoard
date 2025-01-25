@@ -1,4 +1,4 @@
-const { validateGithubUrl, ensureGithubToken, groupArrayItemsByCriteria, getSeverityFromPriorityGroup, isDateWithinPolicy, redactSensitiveData } = require('../src/utils/index')
+const { validateGithubUrl, ensureGithubToken, groupArrayItemsByCriteria, getSeverityFromPriorityGroup, isDateWithinPolicy, redactSensitiveData, generatePercentage } = require('../src/utils/index')
 
 describe('ensureGithubToken', () => {
   let originalGithubToken
@@ -63,6 +63,15 @@ describe('groupArrayItemsByCriteria', () => {
       ]
     ]
     expect(groupByProject(items)).toEqual(expected)
+  })
+})
+
+describe('generatePercentage', () => {
+  it('should generate the correct percentage', () => {
+    expect(generatePercentage(100, 50)).toBe('50%')
+    expect(generatePercentage(236, 25)).toBe('10.6%')
+    expect(generatePercentage(236, 24)).toBe('10.2%')
+    expect(generatePercentage(70, 12)).toBe('17.1%')
   })
 })
 

@@ -1,5 +1,5 @@
 const debug = require('debug')('checks:validator:noSensitiveInfoInRepositories')
-const { getSeverityFromPriorityGroup, groupArrayItemsByCriteria } = require('../../utils')
+const { getSeverityFromPriorityGroup, groupArrayItemsByCriteria, generatePercentage } = require('../../utils')
 
 const groupByOrganization = groupArrayItemsByCriteria('project_id')
 
@@ -39,9 +39,9 @@ module.exports = ({ repositories = [], check, projects = [] }) => {
       result.status = 'passed'
       result.rationale = 'The organizations(s) and repositories has secret scanning enabled'
     } else if (failedOrgs.size || failedRepos.length) {
+      const percentageOfFailedRepos = generatePercentage(projectOrgs.length, failedRepos.length)
       orgMessage = failedOrgs.size ? `The organization(s) (${[...failedOrgs].join(',')}) has not enabled secret scanning by default` : 'The organization(s) has secret scanning for new repositories enabled'
-      // TODO: add porcentage of failed repos
-      repoMessage = failedRepos.length ? `${failedRepos.length} repositories do not have the secret scanner enabled` : 'All repositories have the secret scanner enabled'
+      repoMessage = failedRepos.length ? `${failedRepos.length} (${percentageOfFailedRepos}) repositories do not have the secret scanner enabled` : 'All repositories have the secret scanner enabled'
 
       result.status = 'failed'
       result.rationale = `${orgMessage}. ${repoMessage}`
@@ -49,10 +49,10 @@ module.exports = ({ repositories = [], check, projects = [] }) => {
       alert.title = `${orgMessage}. ${repoMessage}`
       task.description = `Check the details on ${check.details_url}`
       task.title = failedOrgs.size && failedRepos.length
-        ? `Enable secret scanning for new repositories for the organization(s) (${[...failedOrgs].join(',')}) and the repositories`
+        ? `Enable secret scanning for new repositories for the organization(s) (${[...failedOrgs].join(',')}) and ${failedRepos.length} (${percentageOfFailedRepos}) repositories`
         : failedOrgs.size
           ? `Enable secret scanning for new repositories for the organization(s) (${[...failedOrgs].join(',')})`
-          : 'Enable secret scanning for the repositories in the organization ()'
+          : `Enable secret scanning for ${failedRepos.length} (${percentageOfFailedRepos}) repositories in the organization(s) (${Array.from(new Set(failedRepos)).join(',')})`
     } else if (unknownOrgs.size || unknownRepos.length) {
       result.status = 'unknown'
 

@@ -139,7 +139,7 @@ describe('noSensitiveInfoInRepositories', () => {
           project_id: 1,
           compliance_check_id: 1,
           severity: 'critical',
-          title: 'The organization(s) (org1,org2) has not enabled secret scanning by default. 2 repositories do not have the secret scanner enabled',
+          title: 'The organization(s) (org1,org2) has not enabled secret scanning by default. 2 (66.7%) repositories do not have the secret scanner enabled',
           description: 'Check the details on https://example.com'
         }
       ],
@@ -149,7 +149,7 @@ describe('noSensitiveInfoInRepositories', () => {
           compliance_check_id: 1,
           severity: 'critical',
           status: 'failed',
-          rationale: 'The organization(s) (org1,org2) has not enabled secret scanning by default. 2 repositories do not have the secret scanner enabled'
+          rationale: 'The organization(s) (org1,org2) has not enabled secret scanning by default. 2 (66.7%) repositories do not have the secret scanner enabled'
         },
         {
           compliance_check_id: 1,
@@ -164,8 +164,7 @@ describe('noSensitiveInfoInRepositories', () => {
           project_id: 1,
           compliance_check_id: 1,
           severity: 'critical',
-          // TODO: Add   repos names
-          title: 'Enable secret scanning for new repositories for the organization(s) (org1,org2) and the repositories',
+          title: 'Enable secret scanning for new repositories for the organization(s) (org1,org2) and 2 (66.7%) repositories',
           description: 'Check the details on https://example.com'
         }
       ]
@@ -182,7 +181,7 @@ describe('noSensitiveInfoInRepositories', () => {
           project_id: 1,
           compliance_check_id: 1,
           severity: 'critical',
-          title: 'The organization(s) has secret scanning for new repositories enabled. 1 repositories do not have the secret scanner enabled',
+          title: 'The organization(s) has secret scanning for new repositories enabled. 1 (33.3%) repositories do not have the secret scanner enabled',
           description: 'Check the details on https://example.com'
         }
       ],
@@ -192,7 +191,7 @@ describe('noSensitiveInfoInRepositories', () => {
           compliance_check_id: 1,
           severity: 'critical',
           status: 'failed',
-          rationale: 'The organization(s) has secret scanning for new repositories enabled. 1 repositories do not have the secret scanner enabled'
+          rationale: 'The organization(s) has secret scanning for new repositories enabled. 1 (33.3%) repositories do not have the secret scanner enabled'
         },
         {
           compliance_check_id: 1,
@@ -207,7 +206,7 @@ describe('noSensitiveInfoInRepositories', () => {
           project_id: 1,
           compliance_check_id: 1,
           severity: 'critical',
-          title: 'Enable secret scanning for the repositories in the organization ()',
+          title: 'Enable secret scanning for 1 (33.3%) repositories in the organization(s) (org2)',
           description: 'Check the details on https://example.com'
         }
       ]

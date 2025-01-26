@@ -141,7 +141,7 @@ const getAllGithubRepositoriesAndOrganizationByProjectId = (knex, projectIds) =>
   return knex('github_organizations')
     .select('*')
     .whereIn('github_organizations.project_id', projectIds)
-    .innerJoin('github_repositories', function () {
+    .leftJoin('github_repositories', function () {
       this.on('github_repositories.github_organization_id', '=', 'github_organizations.id')
     })
 }

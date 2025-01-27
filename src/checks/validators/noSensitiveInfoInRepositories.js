@@ -27,9 +27,6 @@ module.exports = ({ repositories = [], check, projects = [] }) => {
     const task = { ...baseData }
     const alert = { ...baseData }
 
-    let orgMessage = ''
-    let repoMessage = ''
-
     const failedOrgs = new Set(projectOrgs.filter(org => org.secret_scanning_enabled_for_new_repositories === false).map(org => org.login))
     const unknownOrgs = new Set(projectOrgs.filter(org => org.secret_scanning_enabled_for_new_repositories === null).map(org => org.login))
     const failedRepos = projectOrgs.filter(org => org.secret_scanning_status === 'disabled').map(org => org.login)
@@ -38,28 +35,46 @@ module.exports = ({ repositories = [], check, projects = [] }) => {
     if (projectOrgs.every(repo => repo.secret_scanning_status === 'enabled') && projectOrgs.every(repo => repo.secret_scanning_enabled_for_new_repositories === true)) {
       result.status = 'passed'
       result.rationale = 'The organizations(s) and repositories has secret scanning enabled'
-    } else if (failedOrgs.size || failedRepos.length) {
-      const percentageOfFailedRepos = generatePercentage(projectOrgs.length, failedRepos.length)
-      orgMessage = failedOrgs.size ? `The organization(s) (${[...failedOrgs].join(',')}) has not enabled secret scanning by default` : 'The organization(s) has secret scanning for new repositories enabled'
-      repoMessage = failedRepos.length ? `${failedRepos.length} (${percentageOfFailedRepos}) repositories do not have the secret scanner enabled` : 'All repositories have the secret scanner enabled'
 
-      result.status = 'failed'
-      result.rationale = `${orgMessage}. ${repoMessage}`
+      results.push(result)
+      debug(`Processed project (${project.id})`)
+      return
+    }
+
+    const percentageOfFailedRepos = generatePercentage(projectOrgs.length, failedRepos.length)
+
+    const rationaleOrgMessage = failedOrgs.size
+      ? `The organization(s) (${[...failedOrgs].join(',')}) has not enabled secret scanning by default`
+      : unknownOrgs.size
+        ? `It was not possible to confirm if the organization(s) has enabled secret scanning for new repositories in the following (${[...unknownOrgs].join(',')}) organization(s)`
+        : 'The organization(s) has secret scanning for new repositories enabled'
+
+    const rationaleRepoMessage = failedRepos.length
+      ? `${failedRepos.length} (${percentageOfFailedRepos}) repositories do not have the secret scanner enabled`
+      : unknownRepos.length
+        ? 'It was not possible to confirm if some repositories has not enabled secret scanning'
+        : 'All repositories have the secret scanner enabled'
+
+    result.status = failedOrgs.size || failedRepos.length ? 'failed' : 'unknown'
+
+    result.rationale = failedOrgs.size || failedRepos.length
+      ? `${rationaleOrgMessage}. ${rationaleRepoMessage}`
+      : unknownOrgs.size && unknownRepos.length
+        ? 'It was not possible to confirm if some organizations and repositories has not enabled secret scanning'
+        : unknownOrgs.size
+          ? `${rationaleOrgMessage}`
+          : `${rationaleRepoMessage}`
+
+    if (failedOrgs.size || failedRepos.length) {
       alert.description = `Check the details on ${check.details_url}`
-      alert.title = `${orgMessage}. ${repoMessage}`
+      alert.title = `${rationaleOrgMessage}. ${rationaleRepoMessage}`
+
       task.description = `Check the details on ${check.details_url}`
       task.title = failedOrgs.size && failedRepos.length
         ? `Enable secret scanning for new repositories for the organization(s) (${[...failedOrgs].join(',')}) and ${failedRepos.length} (${percentageOfFailedRepos}) repositories`
         : failedOrgs.size
           ? `Enable secret scanning for new repositories for the organization(s) (${[...failedOrgs].join(',')})`
           : `Enable secret scanning for ${failedRepos.length} (${percentageOfFailedRepos}) repositories in the organization(s) (${Array.from(new Set(failedRepos)).join(',')})`
-    } else if (unknownOrgs.size || unknownRepos.length) {
-      result.status = 'unknown'
-
-      orgMessage = `It was not possible to confirm if the organization(s) has enabled secret scanning for new repositories in the following (${[...unknownOrgs].join(',')}) organization(s)`
-      repoMessage = 'It was not possible to confirm if some repositories has not enabled secret scanning'
-
-      result.rationale = unknownOrgs.size && unknownRepos.length ? 'It was not possible to confirm if some organizations and repositories has not enabled secret scanning' : unknownOrgs.size ? `${orgMessage}` : `${repoMessage}`
     }
 
     // Include only the task if was populated

@@ -1,7 +1,56 @@
 const debug = require('debug')('checks:validator:noSensitiveInfoInRepositories')
-const { getSeverityFromPriorityGroup, groupArrayItemsByCriteria, generatePercentage } = require('../../utils')
+const {
+  getSeverityFromPriorityGroup,
+  groupArrayItemsByCriteria,
+  generatePercentage
+} = require('../../utils')
 
 const groupByOrganization = groupArrayItemsByCriteria('project_id')
+
+function getOrgFailures (projectOrgs) {
+  const failedOrgs = projectOrgs
+      .filter(org => org.secret_scanning_enabled_for_new_repositories === false)
+      .map(org => org.login)
+  const unknownOrgs = projectOrgs
+      .filter(org => org.secret_scanning_enabled_for_new_repositories === null)
+      .map(org => org.login)
+
+  return { failedOrgs, unknownOrgs }
+}
+
+function getRepoFailures (repositories) {
+  const failedRepos = repositories
+    .filter(repo => repo.secret_scanning_status === 'disabled')
+    .map(repo => repo.full_name)
+
+  const unknownRepos = repositories
+    .filter(repo => repo.secret_scanning_status === null)
+    .map(repo => repo.full_name)
+
+  return { failedRepos, unknownRepos }
+}
+
+function buildOrgMessage (failedOrgs, unknownOrgs) {
+  if (failedOrgs.length) {
+    return `The organization(s) (${failedOrgs.join(',')}) has not enabled secret scanning by default`
+  }
+  if (unknownOrgs.length) {
+    return `It was not possible to confirm if the organization(s) has enabled secret scanning for new repositories in the following (${unknownOrgs.join(',')}) organization(s)`
+  }
+  return 'The organization(s) has secret scanning for new repositories enabled'
+}
+
+function buildRepoMessage (failedRepos, unknownRepos, totalRepos) {
+  const percentage = generatePercentage(totalRepos, failedRepos.length)
+
+  if (failedRepos.length) {
+    return `${failedRepos.length} (${percentage}) repositories do not have the secret scanner enabled`
+  }
+  if (unknownRepos.length) {
+    return 'It was not possible to confirm if some repositories have not enabled secret scanning'
+  }
+  return 'All repositories have the secret scanner enabled'
+}
 
 // @see: https://github.com/OpenPathfinder/visionBoard/issues/67
 module.exports = ({ repositories = [], check, projects = [] }) => {
@@ -16,78 +65,118 @@ module.exports = ({ repositories = [], check, projects = [] }) => {
   debug('Processing repositories...')
   repositoriesGroupedByProject.forEach((projectOrgs) => {
     debug(`Processing Project (${projectOrgs[0].github_organization_id})`)
+
     const project = projects.find(p => p.id === projectOrgs[0].project_id)
     const baseData = {
-      project_id: project.id, // dynamic
+      project_id: project.id,
       compliance_check_id: check.id,
       severity: getSeverityFromPriorityGroup(check.default_priority_group)
     }
 
-    const result = { ...baseData }
-    const task = { ...baseData }
-    const alert = { ...baseData }
+    // Early check: if absolutely everything is enabled, we pass and move on
+    const allReposEnabled = projectOrgs.every(
+      repo => repo.secret_scanning_status === 'enabled'
+    )
+    const allOrgDefaultsEnabled = projectOrgs.every(
+      repo => repo.secret_scanning_enabled_for_new_repositories === true
+    )
 
-    const failedOrgs = new Set(projectOrgs.filter(org => org.secret_scanning_enabled_for_new_repositories === false).map(org => org.login))
-    const unknownOrgs = new Set(projectOrgs.filter(org => org.secret_scanning_enabled_for_new_repositories === null).map(org => org.login))
-    const failedRepos = projectOrgs.filter(org => org.secret_scanning_status === 'disabled').map(org => org.login)
-    const unknownRepos = projectOrgs.filter(org => org.secret_scanning_status === null).map(org => org.login)
-
-    if (projectOrgs.every(repo => repo.secret_scanning_status === 'enabled') && projectOrgs.every(repo => repo.secret_scanning_enabled_for_new_repositories === true)) {
-      result.status = 'passed'
-      result.rationale = 'The organizations(s) and repositories has secret scanning enabled'
-
-      results.push(result)
-      debug(`Processed project (${project.id})`)
+    if (allReposEnabled && allOrgDefaultsEnabled) {
+      results.push({
+        ...baseData,
+        status: 'passed',
+        rationale: 'The organizations(s) and repositories have secret scanning enabled'
+      })
+      debug(`Processed project (${project.id}) - All passed`)
       return
     }
 
-    const percentageOfFailedRepos = generatePercentage(projectOrgs.length, failedRepos.length)
+    // Otherwise, gather failures/unknowns
+    const { failedOrgs, unknownOrgs } = getOrgFailures(projectOrgs)
+    const { failedRepos, unknownRepos } = getRepoFailures(projectOrgs)
 
-    const rationaleOrgMessage = failedOrgs.size
-      ? `The organization(s) (${[...failedOrgs].join(',')}) has not enabled secret scanning by default`
-      : unknownOrgs.size
-        ? `It was not possible to confirm if the organization(s) has enabled secret scanning for new repositories in the following (${[...unknownOrgs].join(',')}) organization(s)`
-        : 'The organization(s) has secret scanning for new repositories enabled'
+    // Build rationale pieces
+    const rationaleOrg = buildOrgMessage(failedOrgs, unknownOrgs)
+    const rationaleRepo = buildRepoMessage(
+      failedRepos,
+      unknownRepos,
+      projectOrgs.length
+    )
 
-    const rationaleRepoMessage = failedRepos.length
-      ? `${failedRepos.length} (${percentageOfFailedRepos}) repositories do not have the secret scanner enabled`
-      : unknownRepos.length
-        ? 'It was not possible to confirm if some repositories has not enabled secret scanning'
-        : 'All repositories have the secret scanner enabled'
+    // Determine the overall status
+    const hasFailures = failedOrgs.length > 0 || failedRepos.length > 0
+    const hasUnknowns = unknownOrgs.length > 0 || unknownRepos.length > 0
 
-    result.status = failedOrgs.size || failedRepos.length ? 'failed' : 'unknown'
-
-    result.rationale = failedOrgs.size || failedRepos.length
-      ? `${rationaleOrgMessage}. ${rationaleRepoMessage}`
-      : unknownOrgs.size && unknownRepos.length
-        ? 'It was not possible to confirm if some organizations and repositories has not enabled secret scanning'
-        : unknownOrgs.size
-          ? `${rationaleOrgMessage}`
-          : `${rationaleRepoMessage}`
-
-    if (failedOrgs.size || failedRepos.length) {
-      alert.description = `Check the details on ${check.details_url}`
-      alert.title = `${rationaleOrgMessage}. ${rationaleRepoMessage}`
-
-      task.description = `Check the details on ${check.details_url}`
-      task.title = failedOrgs.size && failedRepos.length
-        ? `Enable secret scanning for new repositories for the organization(s) (${[...failedOrgs].join(',')}) and ${failedRepos.length} (${percentageOfFailedRepos}) repositories`
-        : failedOrgs.size
-          ? `Enable secret scanning for new repositories for the organization(s) (${[...failedOrgs].join(',')})`
-          : `Enable secret scanning for ${failedRepos.length} (${percentageOfFailedRepos}) repositories in the organization(s) (${Array.from(new Set(failedRepos)).join(',')})`
+    let status = 'passed'
+    if (hasFailures) {
+      status = 'failed'
+    } else if (hasUnknowns) {
+      status = 'unknown'
     }
 
-    // Include only the task if was populated
-    if (Object.keys(task).length > Object.keys(baseData).length) {
-      debug(`Adding task for project (${project.id})`)
-      tasks.push(task)
+    // Determine the combined rationale
+    let rationale
+    if (hasFailures) {
+      rationale = `${rationaleOrg}. ${rationaleRepo}`
+    } else if (hasUnknowns) {
+      // We have no failures, but some unknowns
+      // A bit more specific: if we only have unknown orgs or unknown repos
+      rationale = unknownOrgs.length && unknownRepos.length
+        ? 'It was not possible to confirm if some organizations and repositories have secret scanning enabled'
+        : unknownOrgs.length
+          ? rationaleOrg
+          : rationaleRepo
     }
-    // Include only the alert if was populated
-    if (Object.keys(alert).length > Object.keys(baseData).length) {
-      debug(`Adding alert for project (${project.id})`)
-      alerts.push(alert)
+
+    const result = {
+      ...baseData,
+      status,
+      rationale
     }
-    // Always include the result
+
+    // Build alert and task only if we have failures
+    if (hasFailures) {
+      const alert = {
+        ...baseData,
+        title: `${rationaleOrg}. ${rationaleRepo}`,
+        description: `Check the details on ${check.details_url}`
+      }
+
+      // We unify the logic for the task title:
+      let taskTitle = ''
+
+      if (failedOrgs.length && failedRepos.length) {
+        const percentageOfFailedRepos = generatePercentage(
+          projectOrgs.length,
+          failedRepos.length
+        )
+        taskTitle = `Enable secret scanning for new repositories for the organization(s) (${failedOrgs.join(',')}) and ${failedRepos.length} (${percentageOfFailedRepos}) repositories`
+      } else if (failedOrgs.length) {
+        taskTitle = `Enable secret scanning for new repositories for the organization(s) (${failedOrgs.join(',')})`
+      } else if (failedRepos.length) {
+        const percentageOfFailedRepos = generatePercentage(
+          projectOrgs.length,
+          failedRepos.length
+        )
+        // @TODO: The list of failed repos can be very big, so we might need to truncate it or remove it in future releases based on community feedback.
+        taskTitle = `Enable secret scanning for ${failedRepos.length} (${percentageOfFailedRepos}) repositories (${failedRepos.join(",")}) in GitHub`
+      }
+
+      // Only push if we really have something to do
+      if (taskTitle) {
+        const task = {
+          ...baseData,
+          title: taskTitle,
+          description: `Check the details on ${check.details_url}`
+        }
+        debug(`Adding task for project (${project.id})`)
+        tasks.push(task)
+
+        debug(`Adding alert for project (${project.id})`)
+        alerts.push(alert)
+      }
+    }
+
     results.push(result)
     debug(`Processed project (${project.id})`)
   })

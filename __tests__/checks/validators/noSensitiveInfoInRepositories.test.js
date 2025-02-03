@@ -11,6 +11,7 @@ describe('noSensitiveInfoInRepositories', () => {
         secret_scanning_enabled_for_new_repositories: true,
         secret_scanning_status: 'enabled',
         name: 'test',
+        full_name: 'org1/test',
         github_organization_id: 1
       },
       {
@@ -20,6 +21,7 @@ describe('noSensitiveInfoInRepositories', () => {
         secret_scanning_enabled_for_new_repositories: true,
         secret_scanning_status: 'enabled',
         name: 'discussions',
+        full_name: 'org1/discussions',
         github_organization_id: 1
       },
       {
@@ -29,6 +31,7 @@ describe('noSensitiveInfoInRepositories', () => {
         secret_scanning_enabled_for_new_repositories: true,
         secret_scanning_status: 'enabled',
         name: '.github',
+        full_name: 'org2/.github',
         github_organization_id: 2
       },
       {
@@ -38,6 +41,7 @@ describe('noSensitiveInfoInRepositories', () => {
         secret_scanning_enabled_for_new_repositories: true,
         secret_scanning_status: 'enabled',
         name: 'support',
+        full_name: 'org3/support',
         github_organization_id: 3
       }
     ]
@@ -206,7 +210,7 @@ describe('noSensitiveInfoInRepositories', () => {
           project_id: 1,
           compliance_check_id: 1,
           severity: 'critical',
-          title: 'Enable secret scanning for 1 (33.3%) repositories in the organization(s) (org2)',
+          title: 'Enable secret scanning for 1 (33.3%) repositories (org2/.github) in GitHub',
           description: 'Check the details on https://example.com'
         }
       ]
@@ -328,7 +332,7 @@ describe('noSensitiveInfoInRepositories', () => {
           description: 'Check the details on https://example.com',
           project_id: 1,
           severity: 'critical',
-          title: 'Enable secret scanning for 1 (33.3%) repositories in the organization(s) (org1)'
+          title: 'Enable secret scanning for 1 (33.3%) repositories (org1/test) in GitHub'
         }
       ]
     })

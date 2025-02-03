@@ -15,9 +15,9 @@ module.exports = async (knex, { projects } = {}) => {
     projects = await getAllProjects()
   }
 
-  const repositories = await getAllGithubRepositoriesAndOrganizationByProjectId(projects.map(p => p.id))
+  const data = await getAllGithubRepositoriesAndOrganizationByProjectId(projects.map(p => p.id))
   debug('Extracting the validation results...')
-  const analysis = validators.noSensitiveInfoInRepositories({ repositories, check, projects })
+  const analysis = validators.noSensitiveInfoInRepositories({ data, check, projects })
 
   debug('Deleting previous alerts and tasks to avoid orphaned records...')
   await deleteAlertsByComplianceCheckId(check.id)

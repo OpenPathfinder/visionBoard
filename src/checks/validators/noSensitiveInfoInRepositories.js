@@ -5,15 +5,15 @@ const {
   generatePercentage
 } = require('../../utils')
 
-const groupByOrganization = groupArrayItemsByCriteria('project_id')
+const groupByProject = groupArrayItemsByCriteria('project_id')
 
 function getOrgFailures (projectOrgs) {
   const failedOrgs = projectOrgs
-      .filter(org => org.secret_scanning_enabled_for_new_repositories === false)
-      .map(org => org.login)
+    .filter(org => org.secret_scanning_enabled_for_new_repositories === false)
+    .map(org => org.login)
   const unknownOrgs = projectOrgs
-      .filter(org => org.secret_scanning_enabled_for_new_repositories === null)
-      .map(org => org.login)
+    .filter(org => org.secret_scanning_enabled_for_new_repositories === null)
+    .map(org => org.login)
 
   return { failedOrgs, unknownOrgs }
 }
@@ -53,20 +53,22 @@ function buildRepoMessage (failedRepos, unknownRepos, totalRepos) {
 }
 
 // @see: https://github.com/OpenPathfinder/visionBoard/issues/67
-module.exports = ({ repositories = [], check, projects = [] }) => {
+module.exports = ({ data: ghOrgs, check, projects }) => {
   debug('Validating that secret scanning is enabled...')
   debug('Grouping repositories by project...')
-  const repositoriesGroupedByProject = groupByOrganization(repositories)
+  const ghOrgsGroupedByProject = groupByProject(ghOrgs)
 
   const alerts = []
   const results = []
   const tasks = []
 
   debug('Processing repositories...')
-  repositoriesGroupedByProject.forEach((projectOrgs) => {
+  ghOrgsGroupedByProject.forEach((projectOrgs) => {
     debug(`Processing Project (${projectOrgs[0].github_organization_id})`)
 
     const project = projects.find(p => p.id === projectOrgs[0].project_id)
+    const projectRepositories = projectOrgs.map(org => org.repositories).flat()
+
     const baseData = {
       project_id: project.id,
       compliance_check_id: check.id,
@@ -74,7 +76,7 @@ module.exports = ({ repositories = [], check, projects = [] }) => {
     }
 
     // Early check: if absolutely everything is enabled, we pass and move on
-    const allReposEnabled = projectOrgs.every(
+    const allReposEnabled = projectRepositories.every(
       repo => repo.secret_scanning_status === 'enabled'
     )
     const allOrgDefaultsEnabled = projectOrgs.every(
@@ -93,14 +95,14 @@ module.exports = ({ repositories = [], check, projects = [] }) => {
 
     // Otherwise, gather failures/unknowns
     const { failedOrgs, unknownOrgs } = getOrgFailures(projectOrgs)
-    const { failedRepos, unknownRepos } = getRepoFailures(projectOrgs)
+    const { failedRepos, unknownRepos } = getRepoFailures(projectRepositories)
 
     // Build rationale pieces
     const rationaleOrg = buildOrgMessage(failedOrgs, unknownOrgs)
     const rationaleRepo = buildRepoMessage(
       failedRepos,
       unknownRepos,
-      projectOrgs.length
+      projectRepositories.length
     )
 
     // Determine the overall status
@@ -147,7 +149,7 @@ module.exports = ({ repositories = [], check, projects = [] }) => {
 
       if (failedOrgs.length && failedRepos.length) {
         const percentageOfFailedRepos = generatePercentage(
-          projectOrgs.length,
+          projectRepositories.length,
           failedRepos.length
         )
         taskTitle = `Enable secret scanning for new repositories for the organization(s) (${failedOrgs.join(',')}) and ${failedRepos.length} (${percentageOfFailedRepos}) repositories`
@@ -155,11 +157,11 @@ module.exports = ({ repositories = [], check, projects = [] }) => {
         taskTitle = `Enable secret scanning for new repositories for the organization(s) (${failedOrgs.join(',')})`
       } else if (failedRepos.length) {
         const percentageOfFailedRepos = generatePercentage(
-          projectOrgs.length,
+          projectRepositories.length,
           failedRepos.length
         )
         // @TODO: The list of failed repos can be very big, so we might need to truncate it or remove it in future releases based on community feedback.
-        taskTitle = `Enable secret scanning for ${failedRepos.length} (${percentageOfFailedRepos}) repositories (${failedRepos.join(",")}) in GitHub`
+        taskTitle = `Enable secret scanning for ${failedRepos.length} (${percentageOfFailedRepos}) repositories (${failedRepos.join(',')}) in GitHub`
       }
 
       // Only push if we really have something to do

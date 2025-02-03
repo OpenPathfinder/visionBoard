@@ -1,50 +1,55 @@
 const { noSensitiveInfoInRepositories } = require('../../../src/checks/validators')
 
 describe('noSensitiveInfoInRepositories', () => {
-  let repositories, check, projects
+  let data, check, projects
   beforeEach(() => {
-    repositories = [
+    data = [
       {
-        id: 1,
         project_id: 1,
-        login: 'org1',
         secret_scanning_enabled_for_new_repositories: true,
-        secret_scanning_status: 'enabled',
-        name: 'test',
-        full_name: 'org1/test',
-        github_organization_id: 1
-      },
-      {
-        id: 1,
-        project_id: 1,
+        github_organization_id: 1,
         login: 'org1',
-        secret_scanning_enabled_for_new_repositories: true,
-        secret_scanning_status: 'enabled',
-        name: 'discussions',
-        full_name: 'org1/discussions',
-        github_organization_id: 1
-      },
-      {
-        id: 2,
+        repositories: [
+          {
+            id: 1,
+            secret_scanning_status: 'enabled',
+            name: 'test',
+            full_name: 'org1/test'
+          },
+          {
+            id: 2,
+            secret_scanning_status: 'enabled',
+            name: 'discussions',
+            full_name: 'org1/discussions'
+          }
+        ]
+      }, {
         project_id: 1,
+        secret_scanning_enabled_for_new_repositories: true,
+        github_organization_id: 2,
         login: 'org2',
-        secret_scanning_enabled_for_new_repositories: true,
-        secret_scanning_status: 'enabled',
-        name: '.github',
-        full_name: 'org2/.github',
-        github_organization_id: 2
-      },
-      {
-        id: 3,
+        repositories: [
+          {
+            id: 3,
+            secret_scanning_status: 'enabled',
+            name: '.github',
+            full_name: 'org2/.github'
+          }
+        ]
+      }, {
         project_id: 2,
-        login: 'org3',
         secret_scanning_enabled_for_new_repositories: true,
-        secret_scanning_status: 'enabled',
-        name: 'support',
-        full_name: 'org3/support',
-        github_organization_id: 3
-      }
-    ]
+        github_organization_id: 3,
+        login: 'org3',
+        repositories: [
+          {
+            id: 4,
+            secret_scanning_status: 'enabled',
+            name: 'support',
+            full_name: 'org3/support'
+          }
+        ]
+      }]
 
     check = {
       id: 1,
@@ -63,7 +68,7 @@ describe('noSensitiveInfoInRepositories', () => {
   })
 
   it('Should generate a passed result if all organizations and repositories have secret enabled', () => {
-    const analysis = noSensitiveInfoInRepositories({ repositories, check, projects })
+    const analysis = noSensitiveInfoInRepositories({ data, check, projects })
     expect(analysis).toEqual({
       alerts: [],
       results: [
@@ -87,11 +92,11 @@ describe('noSensitiveInfoInRepositories', () => {
   })
 
   it('should generate a failed result if some organizations do not have secret scanning enabled for new repositories, but existing repositories do have it enabled', () => {
-    repositories[0].secret_scanning_enabled_for_new_repositories = false
+    data[0].secret_scanning_enabled_for_new_repositories = false
     // IMPORTANT: If one organization fails, the whole project fails no matter how other organizations are in the project
-    repositories[1].secret_scanning_enabled_for_new_repositories = null
+    data[1].secret_scanning_enabled_for_new_repositories = null
 
-    const analysis = noSensitiveInfoInRepositories({ repositories, check, projects })
+    const analysis = noSensitiveInfoInRepositories({ data, check, projects })
     expect(analysis).toEqual({
       alerts: [
         {
@@ -131,12 +136,12 @@ describe('noSensitiveInfoInRepositories', () => {
   })
 
   it('should generate a failed result if some organizations and repositories do not have secret scanning enabled for new repositories', () => {
-    repositories[0].secret_scanning_enabled_for_new_repositories = false
-    repositories[2].secret_scanning_enabled_for_new_repositories = false
-    repositories[2].secret_scanning_status = 'disabled'
-    repositories[0].secret_scanning_status = 'disabled'
+    data[0].secret_scanning_enabled_for_new_repositories = false
+    data[0].repositories[0].secret_scanning_status = 'disabled'
+    data[1].secret_scanning_enabled_for_new_repositories = false
+    data[1].repositories[0].secret_scanning_status = 'disabled'
 
-    const analysis = noSensitiveInfoInRepositories({ repositories, check, projects })
+    const analysis = noSensitiveInfoInRepositories({ data, check, projects })
     expect(analysis).toEqual({
       alerts: [
         {
@@ -176,9 +181,9 @@ describe('noSensitiveInfoInRepositories', () => {
   })
 
   it('should generate a failed result if some and repositories do not have secret scanning enabled for new repositories', () => {
-    repositories[2].secret_scanning_status = 'disabled'
+    data[1].repositories[0].secret_scanning_status = 'disabled'
 
-    const analysis = noSensitiveInfoInRepositories({ repositories, check, projects })
+    const analysis = noSensitiveInfoInRepositories({ data, check, projects })
     expect(analysis).toEqual({
       alerts: [
         {
@@ -217,9 +222,9 @@ describe('noSensitiveInfoInRepositories', () => {
     })
   })
 
-  it('should generate an unknown result if some organizations have unknown secret ennabled, but existing repositories do have it enabled', () => {
-    repositories[0].secret_scanning_enabled_for_new_repositories = null
-    const analysis = noSensitiveInfoInRepositories({ repositories, check, projects })
+  it('should generate an unknown result if some organizations have unknown secret enabled, but existing repositories do have it enabled', () => {
+    data[0].secret_scanning_enabled_for_new_repositories = null
+    const analysis = noSensitiveInfoInRepositories({ data, check, projects })
     expect(analysis).toEqual({
       alerts: [],
       results: [
@@ -242,10 +247,10 @@ describe('noSensitiveInfoInRepositories', () => {
     })
   })
 
-  it('should generate an unknown result if all organizations have secret ennabled, but some repositories have unknow secret ennabled', () => {
-    repositories[0].secret_scanning_status = null
+  it('should generate an unknown result if all organizations have secret enabled, but some repositories have unknown secret enabled', () => {
+    data[0].repositories[0].secret_scanning_status = null
 
-    const analysis = noSensitiveInfoInRepositories({ repositories, check, projects })
+    const analysis = noSensitiveInfoInRepositories({ data, check, projects })
     expect(analysis).toEqual({
       alerts: [],
       results: [
@@ -268,11 +273,11 @@ describe('noSensitiveInfoInRepositories', () => {
     })
   })
 
-  it('should generate an unknown result if some organizations and some repositories have unknow secret ennabled', () => {
-    repositories[0].secret_scanning_status = null
-    repositories[1].secret_scanning_enabled_for_new_repositories = null
+  it('should generate an unknown result if some organizations and some repositories have unknown secret enabled', () => {
+    data[0].repositories[0].secret_scanning_status = null
+    data[0].secret_scanning_enabled_for_new_repositories = null
 
-    const analysis = noSensitiveInfoInRepositories({ repositories, check, projects })
+    const analysis = noSensitiveInfoInRepositories({ data, check, projects })
     expect(analysis).toEqual({
       alerts: [],
       results: [
@@ -295,11 +300,11 @@ describe('noSensitiveInfoInRepositories', () => {
     })
   })
 
-  it('should generate an failed result if some organizations have unknow secret scanning and some repositories don\'t have secret ennabled', () => {
-    repositories[0].secret_scanning_status = 'disabled'
-    repositories[1].secret_scanning_enabled_for_new_repositories = null
+  it('should generate an failed result if some organizations have unknown secret scanning and some repositories don\'t have secret enabled', () => {
+    data[0].repositories[0].secret_scanning_status = 'disabled'
+    data[0].secret_scanning_enabled_for_new_repositories = null
 
-    const analysis = noSensitiveInfoInRepositories({ repositories, check, projects })
+    const analysis = noSensitiveInfoInRepositories({ data, check, projects })
     expect(analysis).toEqual({
       alerts: [
         {
@@ -338,11 +343,11 @@ describe('noSensitiveInfoInRepositories', () => {
     })
   })
 
-  it('should generate an failed result if some organizations don\'t have secret scanning and some repositories have unknow secret ennabled', () => {
-    repositories[0].secret_scanning_status = null
-    repositories[1].secret_scanning_enabled_for_new_repositories = false
+  it('should generate an failed result if some organizations don\'t have secret scanning and some repositories have unknown secret enabled', () => {
+    data[1].repositories[0].secret_scanning_status = null
+    data[0].secret_scanning_enabled_for_new_repositories = false
 
-    const analysis = noSensitiveInfoInRepositories({ repositories, check, projects })
+    const analysis = noSensitiveInfoInRepositories({ data, check, projects })
     expect(analysis).toEqual({
       alerts: [
         {

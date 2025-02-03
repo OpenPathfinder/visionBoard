@@ -3,7 +3,7 @@ const isURL = require('validator/lib/isURL.js')
 const pinoInit = require('pino')
 
 // GitHub token pattern: looks for patterns matching the GitHub token structure
-const GITHUB_TOKEN_PATTERN = /\b(ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{1,255}\b/g
+const GITHUB_TOKEN_PATTERN = /\b(ghp|gho|ghu|ghs|ghr|github_pat)_[A-Za-z0-9_]{1,255}\b/g
 
 // A helper function to redact sensitive data
 const redactSensitiveData = value => {

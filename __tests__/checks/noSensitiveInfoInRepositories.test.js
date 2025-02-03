@@ -2,17 +2,16 @@ const knexInit = require('knex')
 const { getConfig } = require('../../src/config')
 const noSensitiveInfoInRepositories = require('../../src/checks/complianceChecks/noSensitiveInfoInRepositories')
 const {
-  resetDatabase, initializeStore
+  resetDatabase, initializeStore, generateGithubRepoData
 } = require('../../__utils__')
 const { sampleGithubOrg } = require('../../__fixtures__')
 
 const { dbSettings } = getConfig('test')
 
-let knex
-let project
-let check
-
-let addProject,
+let knex,
+  project,
+  check,
+  addProject,
   addGithubOrg,
   addGithubRepo,
   getAllResults,
@@ -58,7 +57,8 @@ describe('Integration: noSensitiveInfoInRepositories', () => {
       project_id: project.id,
       secret_scanning_enabled_for_new_repositories: true
     })
-    await createGithubRepo(org, 'repo1', 'enabled')
+    const repoData = generateGithubRepoData({ org, name: 'repo1', secret_scanning_status: 'enabled' })
+    await addGithubRepo(repoData)
 
     // Check that the database is empty
     let results = await getAllResults()
@@ -88,7 +88,8 @@ describe('Integration: noSensitiveInfoInRepositories', () => {
       project_id: project.id,
       secret_scanning_enabled_for_new_repositories: true
     })
-    await createGithubRepo(org, 'repo1', 'enabled')
+    const repoData = generateGithubRepoData({ org, name: 'repo1', secret_scanning_status: 'enabled' })
+    await addGithubRepo(repoData)
 
     await addAlert({ compliance_check_id: check.id, project_id: project.id, title: 'existing', description: 'existing', severity: 'critical' })
     await addTask({ compliance_check_id: check.id, project_id: project.id, title: 'existing', description: 'existing', severity: 'critical' })
@@ -115,7 +116,8 @@ describe('Integration: noSensitiveInfoInRepositories', () => {
 
   test('Should add (alerts and tasks) and update results', async () => {
     const org = await addGithubOrg({ login: sampleGithubOrg.login, html_url: sampleGithubOrg.html_url, project_id: project.id, secret_scanning_enabled_for_new_repositories: false })
-    await createGithubRepo(org, 'repo1', 'enabled')
+    const repoData = generateGithubRepoData({ org, name: 'repo1', secret_scanning_status: 'enabled' })
+    await addGithubRepo(repoData)
 
     await addResult({ compliance_check_id: check.id, project_id: project.id, status: 'passed', rationale: 'failed previously', severity: 'critical' })
     // Check that the database has the expected results
@@ -169,20 +171,3 @@ describe('Integration: noSensitiveInfoInRepositories', () => {
     expect(tasks[0].compliance_check_id).toBe(check.id)
   })
 })
-
-const createGithubRepo = async (org, name, status) => {
-  return addGithubRepo({
-    node_id: 'MDEwOlJlcG9zaXRvcnkxMjM0NTY=',
-    name,
-    full_name: `${org.login}/${name}`,
-    visibility: 'public',
-    url: `https://github.com/${org.login}/${name}`,
-    git_url: `git://github.com/${org.login}/${name}.git`,
-    ssh_url: `git@github.com:${org.login}/${name}.git`,
-    clone_url: `https://github.com/${org.login}/${name}.git`,
-    default_branch: 'main',
-    html_url: org.html_url,
-    github_organization_id: org.id,
-    secret_scanning_status: status
-  })
-}

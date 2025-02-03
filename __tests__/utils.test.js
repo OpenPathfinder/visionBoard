@@ -146,6 +146,10 @@ describe('redactSensitiveData', () => {
     const input = 'This has a token: ghp_234 and other information'
     const expected = 'This has a token: [REDACTED] and other information'
     expect(redactSensitiveData(input)).toBe(expected)
+
+    const input2 = 'This has a token: github_pat_1234 and other information'
+    const expected2 = 'This has a token: [REDACTED] and other information'
+    expect(redactSensitiveData(input2)).toBe(expected2)
   })
   it('Should return the same string if no sensitive data is found', () => {
     const input = 'This is a normal string'

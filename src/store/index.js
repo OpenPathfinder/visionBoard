@@ -1,4 +1,5 @@
 const debug = require('debug')('store')
+const { simplifyObject } = require('@ulisesgascon/simplify-object')
 
 const getAllFn = knex => (table) => {
   debug(`Fetching all records from ${table}...`)
@@ -132,6 +133,56 @@ const getAllOwaspTop10TrainingsByProjectIds = (knex, projectIds) => {
     .select('*')
 }
 
+const getAllGithubRepositoriesAndOrganizationByProjectId = async (knex, projectIds) => {
+  debug(`Fetching all GitHub repositories by organization id (${projectIds})...`)
+
+  if (!Array.isArray(projectIds)) {
+    throw new Error('projectIds must be an array')
+  }
+
+  // Fetch data
+  const results = await knex('github_organizations')
+    .select(
+      'github_organizations.id as org_id',
+      'github_organizations.*',
+      'github_repositories.id as repo_id',
+      'github_repositories.*'
+    )
+    .whereIn('github_organizations.project_id', projectIds)
+    .leftJoin(
+      'github_repositories',
+      'github_repositories.github_organization_id',
+      'github_organizations.id'
+    )
+
+  // @TODO: Refactor this into a helper function or part of the query
+  // Transform results into desired structure
+  const organizationsMap = new Map()
+
+  results.forEach(row => {
+    const orgId = row.org_id
+
+    if (!organizationsMap.has(orgId)) {
+      // Create org entry if not exists
+      const orgData = simplifyObject(row, {
+        exclude: ['repo_id']
+      })
+      orgData.repositories = []
+      organizationsMap.set(orgId, orgData)
+    }
+
+    // Add repository if it exists
+    if (row.repo_id) {
+      const repoData = simplifyObject(row, {
+        exclude: ['repo_id', 'org_id']
+      })
+      organizationsMap.get(orgId).repositories.push(repoData)
+    }
+  })
+
+  return Array.from(organizationsMap.values())
+}
+
 const initializeStore = (knex) => {
   debug('Initializing store...')
   const getAll = getAllFn(knex)
@@ -147,6 +198,7 @@ const initializeStore = (knex) => {
     getAllSSoftwareDesignTrainings: () => getAll('software_design_training'),
     getAllOwaspTop10Trainings: () => getAll('owasp_top10_training'),
     getAllGithubRepositories: () => getAll('github_repositories'),
+    getAllGithubRepositoriesAndOrganizationByProjectId: (organizationId) => getAllGithubRepositoriesAndOrganizationByProjectId(knex, organizationId),
     getAllChecklists: () => getAll('compliance_checklists'),
     getAllResults: () => getAll('compliance_checks_results'),
     getAllTasks: () => getAll('compliance_checks_tasks'),

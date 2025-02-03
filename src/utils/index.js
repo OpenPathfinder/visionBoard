@@ -71,6 +71,12 @@ const groupArrayItemsByCriteria = criteria => items => Object.values(
   }, {})
 )
 
+const generatePercentage = (total, value) => {
+  const percentage = (value * 100) / total
+
+  return Number.isInteger(percentage) ? `${percentage}%` : `${percentage.toFixed(1)}%`
+}
+
 const isDateWithinPolicy = (targetDate, policy) => {
   if (!targetDate) {
     throw new Error('Target date is required')
@@ -113,5 +119,6 @@ module.exports = {
   getSeverityFromPriorityGroup,
   groupArrayItemsByCriteria,
   redactSensitiveData,
-  logger
+  logger,
+  generatePercentage
 }

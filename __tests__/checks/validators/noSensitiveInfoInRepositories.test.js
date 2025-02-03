@@ -58,7 +58,7 @@ describe('noSensitiveInfoInRepositories', () => {
     ]
   })
 
-  it('Should generate a passed result if all organizations and repositories have secrect enabled', () => {
+  it('Should generate a passed result if all organizations and repositories have secret enabled', () => {
     const analysis = noSensitiveInfoInRepositories({ repositories, check, projects })
     expect(analysis).toEqual({
       alerts: [],
@@ -68,12 +68,12 @@ describe('noSensitiveInfoInRepositories', () => {
           compliance_check_id: 1,
           severity: 'critical',
           status: 'passed',
-          rationale: 'The organizations(s) and repositories has secret scanning enabled'
+          rationale: 'The organizations(s) and repositories have secret scanning enabled'
         },
         {
           compliance_check_id: 1,
           project_id: 2,
-          rationale: 'The organizations(s) and repositories has secret scanning enabled',
+          rationale: 'The organizations(s) and repositories have secret scanning enabled',
           severity: 'critical',
           status: 'passed'
         }
@@ -109,7 +109,7 @@ describe('noSensitiveInfoInRepositories', () => {
         {
           compliance_check_id: 1,
           project_id: 2,
-          rationale: 'The organizations(s) and repositories has secret scanning enabled',
+          rationale: 'The organizations(s) and repositories have secret scanning enabled',
           severity: 'critical',
           status: 'passed'
         }
@@ -154,7 +154,7 @@ describe('noSensitiveInfoInRepositories', () => {
         {
           compliance_check_id: 1,
           project_id: 2,
-          rationale: 'The organizations(s) and repositories has secret scanning enabled',
+          rationale: 'The organizations(s) and repositories have secret scanning enabled',
           severity: 'critical',
           status: 'passed'
         }
@@ -196,7 +196,7 @@ describe('noSensitiveInfoInRepositories', () => {
         {
           compliance_check_id: 1,
           project_id: 2,
-          rationale: 'The organizations(s) and repositories has secret scanning enabled',
+          rationale: 'The organizations(s) and repositories have secret scanning enabled',
           severity: 'critical',
           status: 'passed'
         }
@@ -229,7 +229,7 @@ describe('noSensitiveInfoInRepositories', () => {
         {
           compliance_check_id: 1,
           project_id: 2,
-          rationale: 'The organizations(s) and repositories has secret scanning enabled',
+          rationale: 'The organizations(s) and repositories have secret scanning enabled',
           severity: 'critical',
           status: 'passed'
         }
@@ -250,12 +250,12 @@ describe('noSensitiveInfoInRepositories', () => {
           compliance_check_id: 1,
           severity: 'critical',
           status: 'unknown',
-          rationale: 'It was not possible to confirm if some repositories has not enabled secret scanning'
+          rationale: 'It was not possible to confirm if some repositories have not enabled secret scanning'
         },
         {
           compliance_check_id: 1,
           project_id: 2,
-          rationale: 'The organizations(s) and repositories has secret scanning enabled',
+          rationale: 'The organizations(s) and repositories have secret scanning enabled',
           severity: 'critical',
           status: 'passed'
         }
@@ -277,12 +277,12 @@ describe('noSensitiveInfoInRepositories', () => {
           compliance_check_id: 1,
           severity: 'critical',
           status: 'unknown',
-          rationale: 'It was not possible to confirm if some organizations and repositories has not enabled secret scanning'
+          rationale: 'It was not possible to confirm if some organizations and repositories have secret scanning enabled'
         },
         {
           compliance_check_id: 1,
           project_id: 2,
-          rationale: 'The organizations(s) and repositories has secret scanning enabled',
+          rationale: 'The organizations(s) and repositories have secret scanning enabled',
           severity: 'critical',
           status: 'passed'
         }
@@ -317,7 +317,7 @@ describe('noSensitiveInfoInRepositories', () => {
         {
           compliance_check_id: 1,
           project_id: 2,
-          rationale: 'The organizations(s) and repositories has secret scanning enabled',
+          rationale: 'The organizations(s) and repositories have secret scanning enabled',
           severity: 'critical',
           status: 'passed'
         }
@@ -346,7 +346,7 @@ describe('noSensitiveInfoInRepositories', () => {
           description: 'Check the details on https://example.com',
           project_id: 1,
           severity: 'critical',
-          title: 'The organization(s) (org1) has not enabled secret scanning by default. It was not possible to confirm if some repositories has not enabled secret scanning'
+          title: 'The organization(s) (org1) has not enabled secret scanning by default. It was not possible to confirm if some repositories have not enabled secret scanning'
         }
       ],
       results: [
@@ -355,12 +355,12 @@ describe('noSensitiveInfoInRepositories', () => {
           compliance_check_id: 1,
           severity: 'critical',
           status: 'failed',
-          rationale: 'The organization(s) (org1) has not enabled secret scanning by default. It was not possible to confirm if some repositories has not enabled secret scanning'
+          rationale: 'The organization(s) (org1) has not enabled secret scanning by default. It was not possible to confirm if some repositories have not enabled secret scanning'
         },
         {
           compliance_check_id: 1,
           project_id: 2,
-          rationale: 'The organizations(s) and repositories has secret scanning enabled',
+          rationale: 'The organizations(s) and repositories have secret scanning enabled',
           severity: 'critical',
           status: 'passed'
         }

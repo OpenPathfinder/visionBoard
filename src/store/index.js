@@ -183,6 +183,70 @@ const getAllGithubRepositoriesAndOrganizationByProjectId = async (knex, projectI
   return Array.from(organizationsMap.values())
 }
 
+const getAllOSSFResultsOfRepositoriesByProjectId = async (knex, projectIds) => {
+  debug(`Fetching all scorecards results of repositories by project id (${projectIds})...`)
+
+  if (!Array.isArray(projectIds)) {
+    throw new Error('projectIds must be an array')
+  }
+
+  const results = await knex('github_organizations')
+    .select(
+      'github_organizations.id as org_id',
+      'github_organizations.*',
+      'github_repositories.id as repo_id',
+      'github_repositories.*',
+      'ossf_scorecard_results.id as ossf_id',
+      'ossf_scorecard_results.*'
+    )
+    .whereIn('github_organizations.project_id', projectIds)
+    .leftJoin(
+      'github_repositories',
+      'github_repositories.github_organization_id',
+      'github_organizations.id'
+    )
+    .leftJoin(
+      'ossf_scorecard_results',
+      'ossf_scorecard_results.github_repository_id',
+      'github_repositories.id'
+    )
+
+  // @TODO: Refactor this into a helper function or part of the query
+  // Transform results into desired structure
+  const organizationsMap = new Map()
+
+  results.forEach(row => {
+    const orgId = row.org_id
+
+    if (!organizationsMap.has(orgId)) {
+      // Create org entry if not exists
+      const orgData = simplifyObject(row, {
+        exclude: ['repo_id', 'ossf_id']
+      })
+      orgData.repositories = []
+      orgData.ossf_results = []
+      organizationsMap.set(orgId, orgData)
+    }
+
+    // Add repository if it exists
+    if (row.repo_id) {
+      const repoData = simplifyObject(row, {
+        exclude: ['repo_id', 'org_id', 'ossf_id']
+      })
+      organizationsMap.get(orgId).repositories.push(repoData)
+    }
+
+    if (row.ossf_id) {
+      const ossfData = simplifyObject(row, {
+        exclude: ['ossf_id', 'repo_id', 'org_id']
+      })
+      organizationsMap.get(orgId).ossf_results.push(ossfData)
+    }
+  })
+
+  return Array.from(organizationsMap.values())
+}
+
 const initializeStore = (knex) => {
   debug('Initializing store...')
   const getAll = getAllFn(knex)
@@ -199,6 +263,7 @@ const initializeStore = (knex) => {
     getAllOwaspTop10Trainings: () => getAll('owasp_top10_training'),
     getAllGithubRepositories: () => getAll('github_repositories'),
     getAllGithubRepositoriesAndOrganizationByProjectId: (organizationId) => getAllGithubRepositoriesAndOrganizationByProjectId(knex, organizationId),
+    getAllOSSFResultsOfRepositoriesByProjectId: (projectId) => getAllOSSFResultsOfRepositoriesByProjectId(knex, projectId),
     getAllChecklists: () => getAll('compliance_checklists'),
     getAllResults: () => getAll('compliance_checks_results'),
     getAllTasks: () => getAll('compliance_checks_tasks'),

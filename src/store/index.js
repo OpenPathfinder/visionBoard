@@ -228,19 +228,23 @@ const getAllOSSFResultsOfRepositoriesByProjectId = async (knex, projectIds) => {
       organizationsMap.set(orgId, orgData)
     }
 
+    let repoData = {}
     // Add repository if it exists
     if (row.repo_id) {
-      const repoData = simplifyObject(row, {
+      repoData = simplifyObject(row, {
         exclude: ['repo_id', 'org_id', 'ossf_id']
       })
-      organizationsMap.get(orgId).repositories.push(repoData)
     }
 
-    if (row.ossf_id) {
+    if (row.ossf_id && row.repo_id) {
       const ossfData = simplifyObject(row, {
         exclude: ['ossf_id', 'repo_id', 'org_id']
       })
-      organizationsMap.get(orgId).ossf_results.push(ossfData)
+      repoData.ossf_results = ossfData
+    }
+
+    if (row.repo_id) {
+      organizationsMap.get(orgId).repositories.push(repoData)
     }
   })
 

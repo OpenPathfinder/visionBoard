@@ -12,22 +12,18 @@ describe('staticCodeAnalysis', () => {
           {
             id: 1,
             name: 'test',
-            full_name: 'org1/test'
+            full_name: 'org1/test',
+            ossf_results: {
+              sast_score: 10
+            }
           },
           {
             id: 2,
             name: 'discussions',
-            full_name: 'org1/discussions'
-          }
-        ],
-        ossf_results: [
-          {
-            sast_score: 10,
-            github_repository_id: 1
-          },
-          {
-            sast_score: 10,
-            github_repository_id: 2
+            full_name: 'org1/discussions',
+            ossf_results: {
+              sast_score: 10
+            }
           }
         ]
       }, {
@@ -38,13 +34,10 @@ describe('staticCodeAnalysis', () => {
           {
             id: 3,
             name: '.github',
-            full_name: 'org2/.github'
-          }
-        ],
-        ossf_results: [
-          {
-            sast_score: 10,
-            github_repository_id: 3
+            full_name: 'org2/.github',
+            ossf_results: {
+              sast_score: 10
+            }
           }
         ]
       }, {
@@ -55,13 +48,10 @@ describe('staticCodeAnalysis', () => {
           {
             id: 4,
             name: 'support',
-            full_name: 'org3/support'
-          }
-        ],
-        ossf_results: [
-          {
-            sast_score: 10,
-            github_repository_id: 4
+            full_name: 'org3/support',
+            ossf_results: {
+              sast_score: 10
+            }
           }
         ]
       }]
@@ -110,9 +100,9 @@ describe('staticCodeAnalysis', () => {
   it.todo('Should generate a pass result if not have public repositories in all the organizations')
 
   it('Should generate a failed result if some repositories have low static code analysis score', () => {
-    data[0].ossf_results[0].sast_score = 0
-    data[0].ossf_results[1].sast_score = null
-    data[1].ossf_results[0].sast_score = 0
+    data[0].repositories[0].ossf_results.sast_score = 0
+    data[0].repositories[1].ossf_results.sast_score = null
+    data[1].repositories[0].ossf_results.sast_score = 0
 
     const analysis = staticCodeAnalysis({ data, check, projects })
     expect(analysis).toEqual({
@@ -154,8 +144,10 @@ describe('staticCodeAnalysis', () => {
   })
 
   it('Should generate an unknown result if not have ossf results', () => {
-    data[0].ossf_results = []
-    data[1].ossf_results = []
+    data[0].repositories[0].ossf_results = null
+    data[0].repositories[1].ossf_results = null
+    data[1].repositories[0].ossf_results = null
+    data[2].repositories[0].ossf_results = null
 
     const analysis = staticCodeAnalysis({ data, check, projects })
     expect(analysis).toEqual({
@@ -179,13 +171,9 @@ describe('staticCodeAnalysis', () => {
       tasks: []
     })
   })
+
   it('Should generate an unknown result if some have repositories have unkown ossf results but other repositories have a high static code analysis score', () => {
-    data[0].ossf_results = [
-      {
-        sast_score: 10,
-        github_repository_id: 1
-      }
-    ]
+    data[0].repositories[1].ossf_results = undefined
 
     const analysis = staticCodeAnalysis({ data, check, projects })
     expect(analysis).toEqual({
@@ -210,7 +198,7 @@ describe('staticCodeAnalysis', () => {
     })
   })
   it('Should generate an unknown result if some repositories have unknown static code analysis', () => {
-    data[2].ossf_results[0].sast_score = null
+    data[2].repositories[0].ossf_results.sast_score = null
 
     const analysis = staticCodeAnalysis({ data, check, projects })
     expect(analysis).toEqual({

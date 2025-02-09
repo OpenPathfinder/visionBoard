@@ -82,12 +82,156 @@ describe('staticCodeAnalysis', () => {
     ]
   })
 
-  it.todo('Should generate a passed result if all repositories has a high static code analysis score')
-  it.todo('Should generate a pass result if not have public repositories')
-  it.todo('Should generate a failed result if some repositories do not have static code analysis')
-  it.todo('Should generate a failed result if somre repisotiores have low static code analysis score')
-  it.todo('Should generate a failed result if some repositories have a low static code analysis score and some repositories have unkwon result')
-  it.todo('Should generate an unknown result if not have ossf results')
-  it.todo('Should generate an unknown result if some have repositories have unkown ossf results but other repositories have a high static code analysis score')
-  it.todo('Should generate an unknown result if some repositories have unknown static code analysis')
+  it('Should generate a passed result if all repositories has a high static code analysis score', () => {
+    const analysis = staticCodeAnalysis({ data, check, projects })
+    expect(analysis).toEqual({
+      alerts: [],
+      results: [
+        {
+          project_id: 1,
+          compliance_check_id: 1,
+          severity: 'medium',
+          status: 'passed',
+          rationale: 'All repositories in all organizations have a static code analysis tool'
+        },
+        {
+          compliance_check_id: 1,
+          project_id: 2,
+          rationale: 'All repositories in all organizations have a static code analysis tool',
+          severity: 'medium',
+          status: 'passed'
+        }
+      ],
+      tasks: []
+    })
+  })
+
+  it.todo('Should generate a pass result if not have public repositories in some organizations')
+  it.todo('Should generate a pass result if not have public repositories in all the organizations')
+
+  it('Should generate a failed result if some repositories have low static code analysis score', () => {
+    data[0].ossf_results[0].sast_score = 0
+    data[0].ossf_results[1].sast_score = null
+    data[1].ossf_results[0].sast_score = 0
+
+    const analysis = staticCodeAnalysis({ data, check, projects })
+    expect(analysis).toEqual({
+      alerts: [
+        {
+          project_id: 1,
+          compliance_check_id: 1,
+          severity: 'medium',
+          title: '3 (66.7%) repositories in org1, org2 organizations do not have a static code analysis tool',
+          description: 'Check the details on https://example.com'
+        }
+      ],
+      results: [
+        {
+          project_id: 1,
+          compliance_check_id: 1,
+          severity: 'medium',
+          status: 'passed',
+          rationale: '3 (66.7%) repositories in org1, org2 organizations do not have a static code analysis tool'
+        },
+        {
+          compliance_check_id: 1,
+          project_id: 2,
+          rationale: 'All repositories in all organizations have a static code analysis tool',
+          severity: 'medium',
+          status: 'passed'
+        }
+      ],
+      tasks: [
+        {
+          compliance_check_id: 1,
+          description: 'Check the details on https://example.com',
+          project_id: 1,
+          severity: 'medium',
+          title: 'Add a code analysis tool for 2 (66.7%) repositories (org1/test, org2/.github)'
+        }
+      ]
+    })
+  })
+
+  it('Should generate an unknown result if not have ossf results', () => {
+    data[0].ossf_results = []
+    data[1].ossf_results = []
+
+    const analysis = staticCodeAnalysis({ data, check, projects })
+    expect(analysis).toEqual({
+      alerts: [],
+      results: [
+        {
+          project_id: 1,
+          compliance_check_id: 1,
+          severity: 'medium',
+          status: 'unknown',
+          rationale: 'No results have been generated from the OSSF Scorecard'
+        },
+        {
+          compliance_check_id: 1,
+          project_id: 2,
+          rationale: 'All repositories in all organizations have a static code analysis tool',
+          severity: 'medium',
+          status: 'passed'
+        }
+      ],
+      tasks: []
+    })
+  })
+  it('Should generate an unknown result if some have repositories have unkown ossf results but other repositories have a high static code analysis score', () => {
+    data[0].ossf_results = [
+      {
+        sast_score: 10,
+        github_repository_id: 1
+      }
+    ]
+
+    const analysis = staticCodeAnalysis({ data, check, projects })
+    expect(analysis).toEqual({
+      alerts: [],
+      results: [
+        {
+          project_id: 1,
+          compliance_check_id: 1,
+          severity: 'medium',
+          status: 'unknown',
+          rationale: '1 (33.3%) repositories have not generated results from the OSSF Scorecard'
+        },
+        {
+          compliance_check_id: 1,
+          project_id: 2,
+          rationale: 'All repositories in all organizations have a static code analysis tool',
+          severity: 'medium',
+          status: 'passed'
+        }
+      ],
+      tasks: []
+    })
+  })
+  it('Should generate an unknown result if some repositories have unknown static code analysis', () => {
+    data[2].ossf_results[0].sast_score = null
+
+    const analysis = staticCodeAnalysis({ data, check, projects })
+    expect(analysis).toEqual({
+      alerts: [],
+      results: [
+        {
+          project_id: 1,
+          compliance_check_id: 1,
+          severity: 'medium',
+          status: 'passed',
+          rationale: 'All repositories in all organizations have a static code analysis tool'
+        },
+        {
+          compliance_check_id: 1,
+          project_id: 2,
+          rationale: '1 (100%) repositories could not be determined to have a code analysis tool',
+          severity: 'medium',
+          status: 'unknown'
+        }
+      ],
+      tasks: []
+    })
+  })
 })

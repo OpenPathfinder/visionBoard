@@ -1,0 +1,43 @@
+exports.up = async (knex) => {
+  await knex.schema.alterTable('projects', (table) => {
+    table.boolean('has_defineFunctionalRoles_policy').nullable()
+    table.boolean('has_orgToolingMFA_policy').nullable()
+    table.boolean('has_softwareArchitectureDocs_policy').nullable()
+    table.boolean('has_MFAImpersonationDefense_policy').nullable()
+    table.boolean('has_includeCVEInReleaseNotes_policy').nullable()
+    table.boolean('has_assignCVEForKnownVulns_policy').nullable()
+    table.boolean('has_incidentResponsePlan_policy').nullable()
+    table.boolean('has_regressionTestsForVulns_policy').nullable()
+    table.boolean('has_vulnResponse14Days_policy').nullable()
+    table.boolean('has_useCVDToolForVulns_policy').nullable()
+    table.boolean('has_securityMdMeetsOpenJSCVD_policy').nullable()
+    table.boolean('has_consistentBuildProcessDocs_policy').nullable()
+    table.boolean('has_machineReadableDependencies_policy').nullable()
+    table.boolean('has_identifyModifiedDependencies_policy').nullable()
+    table.boolean('has_ciAndCdPipelineAsCode_policy').nullable()
+    table.boolean('has_npmOrgMFA_policy').nullable()
+    table.boolean('has_npmPublicationMFA_policy').nullable()
+  })
+}
+
+exports.down = async (knex) => {
+  await knex.schema.alterTable('projects', (table) => {
+    table.dropColumn('has_defineFunctionalRoles_policy')
+    table.dropColumn('has_orgToolingMFA_policy')
+    table.dropColumn('has_softwareArchitectureDocs_policy')
+    table.dropColumn('has_MFAImpersonationDefense_policy')
+    table.dropColumn('has_includeCVEInReleaseNotes_policy')
+    table.dropColumn('has_assignCVEForKnownVulns_policy')
+    table.dropColumn('has_incidentResponsePlan_policy')
+    table.dropColumn('has_regressionTestsForVulns_policy')
+    table.dropColumn('has_vulnResponse14Days_policy')
+    table.dropColumn('has_useCVDToolForVulns_policy')
+    table.dropColumn('has_securityMdMeetsOpenJSCVD_policy')
+    table.dropColumn('has_consistentBuildProcessDocs_policy')
+    table.dropColumn('has_machineReadableDependencies_policy')
+    table.dropColumn('has_identifyModifiedDependencies_policy')
+    table.dropColumn('has_ciAndCdPipelineAsCode_policy')
+    table.dropColumn('has_npmOrgMFA_policy')
+    table.dropColumn('has_npmPublicationMFA_policy')
+  })
+}

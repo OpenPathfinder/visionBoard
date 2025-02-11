@@ -1409,6 +1409,6 @@ exports.up = async (knex) => {
 }
 
 exports.down = async (knex) => {
-  await knex('compliance_checks_resources').truncate()
   await knex('resources_for_compliance_checks').truncate()
+  await knex('compliance_checks_resources').truncate()
 }

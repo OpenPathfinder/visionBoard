@@ -111,7 +111,7 @@ describe('staticCodeAnalysis', () => {
           project_id: 1,
           compliance_check_id: 1,
           severity: 'medium',
-          title: '3 (66.7%) repositories in org1, org2 organizations do not have a static code analysis tool',
+          title: '2 (66.7%) repositories do not have a static code analysis tool',
           description: 'Check the details on https://example.com'
         }
       ],
@@ -120,8 +120,8 @@ describe('staticCodeAnalysis', () => {
           project_id: 1,
           compliance_check_id: 1,
           severity: 'medium',
-          status: 'passed',
-          rationale: '3 (66.7%) repositories in org1, org2 organizations do not have a static code analysis tool'
+          status: 'failed',
+          rationale: '2 (66.7%) repositories do not have a static code analysis tool'
         },
         {
           compliance_check_id: 1,
@@ -137,7 +137,7 @@ describe('staticCodeAnalysis', () => {
           description: 'Check the details on https://example.com',
           project_id: 1,
           severity: 'medium',
-          title: 'Add a code analysis tool for 2 (66.7%) repositories (org1/test, org2/.github)'
+          title: 'Add a code analysis tool for 2 (66.7%) repositories (org1/test, org2/.github) in GitHub'
         }
       ]
     })
@@ -147,7 +147,6 @@ describe('staticCodeAnalysis', () => {
     data[0].repositories[0].ossf_results = null
     data[0].repositories[1].ossf_results = null
     data[1].repositories[0].ossf_results = null
-    data[2].repositories[0].ossf_results = null
 
     const analysis = staticCodeAnalysis({ data, check, projects })
     expect(analysis).toEqual({
@@ -184,7 +183,7 @@ describe('staticCodeAnalysis', () => {
           compliance_check_id: 1,
           severity: 'medium',
           status: 'unknown',
-          rationale: '1 (33.3%) repositories have not generated results from the OSSF Scorecard'
+          rationale: '1 (33.3%) repositories do not generated results from the OSSF Scorecard'
         },
         {
           compliance_check_id: 1,
@@ -197,6 +196,7 @@ describe('staticCodeAnalysis', () => {
       tasks: []
     })
   })
+
   it('Should generate an unknown result if some repositories have unknown static code analysis', () => {
     data[2].repositories[0].ossf_results.sast_score = null
 

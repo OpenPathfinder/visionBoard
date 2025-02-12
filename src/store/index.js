@@ -224,7 +224,6 @@ const getAllOSSFResultsOfRepositoriesByProjectId = async (knex, projectIds) => {
         exclude: ['repo_id', 'ossf_id']
       })
       orgData.repositories = []
-      orgData.ossf_results = []
       organizationsMap.set(orgId, orgData)
     }
 

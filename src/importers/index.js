@@ -4,9 +4,11 @@ const { initializeStore } = require('../store')
 const { simplifyObject } = require('@ulisesgascon/simplify-object')
 const fs = require('fs')
 
+const projectPolicies = ['defineFunctionalRoles', 'orgToolingMFA', 'softwareArchitectureDocs', 'MFAImpersonationDefense', 'includeCVEInReleaseNotes', 'assignCVEForKnownVulns', 'incidentResponsePlan', 'regressionTestsForVulns', 'vulnResponse14Days', 'useCVDToolForVulns', 'securityMdMeetsOpenJSCVD', 'consistentBuildProcessDocs', 'machineReadableDependencies', 'identifyModifiedDependencies', 'ciAndCdPipelineAsCode', 'npmOrgMFA', 'npmPublicationMFA', 'upgradePathDocs']
+
 const bulkImport = async (knex, filePath) => {
   logger.info('Bulk importing data...')
-  const { upsertSoftwareDesignTraining } = initializeStore(knex)
+  const { upsertSoftwareDesignTraining, upsertOwaspTop10Training, upsertProjectPolicies } = initializeStore(knex)
 
   if (!fs.existsSync(filePath)) {
     logger.error(`File not found: ${filePath}`)
@@ -38,6 +40,20 @@ const bulkImport = async (knex, filePath) => {
       await upsertSoftwareDesignTraining(simplifyObject(item, {
         exclude: ['type']
       }))
+    }
+
+    if (item.type === 'owaspTop10Training') {
+      logger.info('Upserting software design training data...')
+      await upsertOwaspTop10Training(simplifyObject(item, {
+        exclude: ['type']
+      }))
+    }
+
+    if (projectPolicies.includes(item.type)) {
+      logger.info(`Upserting project policy ${item.type}...`)
+      await upsertProjectPolicies(item.project_id, {
+        [`has_${item.type}_policy`]: item.is_subscribed
+      })
     }
   }
 

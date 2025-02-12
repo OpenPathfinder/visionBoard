@@ -21,7 +21,8 @@ exports.seed = async (knex) => {
 
   // Add a project
   const project = await addProject({
-    name: 'github'
+    name: 'github',
+    has_defineFunctionalRoles_policy: false
   })
 
   // Add a GitHub organization

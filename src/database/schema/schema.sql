@@ -713,7 +713,22 @@ CREATE TABLE public.projects (
     id integer NOT NULL,
     name character varying(255) NOT NULL,
     created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    "has_defineFunctionalRoles_policy" boolean,
+    "has_orgToolingMFA_policy" boolean,
+    "has_softwareArchitectureDocs_policy" boolean,
+    "has_MFAImpersonationDefense_policy" boolean,
+    "has_includeCVEInReleaseNotes_policy" boolean,
+    "has_assignCVEForKnownVulns_policy" boolean,
+    "has_incidentResponsePlan_policy" boolean,
+    "has_regressionTestsForVulns_policy" boolean,
+    "has_vulnResponse14Days_policy" boolean,
+    "has_useCVDToolForVulns_policy" boolean,
+    "has_securityMdMeetsOpenJSCVD_policy" boolean,
+    "has_consistentBuildProcessDocs_policy" boolean,
+    "has_machineReadableDependencies_policy" boolean,
+    "has_identifyModifiedDependencies_policy" boolean,
+    "has_ciAndCdPipelineAsCode_policy" boolean
 );
 
 

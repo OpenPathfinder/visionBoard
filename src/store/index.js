@@ -46,9 +46,7 @@ const addProject = knex => async (project) => {
     throw new Error(`Project with name (${name}) already exists`)
   }
   debug(`Inserting project (${name})...`)
-  return knex('projects').insert({
-    name
-  }).returning('*').then(results => results[0])
+  return knex('projects').insert(project).returning('*').then(results => results[0])
 }
 
 const getCheckByCodeName = knex => (codeName) => {

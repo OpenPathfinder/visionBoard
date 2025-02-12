@@ -46,7 +46,6 @@ afterAll(async () => {
 })
 
 describe('Integration: Generic Project Policy Compliance Checks', () => {
-  
   // @TODO: ensure that the genericProjectPolicyComplianceCheck is used in the complianceChecks
   it('Should include all the generic Project policy compliance checks', () => {
     expect(complianceChecks).toHaveProperty('defineFunctionalRoles')

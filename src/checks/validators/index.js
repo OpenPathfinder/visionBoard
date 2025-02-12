@@ -4,6 +4,7 @@ const owaspTop10Training = require('./owaspTop10Training')
 const adminRepoCreationOnly = require('./adminRepoCreationOnly')
 const noSensitiveInfoInRepositories = require('./noSensitiveInfoInRepositories')
 const staticCodeAnalysis = require('./staticCodeAnalysis')
+const genericProjectPolicyValidator = require('./genericProjectPolicyValidator')
 
 const validators = {
   githubOrgMFA,
@@ -11,7 +12,25 @@ const validators = {
   owaspTop10Training,
   adminRepoCreationOnly,
   noSensitiveInfoInRepositories,
-  staticCodeAnalysis
+  staticCodeAnalysis,
+  defineFunctionalRoles: genericProjectPolicyValidator('defineFunctionalRoles'),
+  orgToolingMFA: genericProjectPolicyValidator('orgToolingMFA'),
+  softwareArchitectureDocs: genericProjectPolicyValidator('softwareArchitectureDocs'),
+  MFAImpersonationDefense: genericProjectPolicyValidator('MFAImpersonationDefense'),
+  includeCVEInReleaseNotes: genericProjectPolicyValidator('includeCVEInReleaseNotes'),
+  assignCVEForKnownVulns: genericProjectPolicyValidator('assignCVEForKnownVulns'),
+  incidentResponsePlan: genericProjectPolicyValidator('incidentResponsePlan'),
+  regressionTestsForVulns: genericProjectPolicyValidator('regressionTestsForVulns'),
+  vulnResponse14Days: genericProjectPolicyValidator('vulnResponse14Days'),
+  useCVDToolForVulns: genericProjectPolicyValidator('useCVDToolForVulns'),
+  securityMdMeetsOpenJSCVD: genericProjectPolicyValidator('securityMdMeetsOpenJSCVD'),
+  consistentBuildProcessDocs: genericProjectPolicyValidator('consistentBuildProcessDocs'),
+  machineReadableDependencies: genericProjectPolicyValidator('machineReadableDependencies'),
+  identifyModifiedDependencies: genericProjectPolicyValidator('identifyModifiedDependencies'),
+  ciAndCdPipelineAsCode: genericProjectPolicyValidator('ciAndCdPipelineAsCode'),
+  npmOrgMFA: genericProjectPolicyValidator('npmOrgMFA'),
+  npmPublicationMFA: genericProjectPolicyValidator('npmPublicationMFA'),
+  upgradePathDocs: genericProjectPolicyValidator('upgradePathDocs')
 }
 
 module.exports = validators

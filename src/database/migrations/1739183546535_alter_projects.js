@@ -17,6 +17,7 @@ exports.up = async (knex) => {
     table.boolean('has_ciAndCdPipelineAsCode_policy').nullable()
     table.boolean('has_npmOrgMFA_policy').nullable()
     table.boolean('has_npmPublicationMFA_policy').nullable()
+    table.boolean('has_upgradePathDocs_policy').nullable()
   })
 }
 
@@ -39,5 +40,6 @@ exports.down = async (knex) => {
     table.dropColumn('has_ciAndCdPipelineAsCode_policy')
     table.dropColumn('has_npmOrgMFA_policy')
     table.dropColumn('has_npmPublicationMFA_policy')
+    table.dropColumn('has_upgradePathDocs_policy')
   })
 }

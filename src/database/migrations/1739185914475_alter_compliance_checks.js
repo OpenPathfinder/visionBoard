@@ -50,6 +50,9 @@ const checks = [
   }, {
     code_name: 'npmPublicationMFA',
     implementation_details_reference: 'https://github.com/OpenPathfinder/visionBoard/issues/72'
+  }, {
+    code_name: 'upgradePathDocs',
+    implementation_details_reference: 'https://github.com/OpenPathfinder/visionBoard/issues/106'
   }
 ]
 

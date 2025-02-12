@@ -31,8 +31,6 @@ const bulkImport = async (knex, filePath) => {
     throw error
   }
 
-  validateBulkImport(data)
-
   // Update de database
   for await (const item of data) {
     if (item.type === 'softwareDesignTraining') {

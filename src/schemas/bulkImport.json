@@ -7,17 +7,45 @@
     "properties": {
       "type": {
         "type": "string",
-        "enum": ["softwareDesignTraining"]
-      },
-      "description": {
-        "type": "string"
+        "enum": [
+          "softwareDesignTraining",
+          "owaspTop10Training",
+          "defineFunctionalRoles",
+          "orgToolingMFA",
+          "softwareArchitectureDocs",
+          "MFAImpersonationDefense",
+          "includeCVEInReleaseNotes",
+          "assignCVEForKnownVulns",
+          "incidentResponsePlan",
+          "regressionTestsForVulns",
+          "vulnResponse14Days",
+          "useCVDToolForVulns",
+          "securityMdMeetsOpenJSCVD",
+          "consistentBuildProcessDocs",
+          "machineReadableDependencies",
+          "identifyModifiedDependencies",
+          "ciAndCdPipelineAsCode",
+          "npmOrgMFA",
+          "npmPublicationMFA",
+          "upgradePathDocs"
+        ]
       },
       "project_id": {
         "type": "integer"
       },
+      "is_subscribed": {
+        "type": "boolean"
+      },
+      "description": {
+        "type": "string"
+      },
       "implementation_status": {
         "type": "string",
-        "enum": ["unknown", "pending", "completed"]
+        "enum": [
+          "unknown",
+          "pending",
+          "completed"
+        ]
       },
       "training_date": {
         "type": "string",
@@ -25,7 +53,23 @@
         "nullable": true
       }
     },
-    "required": ["type", "description", "project_id", "implementation_status"],
+    "oneOf": [
+      {
+        "required": [
+          "type",
+          "project_id",
+          "is_subscribed"
+        ]
+      },
+      {
+        "required": [
+          "type",
+          "project_id",
+          "description",
+          "implementation_status"
+        ]
+      }
+    ],
     "additionalProperties": false
   }
 }

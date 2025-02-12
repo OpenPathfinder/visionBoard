@@ -100,6 +100,20 @@ const upsertSoftwareDesignTraining = (knex) => (data) => upsertRecord({
   data
 })
 
+const upsertOwaspTop10Training = (knex) => (data) => upsertRecord({
+  table: 'owasp_top10_training',
+  knex,
+  uniqueCriteria: {
+    project_id: data.project_id
+  },
+  data
+})
+
+const upsertProjectPolicies = (knex) => (projectId, policies) => {
+  debug(`Updating project policies for project_id (${projectId})...`)
+  return knex('projects').where({ id: projectId }).update(policies).returning('*')
+}
+
 const getAllChecksInChecklistById = (knex, checklistId) =>
   debug(`Fetching all checks in checklist by id (${checklistId})...`) ||
   knex('checklist_items')
@@ -218,6 +232,8 @@ const initializeStore = (knex) => {
     upsertOSSFScorecard: upsertOSSFScorecard(knex),
     upsertComplianceCheckResult: upsertComplianceCheckResult(knex),
     upsertSoftwareDesignTraining: upsertSoftwareDesignTraining(knex),
+    upsertProjectPolicies: upsertProjectPolicies(knex),
+    upsertOwaspTop10Training: upsertOwaspTop10Training(knex),
     getAllOSSFResults: () => getAll('ossf_scorecard_results')
   }
 }

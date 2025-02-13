@@ -914,6 +914,10 @@ const sampleBulkImportFileContent = [{
   description: 'Course on software design principles done by the team',
   project_id: 1,
   implementation_status: 'completed'
+}, {
+  type: 'defineFunctionalRoles',
+  project_id: 1,
+  is_subscribed: true
 }]
 
 module.exports = {

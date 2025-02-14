@@ -153,7 +153,6 @@ const getAllGithubRepositoriesAndOrganizationByProjectId = async (knex, projectI
       'github_organizations.id'
     )
 
-
   return processEntities(results, {
     idKey: 'org_id',
     excludedKeys: ['repo_id'],

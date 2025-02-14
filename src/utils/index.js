@@ -119,13 +119,14 @@ const processEntities = (data, entityConfig) => {
   data.forEach(item => {
     const entityId = item[entityConfig.idKey]
     const entity = simplifyObject(item, { exclude: entityConfig.excludedKeys })
-    
-    if(!entityMap.has(entityId)) {
+
+    if (!entityMap.has(entityId)) {
       entityMap.set(entityId, entity)
     }
 
     entityConfig.relationships.forEach(relationship => {
       entity[relationship.name] = entity[relationship.name] || []
+
       const relatedEntityId = item[relationship.relatedIdKey]
 
       if (relatedEntityId) {
@@ -137,8 +138,7 @@ const processEntities = (data, entityConfig) => {
 
         entityMap.get(entityId)[relationship.name].push(relatedEntity)
       }
-
-    })    
+    })
   })
 
   return Array.from(entityMap.values())

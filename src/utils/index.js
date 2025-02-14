@@ -119,6 +119,10 @@ const processEntities = (data, entityConfig) => {
   data.forEach(item => {
     const entityId = item[entityConfig.idKey]
     const entity = simplifyObject(item, { exclude: entityConfig.excludedKeys })
+    
+    if(!entityMap.has(entityId)) {
+      entityMap.set(entityId, entity)
+    }
 
     entityConfig.relationships.forEach(relationship => {
       entity[relationship.name] = entity[relationship.name] || []
@@ -131,14 +135,13 @@ const processEntities = (data, entityConfig) => {
           relatedEntity[relationship.relationship.name] = relatedEntity[relationship.relationship.name] || simplifyObject(item, { exclude: relationship.relationship.excludedKeys })
         }
 
-        entity[relationship.name].push(relatedEntity)
+        entityMap.get(entityId)[relationship.name].push(relatedEntity)
       }
-    })
 
-    entityMap.set(entityId, entity)
+    })    
   })
 
-  return entityMap
+  return Array.from(entityMap.values())
 }
 
 module.exports = {

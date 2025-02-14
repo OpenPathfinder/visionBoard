@@ -153,7 +153,8 @@ const getAllGithubRepositoriesAndOrganizationByProjectId = async (knex, projectI
       'github_organizations.id'
     )
 
-  const organizationsMap = processEntities(results, {
+
+  return processEntities(results, {
     idKey: 'org_id',
     excludedKeys: ['repo_id'],
     relationships: [
@@ -164,8 +165,6 @@ const getAllGithubRepositoriesAndOrganizationByProjectId = async (knex, projectI
       }
     ]
   })
-
-  return Array.from(organizationsMap.values())
 }
 
 const getAllOSSFResultsOfRepositoriesByProjectId = async (knex, projectIds) => {
@@ -196,7 +195,7 @@ const getAllOSSFResultsOfRepositoriesByProjectId = async (knex, projectIds) => {
       'github_repositories.id'
     )
 
-  const organizationsMap = processEntities(results, {
+  return processEntities(results, {
     idKey: 'org_id',
     excludedKeys: ['repo_id', 'ossf_id'],
     relationships: [
@@ -212,8 +211,6 @@ const getAllOSSFResultsOfRepositoriesByProjectId = async (knex, projectIds) => {
       }
     ]
   })
-
-  return Array.from(organizationsMap.values())
 }
 
 const initializeStore = (knex) => {

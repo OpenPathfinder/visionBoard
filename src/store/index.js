@@ -1,5 +1,5 @@
 const debug = require('debug')('store')
-const { simplifyObject } = require('@ulisesgascon/simplify-object')
+const { processEntities } = require('../utils')
 
 const getAllFn = knex => (table) => {
   debug(`Fetching all records from ${table}...`)
@@ -155,29 +155,16 @@ const getAllGithubRepositoriesAndOrganizationByProjectId = async (knex, projectI
       'github_organizations.id'
     )
 
-  // @TODO: Refactor this into a helper function or part of the query
-  // Transform results into desired structure
-  const organizationsMap = new Map()
-
-  results.forEach(row => {
-    const orgId = row.org_id
-
-    if (!organizationsMap.has(orgId)) {
-      // Create org entry if not exists
-      const orgData = simplifyObject(row, {
-        exclude: ['repo_id']
-      })
-      orgData.repositories = []
-      organizationsMap.set(orgId, orgData)
-    }
-
-    // Add repository if it exists
-    if (row.repo_id) {
-      const repoData = simplifyObject(row, {
-        exclude: ['repo_id', 'org_id']
-      })
-      organizationsMap.get(orgId).repositories.push(repoData)
-    }
+  const organizationsMap = processEntities(results, {
+    idKey: 'org_id',
+    excludedKeys: ['repo_id'],
+    relationships: [
+      {
+        name: 'repositories',
+        relatedIdKey: 'repo_id',
+        excludedKeys: ['org_id', 'repo_id']
+      }
+    ]
   })
 
   return Array.from(organizationsMap.values())
@@ -211,40 +198,21 @@ const getAllOSSFResultsOfRepositoriesByProjectId = async (knex, projectIds) => {
       'github_repositories.id'
     )
 
-  // @TODO: Refactor this into a helper function or part of the query
-  // Transform results into desired structure
-  const organizationsMap = new Map()
-
-  results.forEach(row => {
-    const orgId = row.org_id
-
-    if (!organizationsMap.has(orgId)) {
-      // Create org entry if not exists
-      const orgData = simplifyObject(row, {
-        exclude: ['repo_id', 'ossf_id']
-      })
-      orgData.repositories = []
-      organizationsMap.set(orgId, orgData)
-    }
-
-    let repoData = {}
-    // Add repository if it exists
-    if (row.repo_id) {
-      repoData = simplifyObject(row, {
-        exclude: ['repo_id', 'org_id', 'ossf_id']
-      })
-    }
-
-    if (row.ossf_id && row.repo_id) {
-      const ossfData = simplifyObject(row, {
-        exclude: ['ossf_id', 'repo_id', 'org_id']
-      })
-      repoData.ossf_results = ossfData
-    }
-
-    if (row.repo_id) {
-      organizationsMap.get(orgId).repositories.push(repoData)
-    }
+  const organizationsMap = processEntities(results, {
+    idKey: 'org_id',
+    excludedKeys: ['repo_id', 'ossf_id'],
+    relationships: [
+      {
+        name: 'repositories',
+        relatedIdKey: 'repo_id',
+        excludedKeys: ['ossf_id', 'repo_id', 'org_id'],
+        relationship: {
+          name: 'ossf_results',
+          relatedIdKey: 'ossf_id',
+          excludedKeys: ['ossf_id', 'repo_id', 'org_id']
+        }
+      }
+    ]
   })
 
   return Array.from(organizationsMap.values())

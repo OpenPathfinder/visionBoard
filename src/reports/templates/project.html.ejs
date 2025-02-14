@@ -43,8 +43,7 @@
             <% alerts.forEach(alert => { %>
               <li class="p-4 border-l-4 
                   <% if (alert.severity === 'critical') { %> border-red-600 bg-red-50 <% } %>
-                  <% if (alert.severity === 'warning') { %> border-yellow-600 bg-yellow-50 <% } %>
-                  <% if (alert.severity === 'info') { %> border-blue-600 bg-blue-50 <% } %>
+                  <% if (alert.severity === 'high' || alert.severity === 'medium' ) { %> border-yellow-600 bg-yellow-50 <% } %>
                   rounded-md shadow">
                 <h3 class="text-lg font-semibold">
                   <%= alert.title %>

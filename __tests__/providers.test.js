@@ -4,11 +4,45 @@ const {
   sampleGithubRepository,
   sampleOSSFScorecardResult
 } = require('../__fixtures__')
+const nock = require('nock')
 
 describe('GitHub Provider', () => {
   describe('fetchOrgByLogin', () => {
-    it.todo('Should fetch organization by login')
-    it.todo('Should throw an error if the organization does not exist')
+    beforeEach(() => {
+      process.env.GITHUB_TOKEN = 'github_pat_ddadas'
+      nock.disableNetConnect()
+    })
+
+    afterEach(() => {
+      nock.cleanAll()
+      nock.enableNetConnect()
+    })
+
+    it.each([undefined, null, ''])('Should throw when no login are provided', async (login) => {
+      const organization = github.fetchOrgByLogin(login)
+
+      expect(organization).rejects.toThrow('Organization name is required')
+    })
+
+    it('Should fetch organization by login', async () => {
+      nock('https://api.github.com')
+        .get('/orgs/github')
+        .reply(200, { ...sampleGithubOrg })
+
+      await expect(github.fetchOrgByLogin('github')).resolves.toEqual(sampleGithubOrg)
+    })
+
+    it('Should throw an error if the organization does not exist', async () => {
+      nock('https://api.github.com')
+        .get('/orgs/github')
+        .reply(404, {
+          message: 'Not Found',
+          documentation_url: 'https://docs.github.com/rest/orgs/orgs#get-an-organization',
+          status: '404'
+        })
+
+      await expect(github.fetchOrgByLogin('github')).rejects.toThrow('Not Found - https://docs.github.com/rest/orgs/orgs#get-an-organization')
+    })
     it.todo('Should throw an error if there are network issues')
   })
 

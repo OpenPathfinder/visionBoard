@@ -8,12 +8,18 @@ const { ossfScorecardSettings } = require('../config').getConfig()
 const debug = require('debug')('providers:github')
 
 const fetchOrgByLogin = async (login) => {
+  if (!login) {
+    throw new Error('Organization name is required')
+  }
+
   debug(`Fetching organization (${login})...`)
   ensureGithubToken()
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
+
   const { data } = await octokit.request('GET /orgs/{org}', {
     org: login
   })
+
   return data
 }
 

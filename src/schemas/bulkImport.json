@@ -29,7 +29,14 @@
           "ciAndCdPipelineAsCode",
           "npmOrgMFA",
           "npmPublicationMFA",
-          "upgradePathDocs"
+          "upgradePathDocs",
+          "patchNonCriticalVulns90Days",
+          "patchCriticalVulns30Days",
+          "twoOrMoreOwnersForAccess",
+          "injectedSecretsAtRuntime",
+          "preventScriptInjection",
+          "resolveLinterWarnings",
+          "annualDependencyRefresh"
         ],
         "examples": ["softwareDesignTraining"]
       },

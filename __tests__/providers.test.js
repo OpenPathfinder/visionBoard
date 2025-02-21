@@ -20,9 +20,7 @@ describe('GitHub Provider', () => {
 
   describe('fetchOrgByLogin', () => {
     it.each([undefined, null, ''])('Should throw when no login are provided', async (login) => {
-      const organization = github.fetchOrgByLogin(login)
-
-      expect(organization).rejects.toThrow('Organization name is required')
+      await expect(github.fetchOrgByLogin(login)).rejects.toThrow('Organization name is required')
     })
 
     it('Should fetch organization by login', async () => {
@@ -49,9 +47,7 @@ describe('GitHub Provider', () => {
 
   describe('fetchOrgReposListByLogin', () => {
     it.each([undefined, null, ''])('Should throw when no login are provided', async (login) => {
-      const organization = github.fetchOrgReposListByLogin(login)
-
-      expect(organization).rejects.toThrow('Organization name is required')
+      await expect(github.fetchOrgReposListByLogin(login)).rejects.toThrow('Organization name is required')
     })
 
     it('Should fetch organization repositories by login', async () => {
@@ -78,8 +74,33 @@ describe('GitHub Provider', () => {
   })
 
   describe('fetchRepoByFullName', () => {
-    it.todo('Should fetch repository by full name')
-    it.todo('Should throw an error if the repository does not exist')
+    it.each([undefined, null, ''])('Should throw when no full name are provided', async (fullName) => {
+      await expect(github.fetchRepoByFullName(fullName)).rejects.toThrow('The full name is required')
+    })
+
+    it.each(['github/', '/repos', 'github'])('Should throw when the full name is invalid', async (fullName) => {
+      await expect(github.fetchRepoByFullName(fullName)).rejects.toThrow('The full name of the repository is invalid')
+    })
+
+    it('Should fetch repository by full name', async () => {
+      nock('https://api.github.com')
+        .get('/repos/github/.github')
+        .reply(200, sampleGithubRepository)
+
+      await expect(github.fetchRepoByFullName('github/.github')).resolves.toEqual(sampleGithubRepository)
+    })
+
+    it('Should throw an error if the repository does not exist', async () => {
+      nock('https://api.github.com')
+        .get('/repos/github/.github')
+        .reply(404, {
+          message: 'Not Found',
+          documentation_url: 'https://docs.github.com/rest/repos/repos#get-a-repository',
+          status: '404'
+        })
+
+      await expect(github.fetchRepoByFullName('github/.github')).rejects.toThrow('Not Found - https://docs.github.com/rest/repos/repos#get-a-repository')
+    })
     it.todo('Should throw an error if there are network issues')
   })
 

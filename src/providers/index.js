@@ -36,7 +36,7 @@ const fetchOrgReposListByLogin = async (login) => {
   // IMPORTANT: Ignore private repositories as they might contain sensitive information
   const orgQuery = { org: login, type: 'public', per_page: 100 }
 
-  const { data: repos, url } = await octokit.rest.repos.listForOrg(orgQuery)
+  const { data: repos } = await octokit.rest.repos.listForOrg(orgQuery)
 
   debug(`Got ${repos.length} repos for org: ${login}`)
   repoList = repoList.concat(repos)
@@ -59,12 +59,25 @@ const fetchOrgReposListByLogin = async (login) => {
 }
 
 const fetchRepoByFullName = async (fullName) => {
+  if (!fullName) {
+    throw new Error('The full name is required')
+  }
+
+  const splitName = fullName.split('/')
+
+  console.log(splitName)
+
+  if (splitName.length !== 2 || (!splitName[0] || !splitName[1])) {
+    throw new Error('The full name of the repository is invalid')
+  }
+
   debug(`Fetching repository (${fullName})...`)
   ensureGithubToken()
+
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
   const { data } = await octokit.request('GET /repos/{owner}/{repo}', {
-    owner: fullName.split('/')[0],
-    repo: fullName.split('/')[1]
+    owner: splitName[0],
+    repo: splitName[1]
   })
   return data
 }

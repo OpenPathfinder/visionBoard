@@ -34,7 +34,18 @@ const logger = pinoInit({
   level: process.env.NODE_ENV === 'test' ? 'silent' : 'info'
 })
 
-const validateGithubUrl = (url) => isURL(url, { protocols: ['https'], require_protocol: true }) && url.includes('github.com')
+const validateGithubUrl = (url) => {
+  if (!isURL(url, { protocols: ['https'], require_protocol: true })) {
+    return false
+  }
+  try {
+    const parsedUrl = new URL(url)
+    const allowedHosts = ['github.com', 'www.github.com']
+    return allowedHosts.includes(parsedUrl.host)
+  } catch (error) {
+    return false
+  }
+}
 
 const ensureGithubToken = () => {
   if (!process.env.GITHUB_TOKEN) {

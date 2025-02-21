@@ -2,22 +2,23 @@ const { github, ossf } = require('../src/providers')
 const {
   sampleGithubOrg,
   sampleGithubRepository,
-  sampleOSSFScorecardResult
+  sampleOSSFScorecardResult,
+  sampleGithubListOrgRepos
 } = require('../__fixtures__')
 const nock = require('nock')
 
 describe('GitHub Provider', () => {
+  beforeEach(() => {
+    process.env.GITHUB_TOKEN = 'github_pat_ddadas'
+    nock.disableNetConnect()
+  })
+
+  afterEach(() => {
+    nock.cleanAll()
+    nock.enableNetConnect()
+  })
+
   describe('fetchOrgByLogin', () => {
-    beforeEach(() => {
-      process.env.GITHUB_TOKEN = 'github_pat_ddadas'
-      nock.disableNetConnect()
-    })
-
-    afterEach(() => {
-      nock.cleanAll()
-      nock.enableNetConnect()
-    })
-
     it.each([undefined, null, ''])('Should throw when no login are provided', async (login) => {
       const organization = github.fetchOrgByLogin(login)
 
@@ -47,8 +48,32 @@ describe('GitHub Provider', () => {
   })
 
   describe('fetchOrgReposListByLogin', () => {
-    it.todo('Should fetch organization repositories by login')
-    it.todo('Should throw an error if the organization does not exist')
+    it.each([undefined, null, ''])('Should throw when no login are provided', async (login) => {
+      const organization = github.fetchOrgReposListByLogin(login)
+
+      expect(organization).rejects.toThrow('Organization name is required')
+    })
+
+    it('Should fetch organization repositories by login', async () => {
+      nock('https://api.github.com')
+        .get('/orgs/github/repos?type=public&per_page=100')
+        .reply(200, sampleGithubListOrgRepos)
+
+      await expect(github.fetchOrgReposListByLogin('github')).resolves.toEqual(sampleGithubListOrgRepos)
+    })
+
+    it('Should throw an error if the organization does not exist', async () => {
+      nock('https://api.github.com')
+        .get('/orgs/github/repos?type=public&per_page=100')
+        .reply(404, {
+          message: 'Not Found',
+          documentation_url: 'https://docs.github.com/rest/repos/repos#list-organization-repositories',
+          status: '404'
+        })
+
+      await expect(github.fetchOrgReposListByLogin('github')).rejects.toThrow('Not Found - https://docs.github.com/rest/repos/repos#list-organization-repositories')
+    })
+
     it.todo('Should throw an error if there are network issues')
   })
 

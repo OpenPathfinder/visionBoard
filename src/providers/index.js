@@ -24,6 +24,10 @@ const fetchOrgByLogin = async (login) => {
 }
 
 const fetchOrgReposListByLogin = async (login) => {
+  if (!login) {
+    throw new Error('Organization name is required')
+  }
+
   debug(`Fetching organization (${login}) repositories...`)
   ensureGithubToken()
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
@@ -32,7 +36,8 @@ const fetchOrgReposListByLogin = async (login) => {
   // IMPORTANT: Ignore private repositories as they might contain sensitive information
   const orgQuery = { org: login, type: 'public', per_page: 100 }
 
-  const { data: repos } = await octokit.rest.repos.listForOrg(orgQuery)
+  const { data: repos, url } = await octokit.rest.repos.listForOrg(orgQuery)
+
   debug(`Got ${repos.length} repos for org: ${login}`)
   repoList = repoList.concat(repos)
 

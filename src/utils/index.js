@@ -1,6 +1,7 @@
 const { add, parseISO, isBefore } = require('date-fns')
 const isURL = require('validator/lib/isURL.js')
 const pinoInit = require('pino')
+const urlLib = require('url')
 
 // GitHub token pattern: looks for patterns matching the GitHub token structure
 const GITHUB_TOKEN_PATTERN = /\b(ghp|gho|ghu|ghs|ghr|github_pat)_[A-Za-z0-9_]{1,255}\b/g
@@ -34,7 +35,14 @@ const logger = pinoInit({
   level: process.env.NODE_ENV === 'test' ? 'silent' : 'info'
 })
 
-const validateGithubUrl = (url) => isURL(url, { protocols: ['https'], require_protocol: true }) && url.includes('github.com')
+const validateGithubUrl = (url) => {
+  if (!isURL(url, { protocols: ['https'], require_protocol: true })) {
+    return false
+  }
+  const parsedUrl = urlLib.parse(url)
+  const allowedHosts = ['github.com', 'www.github.com']
+  return allowedHosts.includes(parsedUrl.host)
+}
 
 const ensureGithubToken = () => {
   if (!process.env.GITHUB_TOKEN) {
@@ -66,10 +74,10 @@ const groupArrayItemsByCriteria = criteria => items => Object.values(
     if (!acc[item[criteria]]) {
       acc[item[criteria]] = []
     }
-    acc[item[criteria]].push(item)
-    return acc
-  }, {})
-)
+      acc[item[criteria]].push(item)
+      return acc
+    }, {})
+  )
 
 const generatePercentage = (total, value) => {
   const percentage = (value * 100) / total

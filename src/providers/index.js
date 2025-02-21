@@ -65,8 +65,6 @@ const fetchRepoByFullName = async (fullName) => {
 
   const splitName = fullName.split('/')
 
-  console.log(splitName)
-
   if (splitName.length !== 2 || (!splitName[0] || !splitName[1])) {
     throw new Error('The full name of the repository is invalid')
   }

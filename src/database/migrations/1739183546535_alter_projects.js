@@ -18,6 +18,13 @@ exports.up = async (knex) => {
     table.boolean('has_npmOrgMFA_policy').nullable()
     table.boolean('has_npmPublicationMFA_policy').nullable()
     table.boolean('has_upgradePathDocs_policy').nullable()
+    table.boolean('has_patchNonCriticalVulns90Days_policy').nullable()
+    table.boolean('has_patchCriticalVulns30Days_policy').nullable()
+    table.boolean('has_twoOrMoreOwnersForAccess_policy').nullable()
+    table.boolean('has_injectedSecretsAtRuntime_policy').nullable()
+    table.boolean('has_preventScriptInjection_policy').nullable()
+    table.boolean('has_resolveLinterWarnings_policy').nullable()
+    table.boolean('has_annualDependencyRefresh_policy').nullable()
   })
 }
 
@@ -41,5 +48,12 @@ exports.down = async (knex) => {
     table.dropColumn('has_npmOrgMFA_policy')
     table.dropColumn('has_npmPublicationMFA_policy')
     table.dropColumn('has_upgradePathDocs_policy')
+    table.dropColumn('has_patchNonCriticalVulns90Days_policy')
+    table.dropColumn('has_patchCriticalVulns30Days_policy')
+    table.dropColumn('has_twoOrMoreOwnersForAccess_policy')
+    table.dropColumn('has_injectedSecretsAtRuntime_policy')
+    table.dropColumn('has_preventScriptInjection_policy')
+    table.dropColumn('has_resolveLinterWarnings_policy')
+    table.dropColumn('has_annualDependencyRefresh_policy')
   })
 }

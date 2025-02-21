@@ -4,7 +4,7 @@ const { initializeStore } = require('../store')
 const { simplifyObject } = require('@ulisesgascon/simplify-object')
 const fs = require('fs')
 
-const projectPolicies = ['defineFunctionalRoles', 'orgToolingMFA', 'softwareArchitectureDocs', 'MFAImpersonationDefense', 'includeCVEInReleaseNotes', 'assignCVEForKnownVulns', 'incidentResponsePlan', 'regressionTestsForVulns', 'vulnResponse14Days', 'useCVDToolForVulns', 'securityMdMeetsOpenJSCVD', 'consistentBuildProcessDocs', 'machineReadableDependencies', 'identifyModifiedDependencies', 'ciAndCdPipelineAsCode', 'npmOrgMFA', 'npmPublicationMFA', 'upgradePathDocs']
+const projectPolicies = ['defineFunctionalRoles', 'orgToolingMFA', 'softwareArchitectureDocs', 'MFAImpersonationDefense', 'includeCVEInReleaseNotes', 'assignCVEForKnownVulns', 'incidentResponsePlan', 'regressionTestsForVulns', 'vulnResponse14Days', 'useCVDToolForVulns', 'securityMdMeetsOpenJSCVD', 'consistentBuildProcessDocs', 'machineReadableDependencies', 'identifyModifiedDependencies', 'ciAndCdPipelineAsCode', 'npmOrgMFA', 'npmPublicationMFA', 'upgradePathDocs', 'upgradePathDocs', 'patchNonCriticalVulns90Days', 'patchCriticalVulns30Days', 'twoOrMoreOwnersForAccess', 'injectedSecretsAtRuntime', 'preventScriptInjection', 'resolveLinterWarnings', 'annualDependencyRefresh']
 
 const bulkImport = async (knex, filePath) => {
   logger.info('Bulk importing data...')

@@ -53,6 +53,27 @@ const checks = [
   }, {
     code_name: 'upgradePathDocs',
     implementation_details_reference: 'https://github.com/OpenPathfinder/visionBoard/issues/106'
+  }, {
+    code_name: 'patchNonCriticalVulns90Days',
+    implementation_details_reference: 'https://github.com/OpenPathfinder/visionBoard/issues/81'
+  }, {
+    code_name: 'patchCriticalVulns30Days',
+    implementation_details_reference: 'https://github.com/OpenPathfinder/visionBoard/issues/80'
+  }, {
+    code_name: 'twoOrMoreOwnersForAccess',
+    implementation_details_reference: 'https://github.com/OpenPathfinder/visionBoard/issues/79'
+  }, {
+    code_name: 'injectedSecretsAtRuntime',
+    implementation_details_reference: 'https://github.com/OpenPathfinder/visionBoard/issues/68'
+  }, {
+    code_name: 'preventScriptInjection',
+    implementation_details_reference: 'https://github.com/OpenPathfinder/visionBoard/issues/104'
+  }, {
+    code_name: 'resolveLinterWarnings',
+    implementation_details_reference: 'https://github.com/OpenPathfinder/visionBoard/issues/84'
+  }, {
+    code_name: 'annualDependencyRefresh',
+    implementation_details_reference: 'https://github.com/OpenPathfinder/visionBoard/issues/112'
   }
 ]
 

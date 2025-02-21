@@ -731,7 +731,14 @@ CREATE TABLE public.projects (
     "has_ciAndCdPipelineAsCode_policy" boolean,
     "has_npmOrgMFA_policy" boolean,
     "has_npmPublicationMFA_policy" boolean,
-    "has_upgradePathDocs_policy" boolean
+    "has_upgradePathDocs_policy" boolean,
+    "has_patchNonCriticalVulns90Days_policy" boolean,
+    "has_patchCriticalVulns30Days_policy" boolean,
+    "has_twoOrMoreOwnersForAccess_policy" boolean,
+    "has_injectedSecretsAtRuntime_policy" boolean,
+    "has_preventScriptInjection_policy" boolean,
+    "has_resolveLinterWarnings_policy" boolean,
+    "has_annualDependencyRefresh_policy" boolean
 );
 
 

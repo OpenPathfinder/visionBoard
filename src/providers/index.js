@@ -8,16 +8,26 @@ const { ossfScorecardSettings } = require('../config').getConfig()
 const debug = require('debug')('providers:github')
 
 const fetchOrgByLogin = async (login) => {
+  if (!login) {
+    throw new Error('Organization name is required')
+  }
+
   debug(`Fetching organization (${login})...`)
   ensureGithubToken()
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
+
   const { data } = await octokit.request('GET /orgs/{org}', {
     org: login
   })
+
   return data
 }
 
 const fetchOrgReposListByLogin = async (login) => {
+  if (!login) {
+    throw new Error('Organization name is required')
+  }
+
   debug(`Fetching organization (${login}) repositories...`)
   ensureGithubToken()
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
@@ -27,6 +37,7 @@ const fetchOrgReposListByLogin = async (login) => {
   const orgQuery = { org: login, type: 'public', per_page: 100 }
 
   const { data: repos } = await octokit.rest.repos.listForOrg(orgQuery)
+
   debug(`Got ${repos.length} repos for org: ${login}`)
   repoList = repoList.concat(repos)
 
@@ -48,12 +59,23 @@ const fetchOrgReposListByLogin = async (login) => {
 }
 
 const fetchRepoByFullName = async (fullName) => {
+  if (!fullName) {
+    throw new Error('The full name is required')
+  }
+
+  const [owner, repo] = fullName.split('/')
+
+  if (!owner || !repo) {
+    throw new Error('The full name of the repository is invalid')
+  }
+
   debug(`Fetching repository (${fullName})...`)
   ensureGithubToken()
+
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
   const { data } = await octokit.request('GET /repos/{owner}/{repo}', {
-    owner: fullName.split('/')[0],
-    repo: fullName.split('/')[1]
+    owner,
+    repo
   })
   return data
 }

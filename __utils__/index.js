@@ -28,8 +28,21 @@ const generateGithubRepoData = (data) => {
   }
 }
 
+const generateOSSFScorecardData = (data) => {
+  return {
+    analysis_score: 10,
+    analysis_time: '2024-12-11T23:55:17Z',
+    analysis_execution_time: 19876,
+    repo_commit: 'dacv23',
+    scorecard_version: 3,
+    scorecard_commit: 'dsad',
+    ...data
+  }
+}
+
 module.exports = {
   generateGithubRepoData,
+  generateOSSFScorecardData,
   resetDatabase,
   initializeStore
 }

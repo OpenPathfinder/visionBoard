@@ -7,6 +7,14 @@ const {
 } = require('../__fixtures__')
 const nock = require('nock')
 
+// Create a larger sample data set for pagination testing
+const largeSampleGithubListOrgRepos = Array.from({ length: 150 }, (_, i) => ({
+  ...sampleGithubListOrgRepos[0],
+  id: i + 1,
+  name: `repo-${i + 1}`,
+  full_name: `org/repo-${i + 1}`
+}))
+
 describe('GitHub Provider', () => {
   beforeEach(() => {
     process.env.GITHUB_TOKEN = 'github_pat_mock_token'
@@ -55,6 +63,23 @@ describe('GitHub Provider', () => {
         .reply(200, sampleGithubListOrgRepos)
 
       await expect(github.fetchOrgReposListByLogin('github')).resolves.toEqual(sampleGithubListOrgRepos)
+    })
+
+    it('Should handle pagination correctly', async () => {
+      const firstPageRepos = largeSampleGithubListOrgRepos.slice(0, 100)
+      const secondPageRepos = largeSampleGithubListOrgRepos.slice(100)
+
+      nock('https://api.github.com')
+        .get('/orgs/github/repos?type=public&per_page=100')
+        .reply(200, firstPageRepos, {
+          link: '<https://api.github.com/orgs/github/repos?type=public&per_page=100&page=2>; rel="next"'
+        })
+        .get('/orgs/github/repos?type=public&per_page=100&page=2')
+        .reply(200, secondPageRepos, {
+          link: null
+        })
+
+      await expect(github.fetchOrgReposListByLogin('github')).resolves.toEqual([...firstPageRepos, ...secondPageRepos])
     })
 
     it('Should throw an error if the organization does not exist', async () => {

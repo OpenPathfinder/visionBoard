@@ -728,7 +728,10 @@ CREATE TABLE public.projects (
     "has_consistentBuildProcessDocs_policy" boolean,
     "has_machineReadableDependencies_policy" boolean,
     "has_identifyModifiedDependencies_policy" boolean,
-    "has_ciAndCdPipelineAsCode_policy" boolean
+    "has_ciAndCdPipelineAsCode_policy" boolean,
+    "has_npmOrgMFA_policy" boolean,
+    "has_npmPublicationMFA_policy" boolean,
+    "has_upgradePathDocs_policy" boolean
 );
 
 

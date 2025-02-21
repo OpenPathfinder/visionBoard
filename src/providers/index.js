@@ -63,9 +63,9 @@ const fetchRepoByFullName = async (fullName) => {
     throw new Error('The full name is required')
   }
 
-  const splitName = fullName.split('/')
+  const [owner, repo] = fullName.split('/')
 
-  if (splitName.length !== 2 || (!splitName[0] || !splitName[1])) {
+  if (!owner || !repo) {
     throw new Error('The full name of the repository is invalid')
   }
 
@@ -74,8 +74,8 @@ const fetchRepoByFullName = async (fullName) => {
 
   const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
   const { data } = await octokit.request('GET /repos/{owner}/{repo}', {
-    owner: splitName[0],
-    repo: splitName[1]
+    owner,
+    repo
   })
   return data
 }

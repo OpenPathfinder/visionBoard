@@ -9,7 +9,7 @@ const nock = require('nock')
 
 describe('GitHub Provider', () => {
   beforeEach(() => {
-    process.env.GITHUB_TOKEN = 'github_pat_ddadas'
+    process.env.GITHUB_TOKEN = 'github_pat_mock_token'
     nock.disableNetConnect()
   })
 

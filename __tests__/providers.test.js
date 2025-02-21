@@ -42,7 +42,6 @@ describe('GitHub Provider', () => {
 
       await expect(github.fetchOrgByLogin('github')).rejects.toThrow('Not Found - https://docs.github.com/rest/orgs/orgs#get-an-organization')
     })
-    it.todo('Should throw an error if there are network issues')
   })
 
   describe('fetchOrgReposListByLogin', () => {
@@ -69,8 +68,6 @@ describe('GitHub Provider', () => {
 
       await expect(github.fetchOrgReposListByLogin('github')).rejects.toThrow('Not Found - https://docs.github.com/rest/repos/repos#list-organization-repositories')
     })
-
-    it.todo('Should throw an error if there are network issues')
   })
 
   describe('fetchRepoByFullName', () => {
@@ -101,7 +98,6 @@ describe('GitHub Provider', () => {
 
       await expect(github.fetchRepoByFullName('github/.github')).rejects.toThrow('Not Found - https://docs.github.com/rest/repos/repos#get-a-repository')
     })
-    it.todo('Should throw an error if there are network issues')
   })
 
   describe('mappers', () => {

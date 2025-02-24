@@ -302,6 +302,37 @@ ALTER SEQUENCE public.compliance_checks_tasks_id_seq OWNED BY public.compliance_
 
 
 --
+-- Name: github_organization_members; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.github_organization_members (
+    id integer NOT NULL,
+    github_organization_id integer NOT NULL,
+    github_user_id integer NOT NULL
+);
+
+
+--
+-- Name: github_organization_members_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.github_organization_members_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: github_organization_members_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.github_organization_members_id_seq OWNED BY public.github_organization_members.id;
+
+
+--
 -- Name: github_organizations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -932,6 +963,13 @@ ALTER TABLE ONLY public.compliance_checks_tasks ALTER COLUMN id SET DEFAULT next
 
 
 --
+-- Name: github_organization_members id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.github_organization_members ALTER COLUMN id SET DEFAULT nextval('public.github_organization_members_id_seq'::regclass);
+
+
+--
 -- Name: github_organizations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1063,6 +1101,14 @@ ALTER TABLE ONLY public.compliance_checks_results
 
 ALTER TABLE ONLY public.compliance_checks_tasks
     ADD CONSTRAINT compliance_checks_tasks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: github_organization_members github_organization_members_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.github_organization_members
+    ADD CONSTRAINT github_organization_members_pkey PRIMARY KEY (id);
 
 
 --
@@ -1345,6 +1391,22 @@ ALTER TABLE ONLY public.compliance_checks_tasks
 
 ALTER TABLE ONLY public.compliance_checks_tasks
     ADD CONSTRAINT compliance_checks_tasks_project_id_foreign FOREIGN KEY (project_id) REFERENCES public.projects(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: github_organization_members github_organization_members_github_organization_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.github_organization_members
+    ADD CONSTRAINT github_organization_members_github_organization_id_foreign FOREIGN KEY (github_organization_id) REFERENCES public.github_organizations(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: github_organization_members github_organization_members_github_user_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.github_organization_members
+    ADD CONSTRAINT github_organization_members_github_user_id_foreign FOREIGN KEY (github_user_id) REFERENCES public.github_users(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

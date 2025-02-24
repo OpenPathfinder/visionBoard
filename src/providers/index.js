@@ -80,6 +80,40 @@ const fetchRepoByFullName = async (fullName) => {
   return data
 }
 
+const fetchOrgMembersByLogin = async (login) => {
+  if (!login) {
+    throw new Error('Organization name is required')
+  }
+
+  debug(`Fetching organization (${login}) members...`)
+  ensureGithubToken()
+  const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
+  let memberList = []
+
+  const orgQuery = { org: login, per_page: 100 }
+
+  const { data: members } = await octokit.rest.orgs.listMembers(orgQuery)
+
+  debug(`Got ${members.length} members for org: ${login}`)
+  memberList = memberList.concat(members)
+
+  // IMPORTANT: If the org has 100 members it might require pagination management
+  if (memberList.length === 100) {
+    let page = 2
+    let hasMore = true
+    while (hasMore) {
+      debug(`Getting page ${page} for org: ${login}`)
+      const { data: members, headers } = await octokit.rest.orgs.listMembers({ ...orgQuery, page })
+      debug(`Got ${members.length} members for org: ${login}`)
+      memberList = memberList.concat(members)
+      hasMore = headers.link.includes('rel="next"')
+      page += 1
+    }
+  }
+
+  return memberList
+}
+
 const performScorecardAnalysis = async (repo) => {
   ensureGithubToken()
   logger.info(`Running OSSF Scorecard for repository (${repo.full_name})...`)
@@ -99,6 +133,7 @@ const performScorecardAnalysis = async (repo) => {
 const github = {
   fetchOrgByLogin,
   fetchOrgReposListByLogin,
+  fetchOrgMembersByLogin,
   fetchRepoByFullName,
   mappers: {
     org: (data) => {

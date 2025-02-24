@@ -480,6 +480,58 @@ ALTER SEQUENCE public.github_repositories_id_seq OWNED BY public.github_reposito
 
 
 --
+-- Name: github_users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.github_users (
+    id integer NOT NULL,
+    name character varying(255),
+    email character varying(255),
+    login character varying(255) NOT NULL,
+    github_user_id character varying(255) NOT NULL,
+    node_id character varying(255) NOT NULL,
+    avatar_url character varying(255),
+    gravatar_id character varying(255),
+    url character varying(255),
+    html_url character varying(255),
+    followers_url character varying(255),
+    following_url character varying(255),
+    starred_url character varying(255),
+    subscriptions_url character varying(255),
+    organizations_url character varying(255),
+    repos_url character varying(255),
+    events_url character varying(255),
+    received_events_url character varying(255),
+    type character varying(255),
+    site_admin boolean NOT NULL,
+    starred_at character varying(255),
+    user_view_type character varying(255),
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: github_users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.github_users_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: github_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.github_users_id_seq OWNED BY public.github_users.id;
+
+
+--
 -- Name: knex_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -894,6 +946,13 @@ ALTER TABLE ONLY public.github_repositories ALTER COLUMN id SET DEFAULT nextval(
 
 
 --
+-- Name: github_users id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.github_users ALTER COLUMN id SET DEFAULT nextval('public.github_users_id_seq'::regclass);
+
+
+--
 -- Name: knex_migrations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1055,6 +1114,22 @@ ALTER TABLE ONLY public.github_repositories
 
 
 --
+-- Name: github_users github_users_github_user_id_unique; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.github_users
+    ADD CONSTRAINT github_users_github_user_id_unique UNIQUE (github_user_id);
+
+
+--
+-- Name: github_users github_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.github_users
+    ADD CONSTRAINT github_users_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: knex_migrations_lock knex_migrations_lock_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1171,6 +1246,13 @@ CREATE TRIGGER set_updated_at_github_organizations BEFORE UPDATE ON public.githu
 --
 
 CREATE TRIGGER set_updated_at_github_repositories BEFORE UPDATE ON public.github_repositories FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+
+--
+-- Name: github_users set_updated_at_github_users; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER set_updated_at_github_users BEFORE UPDATE ON public.github_users FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
 
 --

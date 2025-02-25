@@ -51,5 +51,8 @@ jobs:
     - name: Run tests
       run: npm run test:ci
 
+    - name: Run rollback
+      run: npm run db:rollback
+
     - name: Build Docker image
       run: docker build -t visionboard .

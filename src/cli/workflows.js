@@ -1,6 +1,6 @@
 const inquirer = require('inquirer').default
 const debug = require('debug')('cli:workflows')
-const { updateGithubOrgs, upsertGithubRepositories, runAllTheComplianceChecks, upsertOSSFScorecardAnalysis } = require('../workflows')
+const { updateGithubOrgs, upsertGithubRepositories, upsertGithubOrganizationMembers, runAllTheComplianceChecks, upsertOSSFScorecardAnalysis } = require('../workflows')
 const { generateReports } = require('../reports')
 const { bulkImport } = require('../importers')
 const { logger } = require('../utils')
@@ -14,6 +14,11 @@ const commandList = [{
   description: 'Check the organizations stored and update/create the information related to the repositories with the GitHub API.',
   workflow: upsertGithubRepositories
 }, {
+  name: 'upsert-github-organization-members',
+  description: 'Check the organizations stored and update/create the information related to the organization members with the GitHub API.',
+  workflow: upsertGithubOrganizationMembers
+},
+{
   name: 'run-all-checks',
   description: 'Run all the compliance checks for the stored data.',
   workflow: runAllTheComplianceChecks

@@ -100,6 +100,15 @@ const upsertSoftwareDesignTraining = (knex) => (data) => upsertRecord({
   data
 })
 
+const upsertGithubMembers = (knex) => (data) => upsertRecord({
+  table: 'github_users',
+  knex,
+  uniqueCriteria: {
+    github_user_id: data.github_user_id
+  },
+  data
+})
+
 const upsertOwaspTop10Training = (knex) => (data) => upsertRecord({
   table: 'owasp_top10_training',
   knex,
@@ -204,6 +213,7 @@ const initializeStore = (knex) => {
     addGithubOrganization: addGithubOrganization(knex),
     updateGithubOrganization: updateGithubOrganization(knex),
     upsertGithubRepository: upsertGithubRepository(knex),
+    upsertGithubMembers: upsertGithubMembers(knex),
     getAllGithubOrganizations: () => getAll('github_organizations'),
     getAllComplianceChecks: () => getAll('compliance_checks'),
     getAllProjects: () => getAll('projects'),

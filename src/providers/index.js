@@ -203,6 +203,20 @@ const github = {
       mappedData.secret_scanning_non_provider_patterns_status = data.security_and_analysis?.secret_scanning_non_provider_patterns?.status
       mappedData.secret_scanning_validity_checks_status = data.security_and_analysis?.secret_scanning_validity_checks?.status
       return mappedData
+    },
+    user: (data) => {
+      const mappedData = simplifyObject(data, {
+        include: [
+          'login', 'node_id', 'avatar_url', 'gravatar_id',
+          'url', 'html_url', 'followers_url', 'following_url',
+          'gists_url', 'starred_url', 'subscriptions_url',
+          'organizations_url', 'repos_url', 'events_url',
+          'received_events_url', 'type', 'site_admin',
+          'starred_at', 'user_view_type'
+        ]
+      })
+      mappedData.github_user_id = data.id
+      return mappedData
     }
   }
 }

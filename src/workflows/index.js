@@ -2,7 +2,7 @@ const debug = require('debug')('workflows')
 const { github, ossf } = require('../providers')
 const { initializeStore } = require('../store')
 const { logger } = require('../utils')
-const { validateGithubOrg, validateGithubListOrgRepos, validateGithubRepository, validateOSSFResult } = require('../schemas')
+const { validateGithubOrg, validateGithubListOrgRepos, validateGithubRepository, validateOSSFResult, validateGithubListOrgMembers } = require('../schemas')
 const checks = require('../checks')
 const { chunkArray } = require('@ulisesgascon/array-to-chunks')
 const { ossfScorecardSettings } = require('../config').getConfig()
@@ -63,6 +63,32 @@ const upsertGithubRepositories = async (knex) => {
   logger.info('GitHub repositories updated successfully')
 }
 
+const upsertGithubOrganizationMembers = async (knex) => {
+  const { getAllGithubOrganizations, upsertGithubMembers } = initializeStore(knex)
+  const organizations = await getAllGithubOrganizations()
+  debug('Checking stored organizations')
+  if (organizations.length === 0) {
+    throw new Error('No organizations found. Please add organizations/projects before running this workflow.')
+  }
+
+  debug("Fetching members for each organization from GitHub API")
+  for await (const org of organizations) {
+    debug(`Fetching members for org (${org.login})`)
+    logger.info(`Fetching members for org (${org.login})`)
+    const members = await github.fetchOrgMembersByLogin(org.login)
+    debug(`Got ${members.length} members for org: ${org.login}`)
+    debug('Validating data')
+    validateGithubListOrgMembers(members)
+
+    // Upsert each member in parallel
+    for await (const member of members) {
+      debug(`Upserting member (${member.login})`)
+      const mappedData = github.mappers.user(member)
+      await upsertGithubMembers(mappedData)
+    }
+  }
+}
+
 const runAllTheComplianceChecks = async (knex) => {
   const { getAllComplianceChecks } = initializeStore(knex)
   debug('Fetching all compliance checks')
@@ -112,6 +138,7 @@ const upsertOSSFScorecardAnalysis = async (knex) => {
 module.exports = {
   updateGithubOrgs,
   upsertGithubRepositories,
+  upsertGithubOrganizationMembers,
   runAllTheComplianceChecks,
   upsertOSSFScorecardAnalysis
 }

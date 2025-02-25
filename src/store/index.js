@@ -231,6 +231,8 @@ const initializeStore = (knex) => {
     getAllSSoftwareDesignTrainings: () => getAll('software_design_training'),
     getAllOwaspTop10Trainings: () => getAll('owasp_top10_training'),
     getAllGithubRepositories: () => getAll('github_repositories'),
+    getAllGithubUsers: () => getAll('github_users'),
+    getAllGithubOrganizationMembers: () => getAll('github_organization_members'),
     getAllGithubRepositoriesAndOrganizationByProjectId: (organizationId) => getAllGithubRepositoriesAndOrganizationByProjectId(knex, organizationId),
     getAllChecklists: () => getAll('compliance_checklists'),
     getAllResults: () => getAll('compliance_checks_results'),

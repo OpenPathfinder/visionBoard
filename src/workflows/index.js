@@ -64,14 +64,14 @@ const upsertGithubRepositories = async (knex) => {
 }
 
 const upsertGithubOrganizationMembers = async (knex) => {
-  const { getAllGithubOrganizations, upsertGithubMembers } = initializeStore(knex)
+  const { getAllGithubOrganizations, upsertGithubMembers, upsertGithubOrganizationMembers } = initializeStore(knex)
   const organizations = await getAllGithubOrganizations()
   debug('Checking stored organizations')
   if (organizations.length === 0) {
     throw new Error('No organizations found. Please add organizations/projects before running this workflow.')
   }
 
-  debug("Fetching members for each organization from GitHub API")
+  debug('Fetching members for each organization from GitHub API')
   for await (const org of organizations) {
     debug(`Fetching members for org (${org.login})`)
     logger.info(`Fetching members for org (${org.login})`)
@@ -79,14 +79,27 @@ const upsertGithubOrganizationMembers = async (knex) => {
     debug(`Got ${members.length} members for org: ${org.login}`)
     debug('Validating data')
     validateGithubListOrgMembers(members)
+    debug(`Enriching all organization members for org (${org.login})`)
+    logger.info(`Enriching all organization members for org (${org.login})`)
 
     // Upsert each member in parallel
     for await (const member of members) {
       debug(`Upserting member (${member.login})`)
       const mappedData = github.mappers.user(member)
-      await upsertGithubMembers(mappedData)
+      debug(`Transforming member (${member.login}) data`)
+      const memberDatabase = await upsertGithubMembers(mappedData)
+
+      for (const memberData of memberDatabase) {
+        debug(`Upserting member (${member.login}) in organization (${org.login})`)
+
+        await upsertGithubOrganizationMembers({
+          github_user_id: memberData.id,
+          github_organization_id: org.id
+        })
+      }
     }
   }
+  logger.info('GitHub organization members updated successfully')
 }
 
 const runAllTheComplianceChecks = async (knex) => {

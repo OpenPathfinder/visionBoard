@@ -17,6 +17,8 @@ let getAllProjects,
   getAllGithubRepos,
   getAllGithubUsers,
   getAllGithubOrgMembers,
+  upsertGithubMembers,
+  upsertGithubOrganizationMembers,
   addGithubRepo
 
 beforeAll(() => {
@@ -29,6 +31,8 @@ beforeAll(() => {
     addGithubOrganization: addGithubOrg,
     addProject,
     getAllGithubRepositories: getAllGithubRepos,
+    upsertGithubMembers,
+    upsertGithubOrganizationMembers,
     addGithubRepo
   } = initializeStore(knex))
 })
@@ -188,7 +192,43 @@ describe('run upsert-github-organization-members', () => {
     expect(githubOrgMembers[0].github_user_id).toBe(githubUsers[0].id)
     expect(githubOrgMembers[0].github_organization_id).toBe(githubOrgs[0].id)
   })
-  test.todo('Should update the organization members related to the organization')
+  test('Should update the organization members related to the organization', async () => {
+    const project = await addProject({ name: sampleGithubOrg.login })
+    const org = await addGithubOrg({ login: sampleGithubOrg.login, html_url: sampleGithubOrg.html_url, project_id: project.id })
+    const githubUserData = simplifyObject(sampleGithubOrgMembers[0], {
+      include: [
+        'login', 'node_id', 'avatar_url', 'gravatar_id', 'url', 'html_url', 'followers_url', 'following_url', 'gists_url', 'starred_url', 'subscriptions_url', 'organizations_url', 'repos_url', 'events_url', 'received_events_url', 'type', 'site_admin', 'starred_at', 'user_view_type'
+      ]
+    })
+    githubUserData.github_user_id = sampleGithubOrgMembers[0].id
+    githubUserData.login = 'express'
+    const [user] = await upsertGithubMembers(githubUserData)
+    await upsertGithubOrganizationMembers({
+      github_user_id: user.id,
+      github_organization_id: org.id
+    })
+    const projects = await getAllProjects()
+    expect(projects.length).toBe(1)
+    const githubOrgs = await getAllGithubOrgs()
+    expect(githubOrgs.length).toBe(1)
+    let githubUsers = await getAllGithubUsers()
+    expect(githubUsers.length).toBe(1)
+    expect(githubUsers[0].login).toBe('express')
+    let githubOrgMembers = await getAllGithubOrgMembers()
+    expect(githubOrgMembers.length).toBe(1)
+    expect(githubOrgMembers[0].github_user_id).toBe(githubUsers[0].id)
+    expect(githubOrgMembers[0].github_organization_id).toBe(githubOrgs[0].id)
+    jest.spyOn(github, 'fetchOrgMembersByLogin').mockResolvedValue(sampleGithubOrgMembers)
+    await runWorkflowCommand(knex, { name: 'upsert-github-organization-members' })
+    // Check the database changes
+    githubUsers = await getAllGithubUsers()
+    githubOrgMembers = await getAllGithubOrgMembers()
+    expect(githubUsers.length).toBe(1)
+    expect(githubUsers[0].login).toBe(sampleGithubOrgMembers[0].login)
+    expect(githubOrgMembers.length).toBe(1)
+    expect(githubOrgMembers[0].github_user_id).toBe(githubUsers[0].id)
+    expect(githubOrgMembers[0].github_organization_id).toBe(githubOrgs[0].id)
+  })
   test.todo('Should throw an error when the Github API is not available')
 })
 

@@ -4,11 +4,11 @@ exports.up = async (knex) => {
     table.integer('compliance_check_id')
       .unsigned()
       .notNullable()
-      .references('id').inTable('compliance_checks')
+      .references('id').inTable('compliance_checks').onDelete('CASCADE').onUpdate('CASCADE')
     table.integer('compliance_check_resource_id')
       .unsigned()
       .notNullable()
-      .references('id').inTable('compliance_checks_resources')
+      .references('id').inTable('compliance_checks_resources').onDelete('CASCADE').onUpdate('CASCADE')
 
     table.timestamp('created_at').defaultTo(knex.fn.now()).notNullable()
   })

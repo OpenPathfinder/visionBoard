@@ -1410,5 +1410,5 @@ exports.up = async (knex) => {
 
 exports.down = async (knex) => {
   await knex('resources_for_compliance_checks').truncate()
-  await knex('compliance_checks_resources').truncate()
+  await knex.raw('TRUNCATE TABLE compliance_checks_resources CASCADE')
 }

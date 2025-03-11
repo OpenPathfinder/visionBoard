@@ -23,51 +23,56 @@
       },
       "url": {
         "type": "string",
-        "format": "uri",
+        "format": "url",
         "examples": [
           "https://api.github.com/orgs/github"
         ]
       },
       "repos_url": {
         "type": "string",
-        "format": "uri",
+        "format": "url",
         "examples": [
           "https://api.github.com/orgs/github/repos"
         ]
       },
       "events_url": {
         "type": "string",
-        "format": "uri",
+        "format": "url",
         "examples": [
           "https://api.github.com/orgs/github/events"
         ]
       },
       "hooks_url": {
         "type": "string",
+        "format": "url",
         "examples": [
           "https://api.github.com/orgs/github/hooks"
         ]
       },
       "issues_url": {
         "type": "string",
+        "format": "url",
         "examples": [
           "https://api.github.com/orgs/github/issues"
         ]
       },
       "members_url": {
         "type": "string",
+        "format": "url",
         "examples": [
           "https://api.github.com/orgs/github/members{/member}"
         ]
       },
       "public_members_url": {
         "type": "string",
+        "format": "url",
         "examples": [
           "https://api.github.com/orgs/github/public_members{/member}"
         ]
       },
       "avatar_url": {
         "type": "string",
+        "format": "url",
         "examples": [
           "https://avatars.githubusercontent.com/u/9919?v=4"
         ]
@@ -178,7 +183,7 @@
       },
       "html_url": {
         "type": "string",
-        "format": "uri",
+        "format": "url",
         "examples": [
           "https://github.com/octocat"
         ]

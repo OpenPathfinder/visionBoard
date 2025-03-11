@@ -66,7 +66,7 @@
               "properties": {
                 "url": {
                   "type": "string",
-                  "format": "uri",
+                  "format": "url",
                   "examples": [
                     "https://github.com/ossf/scorecard/blob/ea7e27ed41b76ab879c862fa0ca4cc9c61764ee4/docs/checks.md#binary-artifacts"
                   ]

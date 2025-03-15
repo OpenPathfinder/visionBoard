@@ -37,6 +37,13 @@ checks.ciAndCdPipelineAsCode = genericProjectPolicyComplianceCheck('ciAndCdPipel
 checks.npmOrgMFA = genericProjectPolicyComplianceCheck('npmOrgMFA')
 checks.npmPublicationMFA = genericProjectPolicyComplianceCheck('npmPublicationMFA')
 checks.upgradePathDocs = genericProjectPolicyComplianceCheck('upgradePathDocs')
+checks.patchNonCriticalVulns90Days = genericProjectPolicyComplianceCheck('patchNonCriticalVulns90Days')
+checks.patchCriticalVulns30Days = genericProjectPolicyComplianceCheck('patchCriticalVulns30Days')
+checks.twoOrMoreOwnersForAccess = genericProjectPolicyComplianceCheck('twoOrMoreOwnersForAccess')
+checks.injectedSecretsAtRuntime = genericProjectPolicyComplianceCheck('injectedSecretsAtRuntime')
+checks.preventScriptInjection = genericProjectPolicyComplianceCheck('preventScriptInjection')
+checks.resolveLinterWarnings = genericProjectPolicyComplianceCheck('resolveLinterWarnings')
+checks.annualDependencyRefresh = genericProjectPolicyComplianceCheck('annualDependencyRefresh')
 
 debug('Generic Policies loaded')
 

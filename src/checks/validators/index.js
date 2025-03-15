@@ -29,7 +29,14 @@ const validators = {
   ciAndCdPipelineAsCode: genericProjectPolicyValidator('ciAndCdPipelineAsCode'),
   npmOrgMFA: genericProjectPolicyValidator('npmOrgMFA'),
   npmPublicationMFA: genericProjectPolicyValidator('npmPublicationMFA'),
-  upgradePathDocs: genericProjectPolicyValidator('upgradePathDocs')
+  upgradePathDocs: genericProjectPolicyValidator('upgradePathDocs'),
+  patchNonCriticalVulns90Days: genericProjectPolicyValidator('patchNonCriticalVulns90Days'),
+  patchCriticalVulns30Days: genericProjectPolicyValidator('patchCriticalVulns30Days'),
+  twoOrMoreOwnersForAccess: genericProjectPolicyValidator('twoOrMoreOwnersForAccess'),
+  injectedSecretsAtRuntime: genericProjectPolicyValidator('injectedSecretsAtRuntime'),
+  preventScriptInjection: genericProjectPolicyValidator('preventScriptInjection'),
+  resolveLinterWarnings: genericProjectPolicyValidator('resolveLinterWarnings'),
+  annualDependencyRefresh: genericProjectPolicyValidator('annualDependencyRefresh')
 }
 
 module.exports = validators

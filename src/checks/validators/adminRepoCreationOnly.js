@@ -36,14 +36,14 @@ module.exports = ({ organizations = [], check, projects = [] }) => {
       result.rationale = 'Only Admins can create public repositories in the organization(s)'
     } else if (failedOrgs.length) {
       result.status = 'failed'
-      result.rationale = `Not Only Admins can create public repositories in the following (${failedOrgs.join(',')}) organization(s)`
-      alert.title = `Not Only Admins can create public repositories in the following (${failedOrgs.join(',')}) organization(s)`
+      result.rationale = `Not Only Admins can create public repositories in the following (${failedOrgs.join(', ')}) organization(s)`
+      alert.title = `Not Only Admins can create public repositories in the following (${failedOrgs.join(', ')}) organization(s)`
       alert.description = `Check the details on ${check.details_url}`
-      task.title = `Limit public repo creation to admins for the following (${failedOrgs.join(',')}) organization(s)`
+      task.title = `Limit public repo creation to admins for the following (${failedOrgs.join(', ')}) organization(s)`
       task.description = `Check the details on ${check.details_url}`
     } else if (unknownOrgs.length) {
       result.status = 'unknown'
-      result.rationale = `It was not possible to confirm if only admins can create public repositories in the following (${unknownOrgs.join(',')}) organization(s)`
+      result.rationale = `It was not possible to confirm if only admins can create public repositories in the following (${unknownOrgs.join(', ')}) organization(s)`
     }
     // Include only the task if was populated
     if (Object.keys(task).length > Object.keys(baseData).length) {

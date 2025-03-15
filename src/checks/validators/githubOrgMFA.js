@@ -36,14 +36,14 @@ module.exports = ({ organizations = [], check, projects = [] }) => {
       result.rationale = 'The organization(s) have 2FA enabled'
     } else if (failedOrgs.length) {
       result.status = 'failed'
-      result.rationale = `The organization(s) (${failedOrgs.join(',')}) do not have 2FA enabled`
-      alert.title = `The organization(s) (${failedOrgs.join(',')}) do not have 2FA enabled`
+      result.rationale = `The organization(s) (${failedOrgs.join(', ')}) do not have 2FA enabled`
+      alert.title = `The organization(s) (${failedOrgs.join(', ')}) do not have 2FA enabled`
       alert.description = `Check the details on ${check.details_url}`
-      task.title = `Enable 2FA for the organization(s) (${failedOrgs.join(',')})`
+      task.title = `Enable 2FA for the organization(s) (${failedOrgs.join(', ')})`
       task.description = `Check the details on ${check.details_url}`
     } else if (unknownOrgs.length) {
       result.status = 'unknown'
-      result.rationale = `The organization(s) (${unknownOrgs.join(',')}) have 2FA status unknown`
+      result.rationale = `The organization(s) (${unknownOrgs.join(', ')}) have 2FA status unknown`
     }
     // Include only the task if was populated
     if (Object.keys(task).length > Object.keys(baseData).length) {

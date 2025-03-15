@@ -13,6 +13,11 @@ exports[`list - Non-Interactive Mode Should provide a list of available workflow
     "workflow": [Function],
   },
   {
+    "description": "Check the organizations stored and update/create the information related to the organization members with the GitHub API.",
+    "name": "upsert-github-organization-members",
+    "workflow": [Function],
+  },
+  {
     "description": "Run all the compliance checks for the stored data.",
     "name": "run-all-checks",
     "workflow": [Function],

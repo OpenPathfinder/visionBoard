@@ -3,7 +3,8 @@ const {
   sampleGithubOrg,
   sampleGithubRepository,
   sampleOSSFScorecardResult,
-  sampleGithubListOrgRepos
+  sampleGithubListOrgRepos,
+  sampleGithubOrgMembers
 } = require('../__fixtures__')
 const nock = require('nock')
 
@@ -13,6 +14,13 @@ const largeSampleGithubListOrgRepos = Array.from({ length: 150 }, (_, i) => ({
   id: i + 1,
   name: `repo-${i + 1}`,
   full_name: `org/repo-${i + 1}`
+}))
+
+// Create a larger sample data set for pagination testing
+const largeSampleGithubListOrgMembers = Array.from({ length: 150 }, (_, i) => ({
+  ...sampleGithubOrgMembers[0],
+  id: i + 1,
+  node_id: `repo-${i + 1}`
 }))
 
 describe('GitHub Provider', () => {
@@ -92,6 +100,49 @@ describe('GitHub Provider', () => {
         })
 
       await expect(github.fetchOrgReposListByLogin('github')).rejects.toThrow('Not Found - https://docs.github.com/rest/repos/repos#list-organization-repositories')
+    })
+  })
+
+  describe('fetchOrgMembersByLogin', () => {
+    it.each([undefined, null, ''])('Should throw when no login are provided', async (login) => {
+      await expect(github.fetchOrgMembersByLogin(login)).rejects.toThrow('Organization name is required')
+    })
+
+    it('Should fetch organization members by login', async () => {
+      nock('https://api.github.com')
+        .get('/orgs/github/members?per_page=100')
+        .reply(200, sampleGithubOrgMembers)
+
+      await expect(github.fetchOrgMembersByLogin('github')).resolves.toEqual(sampleGithubOrgMembers)
+    })
+
+    it('Should handle pagination correctly', async () => {
+      const firstPageRepos = largeSampleGithubListOrgMembers.slice(0, 100)
+      const secondPageRepos = largeSampleGithubListOrgMembers.slice(100)
+
+      nock('https://api.github.com')
+        .get('/orgs/github/members?per_page=100')
+        .reply(200, firstPageRepos, {
+          link: '<https://api.github.com/orgs/github/members?per_page=100&page=2>; rel="next"'
+        })
+        .get('/orgs/github/members?per_page=100&page=2')
+        .reply(200, secondPageRepos, {
+          link: null
+        })
+
+      await expect(github.fetchOrgMembersByLogin('github')).resolves.toEqual([...firstPageRepos, ...secondPageRepos])
+    })
+
+    it('Should throw an error if the organization does not exist', async () => {
+      nock('https://api.github.com')
+        .get('/orgs/github/members?per_page=100')
+        .reply(404, {
+          message: 'Not Found',
+          documentation_url: 'https://docs.github.com/rest/orgs/members#list-organization-members',
+          status: '404'
+        })
+
+      await expect(github.fetchOrgMembersByLogin('github')).rejects.toThrow('Not Found - https://docs.github.com/rest/orgs/members#list-organization-members')
     })
   })
 

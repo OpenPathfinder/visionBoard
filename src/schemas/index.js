@@ -2,6 +2,7 @@ const Ajv = require('ajv')
 const addFormats = require('ajv-formats')
 const githubOrganizationSchema = require('./githubOrganization.json')
 const githubListOrgReposSchema = require('./githubListOrgRepos.json')
+const githubListOrgMembersSchema = require('./githubListOrgMembers.json')
 const githubRepositorySchema = require('./githubRepository.json')
 const ossfScorecardResultSchema = require('./ossfScorecardResult.json')
 const bulkImportSchema = require('./bulkImport.json')
@@ -23,6 +24,16 @@ const validateGithubOrg = (data) => {
 
 const validateGithubListOrgRepos = (data) => {
   const validate = ajv.compile(githubListOrgReposSchema)
+  const valid = validate(data)
+  if (!valid) {
+    const readableErrors = getReadableErrors(validate)
+    throw new Error(`Error when validating the Github org response from API: ${readableErrors}`)
+  }
+  return null
+}
+
+const validateGithubListOrgMembers = (data) => {
+  const validate = ajv.compile(githubListOrgMembersSchema)
   const valid = validate(data)
   if (!valid) {
     const readableErrors = getReadableErrors(validate)
@@ -64,6 +75,7 @@ const validateBulkImport = (data) => {
 module.exports = {
   validateGithubOrg,
   validateGithubListOrgRepos,
+  validateGithubListOrgMembers,
   validateGithubRepository,
   validateOSSFResult,
   validateBulkImport

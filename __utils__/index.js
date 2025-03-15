@@ -7,6 +7,8 @@ const resetDatabase = async (knex) => {
   await knex.raw('TRUNCATE TABLE compliance_checks_alerts RESTART IDENTITY CASCADE')
   await knex.raw('TRUNCATE TABLE github_repositories RESTART IDENTITY CASCADE')
   await knex.raw('TRUNCATE TABLE github_organizations RESTART IDENTITY CASCADE')
+  await knex.raw('TRUNCATE TABLE github_users RESTART IDENTITY CASCADE')
+  await knex.raw('TRUNCATE TABLE github_organization_members RESTART IDENTITY CASCADE')
   await knex.raw('TRUNCATE TABLE projects RESTART IDENTITY CASCADE')
 }
 

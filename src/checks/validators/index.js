@@ -3,6 +3,7 @@ const softwareDesignTraining = require('./softwareDesignTraining')
 const owaspTop10Training = require('./owaspTop10Training')
 const adminRepoCreationOnly = require('./adminRepoCreationOnly')
 const noSensitiveInfoInRepositories = require('./noSensitiveInfoInRepositories')
+const staticCodeAnalysis = require('./staticCodeAnalysis')
 const genericProjectPolicyValidator = require('./genericProjectPolicyValidator')
 
 const validators = {
@@ -11,7 +12,7 @@ const validators = {
   owaspTop10Training,
   adminRepoCreationOnly,
   noSensitiveInfoInRepositories,
-  // Generic Policies
+  staticCodeAnalysis,
   defineFunctionalRoles: genericProjectPolicyValidator('defineFunctionalRoles'),
   orgToolingMFA: genericProjectPolicyValidator('orgToolingMFA'),
   softwareArchitectureDocs: genericProjectPolicyValidator('softwareArchitectureDocs'),

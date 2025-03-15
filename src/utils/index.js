@@ -1,5 +1,6 @@
 const { add, parseISO, isBefore } = require('date-fns')
 const isURL = require('validator/lib/isURL.js')
+const { simplifyObject } = require('@ulisesgascon/simplify-object')
 const pinoInit = require('pino')
 
 // GitHub token pattern: looks for patterns matching the GitHub token structure
@@ -123,8 +124,40 @@ const isDateWithinPolicy = (targetDate, policy) => {
   return isBefore(currentDate, expirationDate) // Check if current date is before expiration
 }
 
+const processEntities = (data, entityConfig) => {
+  const entityMap = new Map()
+
+  data.forEach(item => {
+    const entityId = item[entityConfig.idKey]
+    const entity = simplifyObject(item, { exclude: entityConfig.excludedKeys })
+
+    if (!entityMap.has(entityId)) {
+      entityMap.set(entityId, entity)
+    }
+
+    entityConfig.relationships.forEach(relationship => {
+      entity[relationship.name] = entity[relationship.name] || []
+
+      const relatedEntityId = item[relationship.relatedIdKey]
+
+      if (relatedEntityId) {
+        const relatedEntity = simplifyObject(item, { exclude: relationship.excludedKeys })
+
+        if (item[relationship?.relationship?.relatedIdKey]) {
+          relatedEntity[relationship.relationship.name] = relatedEntity[relationship.relationship.name] || simplifyObject(item, { exclude: relationship.relationship.excludedKeys })
+        }
+
+        entityMap.get(entityId)[relationship.name].push(relatedEntity)
+      }
+    })
+  })
+
+  return Array.from(entityMap.values())
+}
+
 module.exports = {
   isDateWithinPolicy,
+  processEntities,
   validateGithubUrl,
   ensureGithubToken,
   getSeverityFromPriorityGroup,

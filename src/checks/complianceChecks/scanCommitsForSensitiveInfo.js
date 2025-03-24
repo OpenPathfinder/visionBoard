@@ -1,6 +1,6 @@
 const validators = require('../validators')
 const { initializeStore } = require('../../store')
-const debug = require('debug')('checks:noSensitiveInfoInRepositories')
+const debug = require('debug')('checks:scanCommitsForSensitiveInfo')
 
 module.exports = async (knex, { projects } = {}) => {
   const {
@@ -10,14 +10,14 @@ module.exports = async (knex, { projects } = {}) => {
   } = initializeStore(knex)
   debug('Collecting relevant data...')
 
-  const check = await getCheckByCodeName('noSensitiveInfoInRepositories')
+  const check = await getCheckByCodeName('scanCommitsForSensitiveInfo')
   if (!projects || (Array.isArray(projects) && projects.length === 0)) {
     projects = await getAllProjects()
   }
 
   const data = await getAllGithubRepositoriesAndOrganizationByProjectId(projects.map(p => p.id))
   debug('Extracting the validation results...')
-  const analysis = validators.noSensitiveInfoInRepositories({ data, check, projects })
+  const analysis = validators.scanCommitsForSensitiveInfo({ data, check, projects })
 
   debug('Deleting previous alerts and tasks to avoid orphaned records...')
   await deleteAlertsByComplianceCheckId(check.id)

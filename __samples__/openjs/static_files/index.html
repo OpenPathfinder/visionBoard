@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisionBoard Reports</title>
+    <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 h-screen">
+    <!-- Header -->
+    <header class="bg-zinc-950 text-white">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex">
+            <h1 class="text-amber-400 text-xl font-semibold">VisionBoard Reports</h1>
+        </div>
+    </header>
+
+    <div class="flex h-full">
+        <main class="flex-1 p-6">
+            <h1 class="text-2xl font-bold mb-4">Welcome!</h1>
+            <p class="text-gray-700 mb-4">In this dashboard, you can find the status of all the projects that you
+                registered. Every project listed includes additional reports with its own dashboard, tasks, and alerts.
+            </p>
+
+            <h2 class="text-2xl font-bold mb-4">Projects</h2>
+            <p class="mb-4">Click on any project to get more details:</p>
+            <ul class="list-disc list-inside mb-6">
+                
+                    <li>
+                        <a href="/projects/node.html" class="text-blue-500 underline font-bold">
+                            node
+                        </a>
+                    </li>
+                
+            </ul>
+
+            <h2 class="text-2xl font-bold mb-4">Checklist</h2>
+            <table class="w-full border border-gray-300 border-collapse mb-6">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="border border-gray-300 px-4 py-2 text-left">Documentation</th>
+                        <th class="border border-gray-300 px-4 py-2 text-left">Title</th>
+                        <th class="border border-gray-300 px-4 py-2 text-left">Description</th>
+                        <th class="border border-gray-300 px-4 py-2 text-left">Author</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checklists/OpenJS-SCGv1.0-incubating" class="text-blue-500 underline font-bold">
+                                    OpenJS-SCGv1.0-incubating
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Security Compliance Guide v1.0 - Incubating
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                This checklist is for projects that are in the incubating phase and have multiple maintainers.
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                OpenJS Foundation
+                            </td>
+
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checklists/OpenJS-SCGv1.0-active" class="text-blue-500 underline font-bold">
+                                    OpenJS-SCGv1.0-active
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Security Compliance Guide v1.0 - Active
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                This checklist is for projects that are in the active phase and have multiple maintainers.
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                OpenJS Foundation
+                            </td>
+
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checklists/OpenJS-SCGv1.0-retiring" class="text-blue-500 underline font-bold">
+                                    OpenJS-SCGv1.0-retiring
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Security Compliance Guide v1.0 - Retiring
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                This checklist is for projects that are in the retiring phase and have multiple maintainers.
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                OpenJS Foundation
+                            </td>
+
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checklists/OpenJS-SCGv1.0-solo-incubating" class="text-blue-500 underline font-bold">
+                                    OpenJS-SCGv1.0-solo-incubating
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Security Compliance Guide v1.0 - Solo Maintainers incubating
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                This checklist is for projects that are in the incubating phase and have a solo maintainer.
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                OpenJS Foundation
+                            </td>
+
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checklists/OpenJS-SCGv1.0-solo-active" class="text-blue-500 underline font-bold">
+                                    OpenJS-SCGv1.0-solo-active
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Security Compliance Guide v1.0 - Solo Maintainers Active
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                This checklist is for projects that are in the active phase and have a solo maintainer.
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                OpenJS Foundation
+                            </td>
+
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checklists/OpenJS-SCGv1.0-solo-retiring" class="text-blue-500 underline font-bold">
+                                    OpenJS-SCGv1.0-solo-retiring
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Security Compliance Guide v1.0 - Solo Maintainers Retiring
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                This checklist is for projects that are in the retiring phase and have a solo maintainer.
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                OpenJS Foundation
+                            </td>
+
+                        </tr>
+                    
+                </tbody>
+            </table>
+
+            <h2 class="text-2xl font-bold mb-4">Compliance Checks</h2>
+            <p class="mb-4">Currently <span class="font-bold">
+                    30/72
+                </span> are implemented. <a href="https://openpathfinder.com/contribute"
+                    class="text-blue-500 underline font-bold">Help us</a> to implement more!</p>
+
+            <table class="w-full border border-gray-300 border-collapse">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="border border-gray-300 px-4 py-2 text-left">Documentation</th>
+                        <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
+                        <th class="border border-gray-300 px-4 py-2 text-left">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/scanCommitsForSensitiveInfo"
+                                    class="text-blue-500 underline font-bold">
+                                    scanCommitsForSensitiveInfo
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure that all the commits are scanned
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                All commits are scanned for secrets and credentials 
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/preventLandingSensitiveCommits"
+                                    class="text-blue-500 underline font-bold">
+                                    preventLandingSensitiveCommits
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Block new commits with secrets or credentials
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                New commits containing secrets or credentials are blocked from merging
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/SSHKeysRequired"
+                                    class="text-blue-500 underline font-bold">
+                                    SSHKeysRequired
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Use SSH keys with passphrases for repository access
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Use SSH keys for developer access to source code repositories and use a passphrase
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/githubWebhookSecrets"
+                                    class="text-blue-500 underline font-bold">
+                                    githubWebhookSecrets
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Secure GitHub Webhooks with secrets
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure that Github Webhooks use secrets
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/requireCodeOwnersReviewForLargeTeams"
+                                    class="text-blue-500 underline font-bold">
+                                    requireCodeOwnersReviewForLargeTeams
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Require code owners review
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Require code owners review
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/restrictedOrgPermissions"
+                                    class="text-blue-500 underline font-bold">
+                                    restrictedOrgPermissions
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Restrict default GitHub Org member permissions
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Default GitHub organization member permissions should be restricted
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/preventBranchProtectionBypass"
+                                    class="text-blue-500 underline font-bold">
+                                    preventBranchProtectionBypass
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Prevent admins from bypassing branch protection
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Do not allow admins to bypass branch protection settings
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/githubWriteAccessRoles"
+                                    class="text-blue-500 underline font-bold">
+                                    githubWriteAccessRoles
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Define teams/individuals with write access to repositories
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Define individuals/teams who write access to a GitHub Repository
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/automateVulnDetection"
+                                    class="text-blue-500 underline font-bold">
+                                    automateVulnDetection
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Automate dependency vulnerability identification
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Implement an automated process to identify dependencies with publicly disclosed vulnerabilities
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/staticCodeAnalysis"
+                                    class="text-blue-500 underline font-bold">
+                                    staticCodeAnalysis
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Use automated static code analysis tools
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Implement automated static code analysis tools (e.g., ESLint)
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/staticAppSecTesting"
+                                    class="text-blue-500 underline font-bold">
+                                    staticAppSecTesting
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Use static application security testing for all commits
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure all commits are scanned by a static application security testing tool
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/defineFunctionalRoles"
+                                    class="text-blue-500 underline font-bold">
+                                    defineFunctionalRoles
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Define roles aligned to functional responsibilities
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Define roles aligned to functional responsibilities
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/commitStatusChecks"
+                                    class="text-blue-500 underline font-bold">
+                                    commitStatusChecks
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Require commit status checks to pass before merging
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure all required commit status checks pass before merging
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/defaultTokenPermissionsReadOnly"
+                                    class="text-blue-500 underline font-bold">
+                                    defaultTokenPermissionsReadOnly
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Set default GitHub workflow token permissions to read-only
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure GitHub organization default workflow token permissions are set to read-only
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/blockWorkflowPRApproval"
+                                    class="text-blue-500 underline font-bold">
+                                    blockWorkflowPRApproval
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Prevent workflows from creating or approving PRs
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure workflows are not allowed to create or approve pull requests
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/noForcePushDefaultBranch"
+                                    class="text-blue-500 underline font-bold">
+                                    noForcePushDefaultBranch
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Disable force push on default branch
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure force push is disabled on the default branch
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/preventDeletionDefaultBranch"
+                                    class="text-blue-500 underline font-bold">
+                                    preventDeletionDefaultBranch
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Prevent deletion of default branch
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure the default branch cannot be deleted
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/upToDateDefaultBranchBeforeMerge"
+                                    class="text-blue-500 underline font-bold">
+                                    upToDateDefaultBranchBeforeMerge
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Require default branch updates before merging
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure the default branch is up to date before allowing merges
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/restrictOrgSecrets"
+                                    class="text-blue-500 underline font-bold">
+                                    restrictOrgSecrets
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Restrict GitHub organization secrets to specific repositories
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Limit GitHub organization secrets to only be accessible by selected repositories
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/verifiedActionsOnly"
+                                    class="text-blue-500 underline font-bold">
+                                    verifiedActionsOnly
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Limit GitHub Actions to verified or trusted actions
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure GitHub Actions are limited to verified or explicitly trusted actions
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/noSelfHostedRunners"
+                                    class="text-blue-500 underline font-bold">
+                                    noSelfHostedRunners
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Disable self-hosted runners in GitHub organization
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure the use of self-hosted runners is disabled in the GitHub organization
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/noArbitraryCodeInPipeline"
+                                    class="text-blue-500 underline font-bold">
+                                    noArbitraryCodeInPipeline
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Restrict build pipeline code execution to build scripts
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure the build pipeline cannot execute arbitrary code outside of a build script
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/limitWorkflowWritePermissions"
+                                    class="text-blue-500 underline font-bold">
+                                    limitWorkflowWritePermissions
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Limit workflow write permissions to job level
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure workflows are granted write permissions only at the job level
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/pinActionsToSHA"
+                                    class="text-blue-500 underline font-bold">
+                                    pinActionsToSHA
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Pin actions with secrets to full-length commit SHAs
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure actions with access to secrets are pinned to a full-length commit SHA
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/automateDependencyManagement"
+                                    class="text-blue-500 underline font-bold">
+                                    automateDependencyManagement
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Automate monitoring of outdated dependencies
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure an automated process is in place to monitor and maintain a list of outdated dependencies
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/softwareArchitectureDocs"
+                                    class="text-blue-500 underline font-bold">
+                                    softwareArchitectureDocs
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Document software architecture
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure the software architecture is clearly documented
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/useHwKeyGithubAccess"
+                                    class="text-blue-500 underline font-bold">
+                                    useHwKeyGithubAccess
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Use AAL2/3 passkeys for GitHub access
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure GitHub access utilizes a passkey (AAL2) or hardware key (AAL3) activated by a password or biometrics
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/useHwKeyGithubNonInteractive"
+                                    class="text-blue-500 underline font-bold">
+                                    useHwKeyGithubNonInteractive
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Use AAL2/3 passkeys for non-interactive GitHub access
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure non-interactive GitHub access uses a passkey (AAL2) or hardware key (AAL3) activated by a password or biometrics
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/useHwKeyOtherContexts"
+                                    class="text-blue-500 underline font-bold">
+                                    useHwKeyOtherContexts
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Use AAL2/3 passkeys in all other contexts
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure all other contexts use a passkey (AAL2) or hardware key (AAL3) activated by a password or biometrics
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/forkWorkflowApproval"
+                                    class="text-blue-500 underline font-bold">
+                                    forkWorkflowApproval
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Require approval for forked workflow changes
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure changes to workflows from forks require approval for all outside collaborators
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/workflowSecurityScanner"
+                                    class="text-blue-500 underline font-bold">
+                                    workflowSecurityScanner
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Use workflow security scanners
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure a workflow security scanner is utilized
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/runnerSecurityScanner"
+                                    class="text-blue-500 underline font-bold">
+                                    runnerSecurityScanner
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Use GitHub runner security scanners
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure a GitHub runner security scanner is utilized
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/activeAdminsSixMonths"
+                                    class="text-blue-500 underline font-bold">
+                                    activeAdminsSixMonths
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Require active admins in GitHub organization (activity in 6 months)
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure GitHub organization admins have been active within the last 6 months
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/activeWritersSixMonths"
+                                    class="text-blue-500 underline font-bold">
+                                    activeWritersSixMonths
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Require active members with write access (activity in 6 months)
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure GitHub organization members with write permissions have been active within the last 6 months
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/PRsBeforeMerge"
+                                    class="text-blue-500 underline font-bold">
+                                    PRsBeforeMerge
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Require pull requests before merging
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Require pull requests before merging
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/commitSignoffForWeb"
+                                    class="text-blue-500 underline font-bold">
+                                    commitSignoffForWeb
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Enforce commit sign-off for web based commits
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                GitHub org requires commit sign-off for web-based commits
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/requireSignedCommits"
+                                    class="text-blue-500 underline font-bold">
+                                    requireSignedCommits
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Require signed commits
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Require signed commits
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/includePackageLock"
+                                    class="text-blue-500 underline font-bold">
+                                    includePackageLock
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Include package-lock.json in releases
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Commit a package-lock.json file with each release
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/requireTwoPartyReview"
+                                    class="text-blue-500 underline font-bold">
+                                    requireTwoPartyReview
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Require two-party review
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Require two party review
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/vulnResponse14Days"
+                                    class="text-blue-500 underline font-bold">
+                                    vulnResponse14Days
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Respond to external vulnerability reports in under 14 days
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure all external vulnerability reports are addressed within 14 days
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/requirePRApprovalForMainline"
+                                    class="text-blue-500 underline font-bold">
+                                    requirePRApprovalForMainline
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Require approved PRs for mainline commits
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Require approved PRs for all commits to mainline branches
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/limitOrgOwners"
+                                    class="text-blue-500 underline font-bold">
+                                    limitOrgOwners
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Limit GitHub org owners to fewer than three
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Limit the number of GitHub org owners (ideally fewer than three)
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/limitRepoAdmins"
+                                    class="text-blue-500 underline font-bold">
+                                    limitRepoAdmins
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Limit GitHub repo admins to fewer than three
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Limit number of GitHub repository admins (ideally fewer than three)
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/patchExploitableHighVulns14Days"
+                                    class="text-blue-500 underline font-bold">
+                                    patchExploitableHighVulns14Days
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Patch critical/high vulnerabilities in 14 Days
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Actively exploited critical and high vulnerabilities patched within 14 Days
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/patchExploitableNoncCriticalVulns60Days"
+                                    class="text-blue-500 underline font-bold">
+                                    patchExploitableNoncCriticalVulns60Days
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Patch non-critical vulnerabilities in 60 Days
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Non-critical exploitable vulnerabilities patched within 60 Days
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/githubOrgMFA"
+                                    class="text-blue-500 underline font-bold">
+                                    githubOrgMFA
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Enforce MFA in GitHub organization(s)
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Multi Factor authentication (MFA) enforced across the Github Organization(s)
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/softwareDesignTraining"
+                                    class="text-blue-500 underline font-bold">
+                                    softwareDesignTraining
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Training on secure software design
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                At least one primary maintainer has taken the training on Secure Software Design
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/adminRepoCreationOnly"
+                                    class="text-blue-500 underline font-bold">
+                                    adminRepoCreationOnly
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Allow only admins to create public repositories
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Only admins should be able to create public repositories
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/owaspTop10Training"
+                                    class="text-blue-500 underline font-bold">
+                                    owaspTop10Training
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Training on OWASP Top 10 or equivalent
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                At least one primary maintainer has taken the training on OWASP Top 10 or Equivalent
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/noSensitiveInfoInRepositories"
+                                    class="text-blue-500 underline font-bold">
+                                    noSensitiveInfoInRepositories
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Check sensitive information
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                No secrets or credentials are included in the source code
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/orgToolingMFA"
+                                    class="text-blue-500 underline font-bold">
+                                    orgToolingMFA
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Enforce MFA in all the tools
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Multi Factor Authentication (MFA) enforced in all tools wherever technically feasible
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/MFAImpersonationDefense"
+                                    class="text-blue-500 underline font-bold">
+                                    MFAImpersonationDefense
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Use MFA against impersonation
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Use Multi Factor Authentication (MFA) methods that defend against impersonation when available 
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/includeCVEInReleaseNotes"
+                                    class="text-blue-500 underline font-bold">
+                                    includeCVEInReleaseNotes
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Include CVE IDs in release notes for security fixes
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure release notes include the CVE ID for patched security vulnerabilities
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/assignCVEForKnownVulns"
+                                    class="text-blue-500 underline font-bold">
+                                    assignCVEForKnownVulns
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Assign CVEs to all known security vulnerabilities
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure all known security vulnerabilities are issued a CVE
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/incidentResponsePlan"
+                                    class="text-blue-500 underline font-bold">
+                                    incidentResponsePlan
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Define clear communication and incident response plans
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Establish clear communication and incident response plans
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/regressionTestsForVulns"
+                                    class="text-blue-500 underline font-bold">
+                                    regressionTestsForVulns
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Create regression tests for bugs and security vulnerabilities
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure regression tests cover at least 50% of bugs and 100% of security vulnerabilities
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/useCVDToolForVulns"
+                                    class="text-blue-500 underline font-bold">
+                                    useCVDToolForVulns
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Use CVD tools to manage vulnerability reports
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure the project utilizes a CVD tool to privately receive and manage external vulnerability reports (e.g., HackerOne, GitHub PVR)
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/securityMdMeetsOpenJSCVD"
+                                    class="text-blue-500 underline font-bold">
+                                    securityMdMeetsOpenJSCVD
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure Security.md meets OpenJS CVD guidelines
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Verify that Security.md complies with OpenJS CVD guidelines
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/consistentBuildProcessDocs"
+                                    class="text-blue-500 underline font-bold">
+                                    consistentBuildProcessDocs
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Document consistent and automated build processes
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure a consistent and automated build process is documented and followed
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/machineReadableDependencies"
+                                    class="text-blue-500 underline font-bold">
+                                    machineReadableDependencies
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Provide machine-readable dependency lists
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure a machine-readable list of all direct and transitive dependencies is available for the software
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/identifyModifiedDependencies"
+                                    class="text-blue-500 underline font-bold">
+                                    identifyModifiedDependencies
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Uniquely identify modified dependencies
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure modified dependencies are uniquely identified and clearly distinguished from the original dependency
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/ciAndCdPipelineAsCode"
+                                    class="text-blue-500 underline font-bold">
+                                    ciAndCdPipelineAsCode
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Automate CI/CD steps in code-based pipelines
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure all CI/CD steps are automated through pipelines defined as code
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/npmOrgMFA"
+                                    class="text-blue-500 underline font-bold">
+                                    npmOrgMFA
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Enforce MFA in npm organization(s)
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Multi Factor Authentication (MFA) enforced across the npm organization(s)
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/npmPublicationMFA"
+                                    class="text-blue-500 underline font-bold">
+                                    npmPublicationMFA
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Publish to npm using MFA-Enabled accounts
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Publish to npm using an MFA-enabled account rather than single factor legacy or granular access tokens
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/upgradePathDocs"
+                                    class="text-blue-500 underline font-bold">
+                                    upgradePathDocs
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Support older versions or provide upgrade paths
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure commonly used older versions are supported or an upgrade path is documented and provided
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/patchNonCriticalVulns90Days"
+                                    class="text-blue-500 underline font-bold">
+                                    patchNonCriticalVulns90Days
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Patch non-critical vulnerabilities within 90 days
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure non-critical exploitable vulnerabilities are patched within 90 days
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/patchCriticalVulns30Days"
+                                    class="text-blue-500 underline font-bold">
+                                    patchCriticalVulns30Days
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Patch actively exploited critical vulnerabilities within 30 Days
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Actively exploited critical vulnerabilities patched within 30 Days
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/twoOrMoreOwnersForAccess"
+                                    class="text-blue-500 underline font-bold">
+                                    twoOrMoreOwnersForAccess
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Configure two or more owners for access continuity
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Have at least two owners configured for access continuity
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/injectedSecretsAtRuntime"
+                                    class="text-blue-500 underline font-bold">
+                                    injectedSecretsAtRuntime
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure that the secrets are injected at runtime
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Secrets are injected at runtime, such as environment variables or as a file (eg: use Github Secrets)
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/preventScriptInjection"
+                                    class="text-blue-500 underline font-bold">
+                                    preventScriptInjection
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Avoid script injection from untrusted variables
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure script injection is prevented by avoiding untrusted context variables
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/resolveLinterWarnings"
+                                    class="text-blue-500 underline font-bold">
+                                    resolveLinterWarnings
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Address compiler and linter warnings before merging
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure all compiler and linter warnings are resolved before merging
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">
+                                <a target="_blank" href="https://openpathfinder.com/docs/checks/annualDependencyRefresh"
+                                    class="text-blue-500 underline font-bold">
+                                    annualDependencyRefresh
+                                </a>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Refresh dependencies with annual releases
+                            </td>
+                            <td class="border border-gray-300 px-4 py-2">
+                                Ensure dependencies are refreshed through a new release at least once annually
+                            </td>
+                        </tr>
+                    
+                </tbody>
+            </table>
+        </main>
+    </div>
+</body>
+
+</html>

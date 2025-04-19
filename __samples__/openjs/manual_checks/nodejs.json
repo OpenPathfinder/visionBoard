@@ -1,0 +1,21 @@
+[{
+    "type": "annualDependencyRefresh",
+    "project_id": 1,
+    "is_subscribed": true
+  }, {
+    "type": "vulnResponse14Days",
+    "project_id": 1,
+    "is_subscribed": true
+  }, {
+    "type": "incidentResponsePlan",
+    "project_id": 1,
+    "is_subscribed": true
+  }, {
+    "type": "assignCVEForKnownVulns",
+    "project_id": 1,
+    "is_subscribed": true
+  }, {
+    "type": "includeCVEInReleaseNotes",
+    "project_id": 1,
+    "is_subscribed": true
+}]

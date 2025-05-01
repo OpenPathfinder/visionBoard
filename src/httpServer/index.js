@@ -24,6 +24,15 @@ app.use(serveStatic(publicPath, {
 // Directory listing for static files
 app.use(serveIndex(publicPath, { icons: true }))
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  logger.error(`Server error: ${err.message}`, { stack: err.stack })
+  res.status(500).json({
+    error: 'Internal Server Error',
+    message: 'Check server logs for more details'
+  })
+})
+
 // Create API router
 function createApiRouter () {
   const router = express.Router()

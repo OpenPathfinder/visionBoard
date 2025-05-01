@@ -37,7 +37,7 @@ const copyFolder = async (from, to) => {
   }
 }
 
-const generateReports = async (knex) => {
+const generateStaticReports = async (knex) => {
   logger.info('Generating reports')
   const { getAllProjects, getAllChecklists, getAllComplianceChecks, getAllAlerts, getAllResults, getAllTasks, getAllGithubOrganizationsByProjectsId, getAllGithubRepositories, getAllOSSFResults } = initializeStore(knex)
   // @TODO: Run the queries in parallel
@@ -104,5 +104,5 @@ const generateReports = async (knex) => {
 }
 
 module.exports = {
-  generateReports
+  generateStaticReports
 }

@@ -1,7 +1,7 @@
 const inquirer = require('inquirer').default
 const debug = require('debug')('cli:workflows')
 const { updateGithubOrgs, upsertGithubRepositories, runAllTheComplianceChecks, upsertOSSFScorecardAnalysis } = require('../workflows')
-const { generateReports } = require('../reports')
+const { generateStaticReports } = require('../reports')
 const { bulkImport } = require('../importers')
 const { logger } = require('../utils')
 
@@ -28,7 +28,7 @@ const commandList = [{
 }, {
   name: 'generate-reports',
   description: 'Generate the reports for the stored data.',
-  workflow: generateReports
+  workflow: generateStaticReports
 }, {
   name: 'bulk-import',
   description: 'Bulk import data from a CSV file.',

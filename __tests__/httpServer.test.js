@@ -5,9 +5,7 @@ const app = request(server)
 
 // Cleanup after all tests
 afterAll(() => {
-  if (server && server.close) {
-    server.close()
-  }
+  server?.close()
 })
 
 describe('HTTP Server API', () => {

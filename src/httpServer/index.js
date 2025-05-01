@@ -1,4 +1,4 @@
-const finalhandler = require('finalhandler')
+const express = require('express')
 const http = require('http')
 const serveStatic = require('serve-static')
 const serveIndex = require('serve-index')
@@ -9,21 +9,36 @@ const { logger } = require('../utils')
 const publicPath = join(process.cwd(), 'output')
 const { staticServer } = getConfig()
 
-const serve = serveStatic(publicPath, {
+// Create Express app
+const app = express()
+
+// API Routes
+app.use('/api/v1', createApiRouter())
+
+// Static file serving
+app.use(serveStatic(publicPath, {
   index: false,
   dotfiles: 'deny'
-})
+}))
 
-const serveDirectory = serveIndex(publicPath, { icons: true })
+// Directory listing for static files
+app.use(serveIndex(publicPath, { icons: true }))
 
-const server = http.createServer(function onRequest (req, res) {
-  serve(req, res, function (err) {
-    if (err) return finalhandler(req, res)(err)
-    // Directory listing
-    serveDirectory(req, res, finalhandler(req, res))
+// Create API router
+function createApiRouter () {
+  const router = express.Router()
+
+  // Health check endpoint
+  router.get('/__health', (req, res) => {
+    res.json({ status: 'ok', timestamp: new Date().toISOString() })
   })
-})
+  return router
+}
+
+// Create HTTP server
+const server = http.createServer(app)
 
 module.exports = () => server.listen(staticServer.port, () => {
   logger.info(`Server running at http://${staticServer.ip}:${staticServer.port}/`)
+  logger.info(`API available at http://${staticServer.ip}:${staticServer.port}/api/v1/`)
 })

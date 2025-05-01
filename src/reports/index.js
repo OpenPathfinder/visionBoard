@@ -1,6 +1,6 @@
 const { logger } = require('../utils')
 const ejs = require('ejs')
-const { mkdir, readdir, copyFile, readFile, writeFile } = require('node:fs').promises
+const { mkdir, readdir, copyFile, readFile, writeFile, rm } = require('node:fs').promises
 const { join } = require('path')
 const { initializeStore } = require('../store')
 
@@ -37,7 +37,13 @@ const copyFolder = async (from, to) => {
   }
 }
 
-const generateStaticReports = async (knex) => {
+const generateStaticReports = async (knex, options = { clearPreviousReports: false }) => {
+  const { clearPreviousReports } = options
+  if (clearPreviousReports) {
+    logger.info('Clearing previous reports')
+    await rm(destinationFolder, { recursive: true, force: true })
+  }
+
   logger.info('Generating reports')
   const { getAllProjects, getAllChecklists, getAllComplianceChecks, getAllAlerts, getAllResults, getAllTasks, getAllGithubOrganizationsByProjectsId, getAllGithubRepositories, getAllOSSFResults } = initializeStore(knex)
   // @TODO: Run the queries in parallel
@@ -101,6 +107,7 @@ const generateStaticReports = async (knex) => {
 
   // Save the index HTML file
   await writeFile('output/index.html', indexHtml)
+  logger.info('Reports generated successfully')
 }
 
 module.exports = {

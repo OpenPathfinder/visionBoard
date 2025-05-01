@@ -10,14 +10,27 @@ services:
       - 5432:5432
     volumes:
       - visionBoard_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "visionBoard", "-d", "dashboard", "-h", "127.0.0.1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   adminer:
     image: adminer
     restart: always
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       - 8080:8080
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "php"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
 
   schema-dump:
     image: postgres:17.2

@@ -5,7 +5,7 @@ const serveIndex = require('serve-index')
 const { join } = require('path')
 const { getConfig } = require('../config')
 const { logger } = require('../utils')
-const { generateStaticReports } = require('../reports')
+const { createApiRouter } = require('./apiV1')
 
 const publicPath = join(process.cwd(), 'output')
 const { staticServer, dbSettings } = getConfig()
@@ -15,7 +15,7 @@ const knex = require('knex')(dbSettings)
 const app = express()
 
 // API Routes
-app.use('/api/v1', createApiRouter())
+app.use('/api/v1', createApiRouter(knex, express))
 
 // Static file serving
 app.use(serveStatic(publicPath, {
@@ -34,27 +34,6 @@ app.use((err, req, res, next) => {
     message: 'Check server logs for more details'
   })
 })
-
-function createApiRouter () {
-  const router = express.Router()
-
-  // Health check endpoint
-  router.get('/__health', (req, res) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString() })
-  })
-
-  router.get('/generate-reports', async (req, res) => {
-    const timestamp = new Date().toISOString()
-    try {
-      await generateStaticReports(knex, { clearPreviousReports: true })
-      res.json({ status: 'completed', timestamp })
-    } catch (error) {
-      logger.error(error)
-      res.status(500).json({ status: 'failed', timestamp })
-    }
-  })
-  return router
-}
 
 // Create HTTP server
 const server = http.createServer(app)

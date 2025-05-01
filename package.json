@@ -61,6 +61,7 @@
   },
   "devDependencies": {
     "jest": "29.7.0",
-    "standard": "17.1.2"
+    "standard": "17.1.2",
+    "supertest": "^7.1.0"
   }
 }

@@ -4,7 +4,7 @@ const serveStatic = require('serve-static')
 const serveIndex = require('serve-index')
 const { join } = require('path')
 const { getConfig } = require('../config')
-const { logger } = require('../utils')
+const { logger, checkDatabaseConnection } = require('../utils')
 const { createApiRouter } = require('./apiV1')
 
 const publicPath = join(process.cwd(), 'output')
@@ -38,7 +38,21 @@ app.use((err, req, res, next) => {
 // Create HTTP server
 const server = http.createServer(app)
 
-module.exports = () => server.listen(staticServer.port, () => {
-  logger.info(`Server running at http://${staticServer.ip}:${staticServer.port}/`)
-  logger.info(`API available at http://${staticServer.ip}:${staticServer.port}/api/v1/`)
+module.exports = () => ({
+  start: async () => {
+    const isDbConnected = await checkDatabaseConnection(knex)
+    if (!isDbConnected) {
+      logger.error('Failed to connect to database')
+      process.exit(1)
+    }
+    return server.listen(staticServer.port, () => {
+      logger.info(`Server running at http://${staticServer.ip}:${staticServer.port}/`)
+      logger.info(`API available at http://${staticServer.ip}:${staticServer.port}/api/v1/`)
+    })
+  },
+  stop: async () => {
+    await knex.destroy()
+    server.close()
+    logger.info('Server stopped')
+  }
 })

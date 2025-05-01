@@ -1,17 +1,26 @@
 const request = require('supertest')
 const { generateStaticReports } = require('../src/reports')
 const serverModule = require('../src/httpServer')
-const server = serverModule()
-const app = request(server)
+let server
+let serverStop
+let app
 
 // Mocks
 jest.mock('../src/reports', () => ({
   generateStaticReports: jest.fn()
 }))
 
-afterAll(() => {
+beforeAll(async () => {
+  // Initialize server asynchronously
+  const serverInstance = serverModule()
+  server = await serverInstance.start()
+  serverStop = serverInstance.stop
+  app = request(server)
+})
+
+afterAll(async () => {
   // Cleanup after all tests
-  server?.close()
+  await serverStop?.()
 })
 
 beforeEach(() => {

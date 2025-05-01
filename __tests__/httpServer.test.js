@@ -1,28 +1,64 @@
 const request = require('supertest')
+const { generateStaticReports } = require('../src/reports')
 const serverModule = require('../src/httpServer')
 const server = serverModule()
 const app = request(server)
 
-// Cleanup after all tests
+// Mocks
+jest.mock('../src/reports', () => ({
+  generateStaticReports: jest.fn()
+}))
+
 afterAll(() => {
+  // Cleanup after all tests
   server?.close()
 })
 
+beforeEach(() => {
+  jest.clearAllMocks()
+})
+
 describe('HTTP Server API', () => {
-  test('health check endpoint should return status ok', async () => {
-    const response = await app.get('/api/v1/__health')
+  describe('GET /api/v1/__health', () => {
+    test('should return status ok', async () => {
+      const response = await app.get('/api/v1/__health')
 
-    expect(response.status).toBe(200)
-    expect(response.body).toHaveProperty('status', 'ok')
-    expect(response.body).toHaveProperty('timestamp')
+      expect(response.status).toBe(200)
+      expect(response.body).toHaveProperty('status', 'ok')
+      expect(response.body).toHaveProperty('timestamp')
 
-    const timestamp = new Date(response.body.timestamp)
-    expect(timestamp.toISOString()).toBe(response.body.timestamp)
+      const timestamp = new Date(response.body.timestamp)
+      expect(timestamp.toISOString()).toBe(response.body.timestamp)
+    })
   })
 
-  test('non-existent API endpoint should return 404', async () => {
-    const response = await app.get('/api/v1/non-existent-endpoint')
+  describe('GET /api/v1/generate-reports', () => {
+    test('should return status completed when report generation succeeds', async () => {
+      generateStaticReports.mockResolvedValueOnce()
 
-    expect(response.status).toBe(404)
+      const response = await app.get('/api/v1/generate-reports')
+
+      expect(generateStaticReports).toHaveBeenCalledWith(expect.anything(), { clearPreviousReports: true })
+      expect(response.status).toBe(200)
+      expect(response.body).toHaveProperty('status', 'completed')
+      expect(response.body).toHaveProperty('timestamp')
+
+      const timestamp = new Date(response.body.timestamp)
+      expect(timestamp.toISOString()).toBe(response.body.timestamp)
+    })
+
+    test('should return status failed when report generation fails', async () => {
+      generateStaticReports.mockRejectedValueOnce(new Error('Report generation failed'))
+
+      const response = await app.get('/api/v1/generate-reports')
+
+      expect(generateStaticReports).toHaveBeenCalledWith(expect.anything(), { clearPreviousReports: true })
+      expect(response.status).toBe(500)
+      expect(response.body).toHaveProperty('status', 'failed')
+      expect(response.body).toHaveProperty('timestamp')
+
+      const timestamp = new Date(response.body.timestamp)
+      expect(timestamp.toISOString()).toBe(response.body.timestamp)
+    })
   })
 })

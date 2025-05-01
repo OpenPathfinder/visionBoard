@@ -5,9 +5,11 @@ const serveIndex = require('serve-index')
 const { join } = require('path')
 const { getConfig } = require('../config')
 const { logger } = require('../utils')
+const { generateStaticReports } = require('../reports')
 
 const publicPath = join(process.cwd(), 'output')
-const { staticServer } = getConfig()
+const { staticServer, dbSettings } = getConfig()
+const knex = require('knex')(dbSettings)
 
 // Create Express app
 const app = express()
@@ -33,13 +35,23 @@ app.use((err, req, res, next) => {
   })
 })
 
-// Create API router
 function createApiRouter () {
   const router = express.Router()
 
   // Health check endpoint
   router.get('/__health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() })
+  })
+
+  router.get('/generate-reports', async (req, res) => {
+    const timestamp = new Date().toISOString()
+    try {
+      await generateStaticReports(knex, { clearPreviousReports: true })
+      res.json({ status: 'completed', timestamp })
+    } catch (error) {
+      logger.error(error)
+      res.status(500).json({ status: 'failed', timestamp })
+    }
   })
   return router
 }

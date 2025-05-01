@@ -123,6 +123,16 @@ const isDateWithinPolicy = (targetDate, policy) => {
   return isBefore(currentDate, expirationDate) // Check if current date is before expiration
 }
 
+const checkDatabaseConnection = async (knex) => {
+  try {
+    await knex.raw('SELECT 1')
+    return true
+  } catch (error) {
+    logger.error('Database connection failed', { error })
+    return false
+  }
+}
+
 module.exports = {
   isDateWithinPolicy,
   validateGithubUrl,
@@ -131,5 +141,6 @@ module.exports = {
   groupArrayItemsByCriteria,
   redactSensitiveData,
   logger,
-  generatePercentage
+  generatePercentage,
+  checkDatabaseConnection
 }

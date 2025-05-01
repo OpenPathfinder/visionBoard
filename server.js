@@ -1,3 +1,6 @@
-const server = require('./src/httpServer')
+const server = require('./src/httpServer');
 
-server()
+(async () => {
+  const serverInstance = server()
+  await serverInstance.start()
+})()

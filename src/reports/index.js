@@ -1,6 +1,6 @@
 const { logger } = require('../utils')
 const ejs = require('ejs')
-const { mkdir, readdir, copyFile, readFile, writeFile } = require('node:fs').promises
+const { mkdir, readdir, copyFile, readFile, writeFile, rm } = require('node:fs').promises
 const { join } = require('path')
 const { initializeStore } = require('../store')
 
@@ -37,18 +37,35 @@ const copyFolder = async (from, to) => {
   }
 }
 
-const generateReports = async (knex) => {
+const generateStaticReports = async (knex, options = { clearPreviousReports: false }) => {
+  const { clearPreviousReports } = options
+  if (clearPreviousReports) {
+    logger.info('Clearing previous reports')
+    await rm(destinationFolder, { recursive: true, force: true })
+  }
+
   logger.info('Generating reports')
   const { getAllProjects, getAllChecklists, getAllComplianceChecks, getAllAlerts, getAllResults, getAllTasks, getAllGithubOrganizationsByProjectsId, getAllGithubRepositories, getAllOSSFResults } = initializeStore(knex)
-  // @TODO: Run the queries in parallel
-  const projects = await getAllProjects()
-  const checklists = await getAllChecklists()
-  const checks = await getAllComplianceChecks()
-  const alerts = await getAllAlerts()
-  const results = await getAllResults()
-  const tasks = await getAllTasks()
-  const ossfScorecardResults = await getAllOSSFResults()
-  const githubRepos = await getAllGithubRepositories()
+  // Run the queries in parallel
+  const [
+    projects,
+    checklists,
+    checks,
+    alerts,
+    results,
+    tasks,
+    ossfScorecardResults,
+    githubRepos
+  ] = await Promise.all([
+    getAllProjects(),
+    getAllChecklists(),
+    getAllComplianceChecks(),
+    getAllAlerts(),
+    getAllResults(),
+    getAllTasks(),
+    getAllOSSFResults(),
+    getAllGithubRepositories()
+  ])
 
   // @TODO: Read the files in parallel
   const indexTemplate = await readFile(indexTemplatePath, 'utf8')
@@ -101,8 +118,9 @@ const generateReports = async (knex) => {
 
   // Save the index HTML file
   await writeFile('output/index.html', indexHtml)
+  logger.info('Reports generated successfully')
 }
 
 module.exports = {
-  generateReports
+  generateStaticReports
 }

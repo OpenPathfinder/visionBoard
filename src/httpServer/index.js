@@ -42,8 +42,9 @@ module.exports = () => ({
   start: async () => {
     const isDbConnected = await checkDatabaseConnection(knex)
     if (!isDbConnected) {
-      logger.error('Failed to connect to database')
-      process.exit(1)
+      const err = new Error('Failed to connect to database')
+      logger.error(err)
+      throw err
     }
     return server.listen(staticServer.port, () => {
       logger.info(`Server running at http://${staticServer.ip}:${staticServer.port}/`)
@@ -52,7 +53,9 @@ module.exports = () => ({
   },
   stop: async () => {
     await knex.destroy()
-    server.close()
+    await new Promise((resolve, reject) => {
+      server.close(err => (err ? reject(err) : resolve()))
+    })
     logger.info('Server stopped')
   }
 })

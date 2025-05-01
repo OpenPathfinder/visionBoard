@@ -8,14 +8,22 @@ function createApiRouter (knex, express) {
     res.json({ status: 'ok', timestamp: new Date().toISOString() })
   })
 
-  router.get('/generate-reports', async (req, res) => {
-    const timestamp = new Date().toISOString()
+  router.post('/generate-reports', async (req, res) => {
+    const startTs = new Date().toISOString()
     try {
       await generateStaticReports(knex, { clearPreviousReports: true })
-      res.json({ status: 'completed', timestamp })
+      res.status(202).json({
+        status: 'completed',
+        startedAt: startTs,
+        finishedAt: new Date().toISOString()
+      })
     } catch (error) {
       logger.error(error)
-      res.status(500).json({ status: 'failed', timestamp })
+      res.status(500).json({
+        status: 'failed',
+        startedAt: startTs,
+        finishedAt: new Date().toISOString()
+      })
     }
   })
   return router

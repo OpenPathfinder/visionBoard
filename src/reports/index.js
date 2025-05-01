@@ -46,15 +46,26 @@ const generateStaticReports = async (knex, options = { clearPreviousReports: fal
 
   logger.info('Generating reports')
   const { getAllProjects, getAllChecklists, getAllComplianceChecks, getAllAlerts, getAllResults, getAllTasks, getAllGithubOrganizationsByProjectsId, getAllGithubRepositories, getAllOSSFResults } = initializeStore(knex)
-  // @TODO: Run the queries in parallel
-  const projects = await getAllProjects()
-  const checklists = await getAllChecklists()
-  const checks = await getAllComplianceChecks()
-  const alerts = await getAllAlerts()
-  const results = await getAllResults()
-  const tasks = await getAllTasks()
-  const ossfScorecardResults = await getAllOSSFResults()
-  const githubRepos = await getAllGithubRepositories()
+  // Run the queries in parallel
+  const [
+    projects,
+    checklists,
+    checks,
+    alerts,
+    results,
+    tasks,
+    ossfScorecardResults,
+    githubRepos
+  ] = await Promise.all([
+    getAllProjects(),
+    getAllChecklists(),
+    getAllComplianceChecks(),
+    getAllAlerts(),
+    getAllResults(),
+    getAllTasks(),
+    getAllOSSFResults(),
+    getAllGithubRepositories()
+  ])
 
   // @TODO: Read the files in parallel
   const indexTemplate = await readFile(indexTemplatePath, 'utf8')

@@ -41,33 +41,41 @@ describe('HTTP Server API', () => {
     })
   })
 
-  describe('GET /api/v1/generate-reports', () => {
+  describe('POST /api/v1/generate-reports', () => {
     test('should return status completed when report generation succeeds', async () => {
       generateStaticReports.mockResolvedValueOnce()
 
-      const response = await app.get('/api/v1/generate-reports')
+      const response = await app.post('/api/v1/generate-reports')
 
       expect(generateStaticReports).toHaveBeenCalledWith(expect.anything(), { clearPreviousReports: true })
-      expect(response.status).toBe(200)
+      expect(response.status).toBe(202)
       expect(response.body).toHaveProperty('status', 'completed')
-      expect(response.body).toHaveProperty('timestamp')
+      expect(response.body).toHaveProperty('startedAt')
+      expect(response.body).toHaveProperty('finishedAt')
 
-      const timestamp = new Date(response.body.timestamp)
-      expect(timestamp.toISOString()).toBe(response.body.timestamp)
+      const startedAt = new Date(response.body.startedAt)
+      const finishedAt = new Date(response.body.finishedAt)
+      expect(startedAt.toISOString()).toBe(response.body.startedAt)
+      expect(finishedAt.toISOString()).toBe(response.body.finishedAt)
+      expect(finishedAt >= startedAt).toBe(true)
     })
 
     test('should return status failed when report generation fails', async () => {
       generateStaticReports.mockRejectedValueOnce(new Error('Report generation failed'))
 
-      const response = await app.get('/api/v1/generate-reports')
+      const response = await app.post('/api/v1/generate-reports')
 
       expect(generateStaticReports).toHaveBeenCalledWith(expect.anything(), { clearPreviousReports: true })
       expect(response.status).toBe(500)
       expect(response.body).toHaveProperty('status', 'failed')
-      expect(response.body).toHaveProperty('timestamp')
+      expect(response.body).toHaveProperty('startedAt')
+      expect(response.body).toHaveProperty('finishedAt')
 
-      const timestamp = new Date(response.body.timestamp)
-      expect(timestamp.toISOString()).toBe(response.body.timestamp)
+      const startedAt = new Date(response.body.startedAt)
+      const finishedAt = new Date(response.body.finishedAt)
+      expect(startedAt.toISOString()).toBe(response.body.startedAt)
+      expect(finishedAt.toISOString()).toBe(response.body.finishedAt)
+      expect(finishedAt >= startedAt).toBe(true)
     })
   })
 })

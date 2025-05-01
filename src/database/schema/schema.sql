@@ -302,6 +302,37 @@ ALTER SEQUENCE public.compliance_checks_tasks_id_seq OWNED BY public.compliance_
 
 
 --
+-- Name: github_organization_members; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.github_organization_members (
+    id integer NOT NULL,
+    github_organization_id integer NOT NULL,
+    github_user_id integer NOT NULL
+);
+
+
+--
+-- Name: github_organization_members_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.github_organization_members_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: github_organization_members_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.github_organization_members_id_seq OWNED BY public.github_organization_members.id;
+
+
+--
 -- Name: github_organizations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -477,6 +508,58 @@ CREATE SEQUENCE public.github_repositories_id_seq
 --
 
 ALTER SEQUENCE public.github_repositories_id_seq OWNED BY public.github_repositories.id;
+
+
+--
+-- Name: github_users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.github_users (
+    id integer NOT NULL,
+    name character varying(255),
+    email character varying(255),
+    login character varying(255) NOT NULL,
+    github_user_id character varying(255) NOT NULL,
+    node_id character varying(255) NOT NULL,
+    avatar_url character varying(255),
+    gravatar_id character varying(255),
+    url character varying(255),
+    html_url character varying(255),
+    followers_url character varying(255),
+    following_url character varying(255),
+    starred_url character varying(255),
+    subscriptions_url character varying(255),
+    organizations_url character varying(255),
+    repos_url character varying(255),
+    events_url character varying(255),
+    received_events_url character varying(255),
+    type character varying(255),
+    site_admin boolean NOT NULL,
+    starred_at character varying(255),
+    user_view_type character varying(255),
+    created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+--
+-- Name: github_users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.github_users_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: github_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.github_users_id_seq OWNED BY public.github_users.id;
 
 
 --
@@ -880,6 +963,13 @@ ALTER TABLE ONLY public.compliance_checks_tasks ALTER COLUMN id SET DEFAULT next
 
 
 --
+-- Name: github_organization_members id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.github_organization_members ALTER COLUMN id SET DEFAULT nextval('public.github_organization_members_id_seq'::regclass);
+
+
+--
 -- Name: github_organizations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -891,6 +981,13 @@ ALTER TABLE ONLY public.github_organizations ALTER COLUMN id SET DEFAULT nextval
 --
 
 ALTER TABLE ONLY public.github_repositories ALTER COLUMN id SET DEFAULT nextval('public.github_repositories_id_seq'::regclass);
+
+
+--
+-- Name: github_users id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.github_users ALTER COLUMN id SET DEFAULT nextval('public.github_users_id_seq'::regclass);
 
 
 --
@@ -1007,6 +1104,14 @@ ALTER TABLE ONLY public.compliance_checks_tasks
 
 
 --
+-- Name: github_organization_members github_organization_members_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.github_organization_members
+    ADD CONSTRAINT github_organization_members_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: github_organizations github_organizations_github_org_id_unique; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1052,6 +1157,22 @@ ALTER TABLE ONLY public.github_repositories
 
 ALTER TABLE ONLY public.github_repositories
     ADD CONSTRAINT github_repositories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: github_users github_users_github_user_id_unique; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.github_users
+    ADD CONSTRAINT github_users_github_user_id_unique UNIQUE (github_user_id);
+
+
+--
+-- Name: github_users github_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.github_users
+    ADD CONSTRAINT github_users_pkey PRIMARY KEY (id);
 
 
 --
@@ -1174,6 +1295,13 @@ CREATE TRIGGER set_updated_at_github_repositories BEFORE UPDATE ON public.github
 
 
 --
+-- Name: github_users set_updated_at_github_users; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER set_updated_at_github_users BEFORE UPDATE ON public.github_users FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
+
+
+--
 -- Name: ossf_scorecard_results set_updated_at_ossf_scorecard_results; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -1263,6 +1391,22 @@ ALTER TABLE ONLY public.compliance_checks_tasks
 
 ALTER TABLE ONLY public.compliance_checks_tasks
     ADD CONSTRAINT compliance_checks_tasks_project_id_foreign FOREIGN KEY (project_id) REFERENCES public.projects(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: github_organization_members github_organization_members_github_organization_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.github_organization_members
+    ADD CONSTRAINT github_organization_members_github_organization_id_foreign FOREIGN KEY (github_organization_id) REFERENCES public.github_organizations(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: github_organization_members github_organization_members_github_user_id_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.github_organization_members
+    ADD CONSTRAINT github_organization_members_github_user_id_foreign FOREIGN KEY (github_user_id) REFERENCES public.github_users(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

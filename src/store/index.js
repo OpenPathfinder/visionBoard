@@ -100,6 +100,25 @@ const upsertSoftwareDesignTraining = (knex) => (data) => upsertRecord({
   data
 })
 
+const upsertGithubMembers = (knex) => (data) => upsertRecord({
+  table: 'github_users',
+  knex,
+  uniqueCriteria: {
+    github_user_id: data.github_user_id
+  },
+  data
+})
+
+const upsertGithubOrganizationMembers = (knex) => (data) => upsertRecord({
+  table: 'github_organization_members',
+  knex,
+  uniqueCriteria: {
+    github_user_id: data.github_user_id,
+    github_organization_id: data.github_organization_id
+  },
+  data
+})
+
 const upsertOwaspTop10Training = (knex) => (data) => upsertRecord({
   table: 'owasp_top10_training',
   knex,
@@ -203,13 +222,17 @@ const initializeStore = (knex) => {
     addProject: addProject(knex),
     addGithubOrganization: addGithubOrganization(knex),
     updateGithubOrganization: updateGithubOrganization(knex),
+    upsertGithubOrganizationMembers: upsertGithubOrganizationMembers(knex),
     upsertGithubRepository: upsertGithubRepository(knex),
+    upsertGithubMembers: upsertGithubMembers(knex),
     getAllGithubOrganizations: () => getAll('github_organizations'),
     getAllComplianceChecks: () => getAll('compliance_checks'),
     getAllProjects: () => getAll('projects'),
     getAllSSoftwareDesignTrainings: () => getAll('software_design_training'),
     getAllOwaspTop10Trainings: () => getAll('owasp_top10_training'),
     getAllGithubRepositories: () => getAll('github_repositories'),
+    getAllGithubUsers: () => getAll('github_users'),
+    getAllGithubOrganizationMembers: () => getAll('github_organization_members'),
     getAllGithubRepositoriesAndOrganizationByProjectId: (organizationId) => getAllGithubRepositoriesAndOrganizationByProjectId(knex, organizationId),
     getAllChecklists: () => getAll('compliance_checklists'),
     getAllResults: () => getAll('compliance_checks_results'),

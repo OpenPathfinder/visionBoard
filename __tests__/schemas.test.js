@@ -1,5 +1,5 @@
-const { sampleGithubOrg, sampleGithubListOrgRepos, sampleGithubRepository, sampleOSSFScorecardResult, sampleBulkImportFileContent } = require('../__fixtures__')
-const { validateGithubOrg, validateGithubListOrgRepos, validateGithubRepository, validateOSSFResult, validateBulkImport } = require('../src/schemas')
+const { sampleGithubOrg, sampleGithubListOrgRepos, sampleGithubRepository, sampleOSSFScorecardResult, sampleBulkImportFileContent, sampleGithubOrgMembers } = require('../__fixtures__')
+const { validateGithubOrg, validateGithubListOrgRepos, validateGithubRepository, validateOSSFResult, validateBulkImport, validateGithubListOrgMembers } = require('../src/schemas')
 
 describe('schemas', () => {
   describe('validateGithubOrg', () => {
@@ -38,6 +38,29 @@ describe('schemas', () => {
       expect(() => validateGithubListOrgRepos(invalidData)).toThrow()
     })
   })
+
+  describe('validateGithubListOrgMembers', () => {
+    test('Should not throw an error with valid data', () => {
+      expect(() => validateGithubListOrgMembers(sampleGithubOrgMembers)).not.toThrow()
+    })
+
+    test('Should not throw an error with additional data', () => {
+      const additionalData = [
+        ...sampleGithubOrgMembers,
+        { ...sampleGithubOrgMembers[0], additionalKey: 'value' }
+      ]
+      expect(() => validateGithubListOrgMembers(additionalData)).not.toThrow()
+    })
+
+    test('Should throw an error with invalid data', () => {
+      const invalidData = [
+        ...sampleGithubOrgMembers,
+        { ...sampleGithubOrgMembers[0], id: '123' }
+      ]
+      expect(() => validateGithubListOrgMembers(invalidData)).toThrow()
+    })
+  })
+
   describe('validateGithubRepository', () => {
     test('Should not throw an error with valid data', () => {
       expect(() => validateGithubRepository(sampleGithubRepository)).not.toThrow()

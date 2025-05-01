@@ -1,4 +1,4 @@
-const { validateGithubUrl, ensureGithubToken, groupArrayItemsByCriteria, getSeverityFromPriorityGroup, isDateWithinPolicy, redactSensitiveData, generatePercentage } = require('../src/utils/index')
+const { validateGithubUrl, ensureGithubToken, groupArrayItemsByCriteria, getSeverityFromPriorityGroup, isDateWithinPolicy, redactSensitiveData, generatePercentage, processEntities } = require('../src/utils/index')
 
 describe('ensureGithubToken', () => {
   let originalGithubToken
@@ -154,5 +154,437 @@ describe('redactSensitiveData', () => {
   it('Should return the same string if no sensitive data is found', () => {
     const input = 'This is a normal string'
     expect(redactSensitiveData(input)).toBe(input)
+  })
+})
+
+describe('processEntities', () => {
+  it('should process entities with relationships', () => {
+    const data = [
+      {
+        org_id: 1,
+        org_name: 'Org1',
+        repo_id: 1,
+        repo_name: 'Repo1',
+        ossf_id: 1,
+        ossf_score: 'A'
+      },
+      {
+        org_id: 1,
+        org_name: 'Org1',
+        repo_id: 2,
+        repo_name: 'Repo2',
+        ossf_id: 2,
+        ossf_score: 'B'
+      },
+      {
+        org_id: 2,
+        org_name: 'Org2',
+        repo_id: 3,
+        repo_name: 'Repo3',
+        ossf_id: 3,
+        ossf_score: 'C'
+      }
+    ]
+    const entityConfig = {
+      idKey: 'org_id',
+      excludedKeys: ['repo_id'],
+      relationships: [
+        {
+          name: 'repositories',
+          relatedIdKey: 'repo_id',
+          excludedKeys: ['org_id', 'repo_id']
+        }
+      ]
+    }
+    const expected = [
+      {
+        org_id: 1,
+        org_name: 'Org1',
+        ossf_id: 1,
+        ossf_score: 'A',
+        repo_name: 'Repo1',
+        repositories: [
+          {
+            org_name: 'Org1',
+            ossf_id: 1,
+            ossf_score: 'A',
+            repo_name: 'Repo1'
+          },
+          {
+            org_name: 'Org1',
+            repo_name: 'Repo2',
+            ossf_id: 2,
+            ossf_score: 'B'
+          }
+        ]
+      },
+      {
+        org_id: 2,
+        org_name: 'Org2',
+        ossf_id: 3,
+        ossf_score: 'C',
+        repo_name: 'Repo3',
+        repositories: [
+          {
+            org_name: 'Org2',
+            repo_name: 'Repo3',
+            ossf_id: 3,
+            ossf_score: 'C'
+          }
+        ]
+      }
+    ]
+    expect(processEntities(data, entityConfig)).toEqual(expected)
+  })
+
+  it('should process entities without relationships', () => {
+    const data = [
+      {
+        org_id: 1,
+        org_name: 'Org1',
+        repo_id: 1,
+        repo_name: 'Repo1',
+        ossf_id: 1,
+        ossf_score: 'A'
+      },
+      {
+        org_id: 2,
+        org_name: 'Org2',
+        repo_id: 2,
+        repo_name: 'Repo2',
+        ossf_id: 2,
+        ossf_score: 'B'
+      },
+      {
+        org_id: 3,
+        org_name: 'Org1',
+        repo_id: 3,
+        repo_name: 'Repo3',
+        ossf_id: 3,
+        ossf_score: 'A'
+      }
+    ]
+    const entityConfig = {
+      idKey: 'org_id',
+      excludedKeys: ['repo_id'],
+      relationships: []
+    }
+    const expected = [
+      {
+        org_id: 1,
+        org_name: 'Org1',
+        ossf_id: 1,
+        ossf_score: 'A',
+        repo_name: 'Repo1'
+      },
+      {
+        org_id: 2,
+        org_name: 'Org2',
+        ossf_id: 2,
+        ossf_score: 'B',
+        repo_name: 'Repo2'
+      }, {
+        org_id: 3,
+        org_name: 'Org1',
+        repo_name: 'Repo3',
+        ossf_id: 3,
+        ossf_score: 'A'
+      }
+    ]
+    expect(processEntities(data, entityConfig)).toEqual(expected)
+  })
+
+  it('should process entities without some properties', () => {
+    const data = [
+      {
+        org_id: 1,
+        org_name: 'Org1',
+        repo_id: 1,
+        repo_name: 'Repo1'
+      },
+      {
+        org_id: 1,
+        org_name: 'Org1',
+        repo_id: 2,
+        repo_name: 'Repo2',
+        ossf_score: 'B'
+      },
+      {
+        org_id: 2,
+        org_name: 'Org2',
+        repo_id: 3,
+        repo_name: 'Repo3',
+        ossf_id: 3,
+        ossf_score: 'C'
+      }
+    ]
+    const entityConfig = {
+      idKey: 'org_id',
+      excludedKeys: ['repo_id'],
+      relationships: [
+        {
+          name: 'repositories',
+          relatedIdKey: 'repo_id',
+          excludedKeys: ['org_id', 'repo_id']
+        }
+      ]
+    }
+    const expected = [
+      {
+        org_id: 1,
+        org_name: 'Org1',
+        repo_name: 'Repo1',
+        repositories: [
+          {
+            org_name: 'Org1',
+            repo_name: 'Repo1'
+          },
+          {
+            org_name: 'Org1',
+            repo_name: 'Repo2',
+            ossf_score: 'B'
+          }
+        ]
+      },
+      {
+        org_id: 2,
+        org_name: 'Org2',
+        ossf_id: 3,
+        ossf_score: 'C',
+        repo_name: 'Repo3',
+        repositories: [
+          {
+            org_name: 'Org2',
+            repo_name: 'Repo3',
+            ossf_id: 3,
+            ossf_score: 'C'
+          }
+        ]
+      }
+    ]
+    expect(processEntities(data, entityConfig)).toEqual(expected)
+  })
+
+  it('should process entities with nested relationships', () => {
+    const data = [
+      {
+        org_id: 1,
+        org_name: 'Org1',
+        repo_id: 1,
+        repo_name: 'Repo1',
+        ossf_id: 1,
+        ossf_score: 'A',
+        rule_id: 1,
+        rule_name: 'Rule1'
+      },
+      {
+        org_id: 1,
+        org_name: 'Org1',
+        repo_id: 2,
+        repo_name: 'Repo2',
+        ossf_id: 2,
+        ossf_score: 'B',
+        rule_id: 2,
+        rule_name: 'Rule2'
+      },
+      {
+        org_id: 2,
+        org_name: 'Org2',
+        repo_id: 3,
+        repo_name: 'Repo3',
+        ossf_id: 3,
+        ossf_score: 'C',
+        rule_id: 3,
+        rule_name: 'Rule3'
+      }
+    ]
+    const entityConfig = {
+      idKey: 'org_id',
+      excludedKeys: ['repo_id'],
+      relationships: [
+        {
+          name: 'repositories',
+          relatedIdKey: 'repo_id',
+          excludedKeys: ['org_id', 'repo_id'],
+          relationship: {
+            name: 'rules',
+            relatedIdKey: 'rule_id',
+            excludedKeys: ['org_id', 'repo_id', 'rule_id']
+          }
+        }
+      ]
+    }
+    const expected = [
+      {
+        org_id: 1,
+        org_name: 'Org1',
+        ossf_id: 1,
+        ossf_score: 'A',
+        repo_name: 'Repo1',
+        repositories: [
+          {
+            org_name: 'Org1',
+            ossf_id: 1,
+            ossf_score: 'A',
+            repo_name: 'Repo1',
+            rule_id: 1,
+            rule_name: 'Rule1',
+            rules:
+            {
+              org_name: 'Org1',
+              ossf_id: 1,
+              ossf_score: 'A',
+              repo_name: 'Repo1',
+              rule_name: 'Rule1'
+            }
+
+          },
+          {
+            org_name: 'Org1',
+            repo_name: 'Repo2',
+            rule_name: 'Rule2',
+            rule_id: 2,
+            ossf_score: 'B',
+            ossf_id: 2,
+            rules: {
+              org_name: 'Org1',
+              ossf_id: 2,
+              ossf_score: 'B',
+              repo_name: 'Repo2',
+              rule_name: 'Rule2'
+            }
+          }
+        ],
+        rule_id: 1,
+        rule_name: 'Rule1'
+      },
+      {
+        org_id: 2,
+        org_name: 'Org2',
+        ossf_id: 3,
+        ossf_score: 'C',
+        repo_name: 'Repo3',
+        repositories: [
+          {
+            org_name: 'Org2',
+            repo_name: 'Repo3',
+            ossf_id: 3,
+            ossf_score: 'C',
+            rule_id: 3,
+            rule_name: 'Rule3',
+            rules: {
+              org_name: 'Org2',
+              repo_name: 'Repo3',
+              ossf_id: 3,
+              ossf_score: 'C',
+              rule_name: 'Rule3'
+            }
+          }
+        ],
+        rule_id: 3,
+        rule_name: 'Rule3'
+      }
+    ]
+    expect(processEntities(data, entityConfig)).toEqual(expected)
+  })
+
+  it('should process entities with nested relationships without some props', () => {
+    const data = [
+      {
+        org_id: 1,
+        org_name: 'Org1',
+        repo_id: 1,
+        repo_name: 'Repo1',
+        ossf_id: 1,
+        ossf_score: 'A',
+        rule_name: 'Rule1'
+      },
+      {
+        org_id: 1,
+        org_name: 'Org1',
+        repo_id: 2,
+        repo_name: 'Repo2',
+        ossf_id: 2,
+        ossf_score: 'B'
+      },
+      {
+        org_id: 2,
+        org_name: 'Org2',
+        repo_id: 3,
+        repo_name: 'Repo3',
+        ossf_id: 3,
+        ossf_score: 'C',
+        rule_id: 3,
+        rule_name: 'Rule3'
+      }
+    ]
+    const entityConfig = {
+      idKey: 'org_id',
+      excludedKeys: ['repo_id'],
+      relationships: [
+        {
+          name: 'repositories',
+          relatedIdKey: 'repo_id',
+          excludedKeys: ['org_id', 'repo_id'],
+          relationship: {
+            name: 'rules',
+            relatedIdKey: 'rule_id',
+            excludedKeys: ['org_id', 'repo_id', 'rule_id']
+          }
+        }
+      ]
+    }
+    const expected = [
+      {
+        org_id: 1,
+        org_name: 'Org1',
+        ossf_id: 1,
+        ossf_score: 'A',
+        repo_name: 'Repo1',
+        repositories: [
+          {
+            org_name: 'Org1',
+            ossf_id: 1,
+            ossf_score: 'A',
+            repo_name: 'Repo1',
+            rule_name: 'Rule1'
+          },
+          {
+            org_name: 'Org1',
+            repo_name: 'Repo2',
+            ossf_score: 'B',
+            ossf_id: 2
+          }
+        ],
+        rule_name: 'Rule1'
+      },
+      {
+        org_id: 2,
+        org_name: 'Org2',
+        ossf_id: 3,
+        ossf_score: 'C',
+        repo_name: 'Repo3',
+        repositories: [
+          {
+            org_name: 'Org2',
+            repo_name: 'Repo3',
+            ossf_id: 3,
+            ossf_score: 'C',
+            rule_id: 3,
+            rule_name: 'Rule3',
+            rules: {
+              org_name: 'Org2',
+              repo_name: 'Repo3',
+              ossf_id: 3,
+              ossf_score: 'C',
+              rule_name: 'Rule3'
+            }
+          }
+        ],
+        rule_id: 3,
+        rule_name: 'Rule3'
+      }
+    ]
+    expect(processEntities(data, entityConfig)).toEqual(expected)
   })
 })

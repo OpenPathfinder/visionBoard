@@ -18,7 +18,8 @@
     "db:generate-schema": "docker-compose run schema-dump",
     "db:export-checks": "node scripts/export-checks.js",
     "db:export-checklists": "node scripts/export-checklists.js",
-    "db:seed": "knex seed:run"
+    "db:seed": "knex seed:run",
+    "start": "node server.js"
   },
   "keywords": [
     "security",

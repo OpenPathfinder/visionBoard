@@ -22,10 +22,6 @@ const commandList = [{
   description: 'Upsert the OSSF Scorecard scoring by running and checking every repository in the database.',
   workflow: upsertOSSFScorecardAnalysis
 }, {
-  name: 'show-reports',
-  description: 'Starts a http server that shows all the files and folders in the output directory.',
-  workflow: require('../httpServer')
-}, {
   name: 'generate-reports',
   description: 'Generate the reports for the stored data.',
   workflow: generateStaticReports

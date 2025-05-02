@@ -7,7 +7,7 @@ const { getConfig } = require('../config')
 const { logger, checkDatabaseConnection } = require('../utils')
 const { createApiRouter } = require('./routers/apiV1')
 
-const publicPath = join(process.cwd(), 'output')
+const publicPath = join(process.cwd(), 'src', 'reports', 'assets')
 const { staticServer, dbSettings } = getConfig()
 const knex = require('knex')(dbSettings)
 

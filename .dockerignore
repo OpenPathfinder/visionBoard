@@ -134,3 +134,5 @@ dist
 IGNORE/
 output
 .vscode
+test-results/
+playwright-report

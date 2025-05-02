@@ -1,8 +1,11 @@
 <!-- Header -->
-<header class="bg-zinc-950 text-white">
+<% function resolveLink(path) { return typeof getLink !== 'function' ? path : getLink(path); } %> 
+<header class="bg-zinc-950 text-white" role="banner">
   <div class="max-w-7xl mx-auto px-4 py-4 flex items-center">
-    <img src="<%= typeof getLink !== 'function' ? '/assets/logo.png' : getLink('/assets/logo.png') %>" alt="VisionBoard Logo" class="h-8 mr-3">
-    <a href="<%= typeof getLink !== 'function' ? '/' : getLink('/') %>" class="text-amber-400 text-xl font-semibold">VisionBoard Reports</a>
+    <img src="<%= resolveLink('/assets/logo.png') %>" alt="VisionBoard Logo" class="h-8 mr-3">
+    <nav role="navigation">
+      <a href="<%= resolveLink('/') %>" class="text-amber-400 text-xl font-semibold">VisionBoard Reports</a>
+    </nav>
   </div>
 </header>
   

@@ -1,6 +1,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VisionBoard Reports</title>
-<link rel="icon" href="<%= typeof getLink !== 'function' ? '/assets/favicon.ico' : getLink('/assets/favicon.ico') %>" type="image/x-icon">
-<link rel="shortcut icon" href="<%= typeof getLink !== 'function' ? '/assets/favicon.ico' : getLink('/assets/favicon.ico') %>" type="image/x-icon">
-<script src="https://cdn.tailwindcss.com"></script>
+<% function resolveLink(path) { return typeof getLink !== 'function' ? path : getLink(path); } %>
+<link rel="icon" href="<%= resolveLink('/assets/favicon.ico') %>" type="image/x-icon">
+<link rel="shortcut icon" href="<%= resolveLink('/assets/favicon.ico') %>" type="image/x-icon">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4" integrity="sha384-V3xw6usU0B+HmfEzzj0GvGcgrXrAE7QUZrnCoH+uVYtM/c3olucIodH4fLTKRmBr" crossorigin="anonymous"></script>

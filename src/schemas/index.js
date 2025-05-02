@@ -5,8 +5,12 @@ const githubListOrgReposSchema = require('./githubListOrgRepos.json')
 const githubRepositorySchema = require('./githubRepository.json')
 const ossfScorecardResultSchema = require('./ossfScorecardResult.json')
 const bulkImportSchema = require('./bulkImport.json')
+const projectDataSchema = require('./projectData.json')
+const indexDataSchema = require('./indexData.json')
 
-const ajv = new Ajv()
+const ajv = new Ajv({
+  allowUnionTypes: true // Allow union types for fields like Date/string
+})
 addFormats(ajv)
 
 const getReadableErrors = validate => validate.errors.map((error) => `[ERROR: ${error.keyword}]${error.schemaPath}: ${error.message}`).join('\n')
@@ -61,10 +65,32 @@ const validateBulkImport = (data) => {
   return null
 }
 
+const validateProjectData = (data) => {
+  const validate = ajv.compile(projectDataSchema)
+  const valid = validate(data)
+  if (!valid) {
+    const readableErrors = getReadableErrors(validate)
+    throw new Error(`Error when validating project data: ${readableErrors}`)
+  }
+  return null
+}
+
+const validateIndexData = (data) => {
+  const validate = ajv.compile(indexDataSchema)
+  const valid = validate(data)
+  if (!valid) {
+    const readableErrors = getReadableErrors(validate)
+    throw new Error(`Error when validating index data: ${readableErrors}`)
+  }
+  return null
+}
+
 module.exports = {
   validateGithubOrg,
   validateGithubListOrgRepos,
   validateGithubRepository,
   validateOSSFResult,
-  validateBulkImport
+  validateBulkImport,
+  validateProjectData,
+  validateIndexData
 }

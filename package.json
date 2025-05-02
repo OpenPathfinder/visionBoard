@@ -55,7 +55,6 @@
     "pg": "8.13.1",
     "pino": "9.5.0",
     "pino-pretty": "13.0.0",
-    "serve-index": "1.9.1",
     "serve-static": "1.16.2",
     "validator": "13.12.0"
   },

@@ -1,12 +1,12 @@
 const request = require('supertest')
-const { generateStaticReports } = require('../src/reports')
-const serverModule = require('../src/httpServer')
+const { generateStaticReports } = require('../../src/reports')
+const serverModule = require('../../src/httpServer')
 let server
 let serverStop
 let app
 
 // Mocks
-jest.mock('../src/reports', () => ({
+jest.mock('../../src/reports', () => ({
   generateStaticReports: jest.fn()
 }))
 
@@ -27,7 +27,7 @@ beforeEach(() => {
   jest.clearAllMocks()
 })
 
-describe('HTTP Server API', () => {
+describe('HTTP Server API V1', () => {
   describe('GET /api/v1/__health', () => {
     test('should return status ok', async () => {
       const response = await app.get('/api/v1/__health')

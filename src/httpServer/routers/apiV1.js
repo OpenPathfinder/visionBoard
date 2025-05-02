@@ -1,5 +1,5 @@
-const { generateStaticReports } = require('../reports')
-const { logger } = require('../utils')
+const { generateStaticReports } = require('../../reports')
+const { logger } = require('../../utils')
 
 function createApiRouter (knex, express) {
   const router = express.Router()

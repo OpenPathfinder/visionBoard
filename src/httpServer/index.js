@@ -1,30 +1,36 @@
 const express = require('express')
 const http = require('http')
 const serveStatic = require('serve-static')
-const serveIndex = require('serve-index')
 const { join } = require('path')
 const { getConfig } = require('../config')
 const { logger, checkDatabaseConnection } = require('../utils')
-const { createApiRouter } = require('./apiV1')
-
-const publicPath = join(process.cwd(), 'output')
+const { createApiRouter } = require('./routers/apiV1')
+const { createWebRouter } = require('./routers/website')
 const { staticServer, dbSettings } = getConfig()
 const knex = require('knex')(dbSettings)
 
 // Create Express app
 const app = express()
+const basePath = join(__dirname, '..', 'reports')
+const publicPath = join(basePath, 'assets')
+const templatePath = join(basePath, 'templates')
+
+// Middleware
+app.set('view engine', 'ejs')
+app.set('views', templatePath)
 
 // API Routes
 app.use('/api/v1', createApiRouter(knex, express))
 
-// Static file serving
-app.use(serveStatic(publicPath, {
-  index: false,
-  dotfiles: 'deny'
-}))
+// Web Routes
+app.use('/', createWebRouter(knex, express))
 
 // Directory listing for static files
-app.use(serveIndex(publicPath, { icons: true }))
+app.use('/assets', serveStatic(publicPath, {
+  index: false,
+  dotfiles: 'deny',
+  icons: true
+}))
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -37,6 +43,9 @@ app.use((err, req, res, next) => {
 
 // Create HTTP server
 const server = http.createServer(app)
+
+// Track all active connections
+const connections = new Set()
 
 module.exports = () => ({
   start: async () => {
@@ -54,19 +63,66 @@ module.exports = () => ({
         resolve()
       })
     })
+
+    // Track connections
+    server.on('connection', connection => {
+      connections.add(connection)
+      connection.on('close', () => {
+        connections.delete(connection)
+      })
+    })
     return server
   },
   stop: async () => {
-    await knex.destroy()
-    await new Promise((resolve, reject) => {
-      server.close(err => {
-        if (err) {
-          logger.error('Failed to stop server', { err })
-          return reject(err)
+    logger.info('Starting server shutdown sequence')
+    try {
+      // Check if server is listening before attempting to close
+      if (!server.listening) {
+        logger.info('Server was not listening, skipping server.close()')
+      } else {
+        logger.info('Closing HTTP server - stop accepting new connections')
+        // Terminate all existing connections if needed
+        if (connections.size > 0) {
+          logger.info(`${connections.size} active connections will be allowed to complete`)
         }
-        logger.info('Server stopped')
-        resolve()
-      })
-    })
+
+        // First, stop accepting new connections and wait for existing ones to complete
+        await new Promise((resolve, reject) => {
+          // Add a timeout to prevent hanging indefinitely
+          const timeout = setTimeout(() => {
+            logger.warn('Server close timed out after 5 seconds, forcing active connections to close')
+            // Force close any remaining connections
+            if (connections.size > 0) {
+              logger.info(`Forcibly closing ${connections.size} remaining connections`)
+              for (const connection of connections) {
+                connection.destroy()
+              }
+              connections.clear()
+            }
+            resolve()
+          }, 5000)
+
+          server.close(err => {
+            clearTimeout(timeout)
+            if (err) {
+              logger.error('Failed to stop server', { err })
+              return reject(err)
+            }
+            logger.info('HTTP server closed successfully')
+            resolve()
+          })
+        })
+      }
+
+      // Only after the server is closed, close database connections
+      logger.info('Closing database connections')
+      await knex.destroy()
+      logger.info('Database connections closed')
+
+      logger.info('Server shutdown complete')
+    } catch (error) {
+      logger.error('Error during server shutdown', { error })
+      throw error
+    }
   }
 })

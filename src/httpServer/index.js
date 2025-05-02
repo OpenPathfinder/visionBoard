@@ -6,19 +6,27 @@ const { join } = require('path')
 const { getConfig } = require('../config')
 const { logger, checkDatabaseConnection } = require('../utils')
 const { createApiRouter } = require('./routers/apiV1')
-
+const { createWebRouter } = require('./routers/website')
 const publicPath = join(process.cwd(), 'src', 'reports', 'assets')
 const { staticServer, dbSettings } = getConfig()
 const knex = require('knex')(dbSettings)
 
 // Create Express app
 const app = express()
+const templatePath = join(process.cwd(), 'src', 'reports', 'templates')
+
+// Middleware
+app.set('view engine', 'ejs')
+app.set('views', templatePath)
 
 // API Routes
 app.use('/api/v1', createApiRouter(knex, express))
 
+// Web Routes
+app.use('/', createWebRouter(knex, express))
+
 // Static file serving
-app.use(serveStatic(publicPath, {
+app.use('/assets', serveStatic(publicPath, {
   index: false,
   dotfiles: 'deny'
 }))

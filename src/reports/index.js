@@ -3,6 +3,7 @@ const ejs = require('ejs')
 const { mkdir, readdir, copyFile, readFile, writeFile, rm } = require('node:fs').promises
 const { join } = require('path')
 const { initializeStore } = require('../store')
+const { validateProjectData, validateIndexData } = require('../schemas')
 
 const indexTemplatePath = join(process.cwd(), 'src', 'reports', 'templates', 'index.ejs')
 const projectTemplatePath = join(process.cwd(), 'src', 'reports', 'templates', 'project.ejs')
@@ -39,37 +40,71 @@ const copyFolder = async (from, to) => {
 
 const collectIndexData = async (knex) => {
   const { getAllProjects, getAllChecklists, getAllComplianceChecks } = initializeStore(knex)
-  const projects = await getAllProjects()
-  const checklists = await getAllChecklists()
-  const checks = await getAllComplianceChecks()
-  return { projects, checklists, checks, getLink: internalLinkBuilder('server') }
+  try {
+    const [projects, checklists, checks] = await Promise.all([
+      getAllProjects(),
+      getAllChecklists(),
+      getAllComplianceChecks()
+    ])
+    const getLink = internalLinkBuilder('server')
+
+    // Create the data object
+    const data = { projects, checklists, checks, getLink }
+
+    // Validate the data against the schema
+    validateIndexData(data)
+
+    return data
+  } catch (error) {
+    logger.error(`Error collecting index data: ${error.message}`)
+    throw error
+  }
 }
 
 // @TODO: use new store functions to collect project data individually more accurately and avoid loops
 const collectProjectData = async (knex, projectId) => {
   const { getAllComplianceChecks, getProjectById, getAllGithubRepositories, getAllOSSFResults, getAllAlerts, getAllResults, getAllTasks, getAllGithubOrganizationsByProjectsId } = initializeStore(knex)
-  const checks = await getAllComplianceChecks()
-  const project = await getProjectById(projectId)
-  const ossfScorecardResults = await getAllOSSFResults()
-  const alerts = await getAllAlerts()
-  const results = await getAllResults()
-  const tasks = await getAllTasks()
-  const githubRepos = await getAllGithubRepositories()
-  const githubOrgs = await getAllGithubOrganizationsByProjectsId([projectId])
-  const githubOrgsIds = githubOrgs.map(org => org.id)
-  const githubReposInScope = githubRepos.filter(repo => githubOrgsIds.includes(repo.github_organization_id))
-  const githubReposInScopeIds = githubReposInScope.map(repo => repo.id)
+  try {
+    const project = await getProjectById(projectId)
+    if (!project) {
+      throw new Error(`Project not found: ${projectId}`)
+    }
+    const [checks, ossfScorecardResults, alerts, results, tasks, githubRepos, githubOrgs] = await Promise.all([
+      getAllComplianceChecks(),
+      getAllOSSFResults(),
+      getAllAlerts(),
+      getAllResults(),
+      getAllTasks(),
+      getAllGithubRepositories(),
+      getAllGithubOrganizationsByProjectsId([projectId])
+    ])
 
-  return {
-    project,
-    checks,
-    alerts: alerts.filter(alert => alert.project_id === project.id),
-    results: results.filter(result => result.project_id === project.id),
-    tasks: tasks.filter(task => task.project_id === project.id),
-    githubOrgs,
-    githubRepos: githubReposInScope,
-    ossfScorecardResults: ossfScorecardResults.filter(ossfResult => githubReposInScopeIds.includes(ossfResult.github_repository_id)),
-    getLink: internalLinkBuilder('server', project)
+    // Process the data
+    const githubOrgsIds = githubOrgs.map(org => org.id)
+    const githubReposInScope = githubRepos.filter(repo => githubOrgsIds.includes(repo.github_organization_id))
+    const githubReposInScopeIds = githubReposInScope.map(repo => repo.id)
+    const getLink = internalLinkBuilder('server', project)
+
+    // Create the data object
+    const data = {
+      project,
+      checks,
+      alerts: alerts.filter(alert => alert.project_id === project.id),
+      results: results.filter(result => result.project_id === project.id),
+      tasks: tasks.filter(task => task.project_id === project.id),
+      githubOrgs,
+      githubRepos: githubReposInScope,
+      ossfScorecardResults: ossfScorecardResults.filter(ossfResult => githubReposInScopeIds.includes(ossfResult.github_repository_id)),
+      getLink
+    }
+
+    // Validate the data against the schema
+    validateProjectData(data)
+
+    return data
+  } catch (error) {
+    logger.error(`Error collecting project data: ${error.message}`)
+    throw error
   }
 }
 
@@ -117,10 +152,11 @@ const generateStaticReports = async (knex, options = { clearPreviousReports: fal
     getAllGithubRepositories()
   ])
 
-  // @TODO: Read the files in parallel
-  const indexTemplate = await readFile(indexTemplatePath, 'utf8')
-  const projectTemplate = await readFile(projectTemplatePath, 'utf8')
-  await mkdir(join(destinationFolder, 'projects'), { recursive: true })
+  const [indexTemplate, projectTemplate] = await Promise.all([
+    readFile(indexTemplatePath, 'utf8'),
+    readFile(projectTemplatePath, 'utf8')
+  ])
+  await mkdir(destinationFolder, { recursive: true })
 
   // Collecting data from the database
   const indexData = {
@@ -130,6 +166,9 @@ const generateStaticReports = async (knex, options = { clearPreviousReports: fal
     getLink: internalLinkBuilder('static')
   }
 
+  // Validate index data
+  validateIndexData(indexData)
+
   const projectsData = { }
 
   for (const project of projects) {
@@ -138,7 +177,7 @@ const generateStaticReports = async (knex, options = { clearPreviousReports: fal
     const githubReposInScope = githubRepos.filter(repo => githubOrgsIds.includes(repo.github_organization_id))
     const githubReposInScopeIds = githubReposInScope.map(repo => repo.id)
 
-    projectsData[project.name] = {
+    const projectData = {
       project,
       checks,
       alerts: alerts.filter(alert => alert.project_id === project.id),
@@ -149,6 +188,11 @@ const generateStaticReports = async (knex, options = { clearPreviousReports: fal
       ossfScorecardResults: ossfScorecardResults.filter(ossfResult => githubReposInScopeIds.includes(ossfResult.github_repository_id)),
       getLink: internalLinkBuilder('static')
     }
+
+    // Validate each project's data
+    validateProjectData(projectData)
+
+    projectsData[project.name] = projectData
 
     // Populate the project HTML template
     const projectHtml = ejs.render(projectTemplate, projectsData[project.name], {
@@ -162,11 +206,10 @@ const generateStaticReports = async (knex, options = { clearPreviousReports: fal
     }
   }
 
-  // @TODO: Validate against JSON Schemas
-
-  // @TODO: Save the files in parallel
-  await writeFile('output/index_data.json', JSON.stringify(indexData, null, 2))
-  await writeFile('output/projects_data.json', JSON.stringify(projectsData, null, 2))
+  await Promise.all([
+    writeFile('output/index_data.json', JSON.stringify(indexData, null, 2)),
+    writeFile('output/projects_data.json', JSON.stringify(projectsData, null, 2))
+  ])
 
   // copy assets folder
   await copyFolder(assetsFolder, join(destinationFolder, 'assets'))

@@ -1,0 +1,127 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["project", "checks", "results", "tasks", "alerts", "githubOrgs", "githubRepos", "ossfScorecardResults"],
+  "properties": {
+    "project": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "description": { "type": ["string", "null"] },
+        "created_at": { "type": ["string", "object"], "format": "date-time" },
+        "updated_at": { "type": ["string", "object"], "format": "date-time" }
+      }
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "checklist_id": { "type": "integer" },
+          "description": { "type": "string" },
+          "created_at": { "type": ["string", "object"], "format": "date-time" },
+          "updated_at": { "type": ["string", "object"], "format": "date-time" }
+        }
+      }
+    },
+    "results": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "required": ["id", "project_id", "name", "score"],
+        "properties": {
+          "id": { "type": "integer" },
+          "project_id": { "type": "integer" },
+          "name": { "type": "string" },
+          "score": { "type": "number" },
+          "created_at": { "type": ["string", "object"], "format": "date-time" },
+          "updated_at": { "type": ["string", "object"], "format": "date-time" }
+        }
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "required": ["id", "project_id", "description", "implementation_status"],
+        "properties": {
+          "id": { "type": "integer" },
+          "project_id": { "type": "integer" },
+          "description": { "type": "string" },
+          "implementation_status": { "type": "string", "enum": ["pending", "in_progress", "completed"] },
+          "created_at": { "type": ["string", "object"], "format": "date-time" },
+          "updated_at": { "type": ["string", "object"], "format": "date-time" }
+        }
+      }
+    },
+    "alerts": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "required": ["id", "project_id", "title", "description", "severity"],
+        "properties": {
+          "id": { "type": "integer" },
+          "project_id": { "type": "integer" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "severity": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+          "created_at": { "type": ["string", "object"], "format": "date-time" },
+          "updated_at": { "type": ["string", "object"], "format": "date-time" }
+        }
+      }
+    },
+    "githubOrgs": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "required": ["id", "login"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": ["string", "null"] },
+          "login": { "type": "string" },
+          "created_at": { "type": ["string", "object"], "format": "date-time" },
+          "updated_at": { "type": ["string", "object"], "format": "date-time" }
+        }
+      }
+    },
+    "githubRepos": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "full_name"],
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "full_name": { "type": "string" },
+          "created_at": { "type": ["string", "object"], "format": "date-time" },
+          "updated_at": { "type": ["string", "object"], "format": "date-time" }
+        }
+      }
+    },
+    "ossfScorecardResults": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "integer" },
+          "repository_id": { "type": "integer" },
+          "score": { "type": "number" },
+          "created_at": { "type": ["string", "object"], "format": "date-time" },
+          "updated_at": { "type": ["string", "object"], "format": "date-time" }
+        }
+      }
+    }
+  }
+}

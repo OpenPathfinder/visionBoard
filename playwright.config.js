@@ -1,6 +1,5 @@
 // @ts-check
 const { defineConfig, devices } = require('@playwright/test')
-const path = require('path')
 
 /**
  * @see https://playwright.dev/docs/test-configuration
@@ -11,6 +10,8 @@ module.exports = defineConfig({
   timeout: 30 * 1000,
   /* Global setup to prepare database fixtures */
   globalSetup: require.resolve('./e2e/global-setup.js'),
+  /* Global teardown to clean database after tests */
+  globalTeardown: require.resolve('./e2e/global-teardown.js'),
   expect: {
     /**
      * Maximum time expect() should wait for the condition to be met
@@ -32,7 +33,7 @@ module.exports = defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    
+
     /* Capture screenshot on failure */
     screenshot: 'only-on-failure'
   },
@@ -55,7 +56,7 @@ module.exports = defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npm run start',
+    command: 'NODE_ENV=test npm run start',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',

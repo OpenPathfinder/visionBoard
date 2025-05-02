@@ -165,10 +165,6 @@ describe('run bulk-import', () => {
   test.todo('Should throw an error when the JSON file is not valid due schema validation')
 })
 
-describe('run show-reports', () => {
-  test.todo('Should start a http server that shows all the files and folders in the output directory')
-})
-
 describe('run generate-reports', () => {
   test.todo('Should generate the reports for the stored data')
 })

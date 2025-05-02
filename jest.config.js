@@ -10,6 +10,10 @@ export default {
     '<rootDir>/src/database/seeds/',
     '<rootDir>/src/config/'
   ],
+  testPathIgnorePatterns: [
+    '<rootDir>/node_modules/',
+    '<rootDir>/e2e/'
+  ],
   transformIgnorePatterns: [
     '/node_modules/(?!octokit).+\\.js$'
   ]

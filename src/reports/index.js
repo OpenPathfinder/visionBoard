@@ -151,7 +151,10 @@ const generateStaticReports = async (knex, options = { clearPreviousReports: fal
     }
 
     // Populate the project HTML template
-    const projectHtml = ejs.render(projectTemplate, projectsData[project.name])
+    const projectHtml = ejs.render(projectTemplate, projectsData[project.name], {
+      filename: projectTemplatePath,
+      views: [join(process.cwd(), 'src', 'reports', 'templates')]
+    })
     // @TODO: Prevent overwriting (edge case) at creation level
     if (project.name !== 'index') {
       const projectFilename = join(destinationFolder, `${project.name}.html`)
@@ -169,7 +172,10 @@ const generateStaticReports = async (knex, options = { clearPreviousReports: fal
   await copyFolder(assetsFolder, join(destinationFolder, 'assets'))
 
   // Populate the index HTML template
-  const indexHtml = ejs.render(indexTemplate, indexData)
+  const indexHtml = ejs.render(indexTemplate, indexData, {
+    filename: indexTemplatePath,
+    views: [join(process.cwd(), 'src', 'reports', 'templates')]
+  })
 
   // Save the index HTML file
   await writeFile('output/index.html', indexHtml)

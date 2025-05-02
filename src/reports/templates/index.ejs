@@ -2,25 +2,14 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VisionBoard Reports</title>
-    <link rel="icon" href="<%= getLink('/assets/favicon.ico') %>" type="image/x-icon">
-    <link rel="shortcut icon" href="<%= getLink('/assets/favicon.ico') %>" type="image/x-icon">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <%- include('partials/head') %>
 </head>
 
-<body class="bg-gray-100 h-screen">
-    <!-- Header -->
-    <header class="bg-zinc-950 text-white">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center">
-            <img src="<%= getLink('/assets/logo.png') %>" alt="VisionBoard Logo" class="h-8 mr-3">
-            <a href="<%= getLink('/') %>" class="text-amber-400 text-xl font-semibold">VisionBoard Reports</a>
-        </div>
-    </header>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <%- include('partials/navigation') %>
 
-    <div class="flex h-full">
-        <main class="flex-1 p-6">
+    <div class="flex-grow">
+        <main class="container mx-auto p-6">
             <h1 class="text-2xl font-bold mb-4">Welcome!</h1>
             <p class="text-gray-700 mb-4">In this dashboard, you can find the status of all the projects that you
                 registered. Every project listed includes additional reports with its own dashboard, tasks, and alerts.
@@ -105,6 +94,9 @@
                 </tbody>
             </table>
         </main>
+    </div>
+    <div class="mt-auto">
+        <%- include('partials/footer') %>
     </div>
 </body>
 

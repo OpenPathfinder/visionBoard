@@ -46,16 +46,27 @@ module.exports = () => ({
       logger.error(err)
       throw err
     }
-    return server.listen(staticServer.port, () => {
-      logger.info(`Server running at http://${staticServer.ip}:${staticServer.port}/`)
-      logger.info(`API available at http://${staticServer.ip}:${staticServer.port}/api/v1/`)
+    await new Promise((resolve, reject) => {
+      server.listen(staticServer.port, staticServer.ip, err => {
+        if (err) return reject(err)
+        logger.info(`Server running at http://${staticServer.ip}:${staticServer.port}/`)
+        logger.info(`API available at http://${staticServer.ip}:${staticServer.port}/api/v1/`)
+        resolve()
+      })
     })
+    return server
   },
   stop: async () => {
     await knex.destroy()
     await new Promise((resolve, reject) => {
-      server.close(err => (err ? reject(err) : resolve()))
+      server.close(err => {
+        if (err) {
+          logger.error('Failed to stop server', { err })
+          return reject(err)
+        }
+        logger.info('Server stopped')
+        resolve()
+      })
     })
-    logger.info('Server stopped')
   }
 })

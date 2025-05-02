@@ -47,7 +47,7 @@ module.exports = () => ({
       throw err
     }
     await new Promise((resolve, reject) => {
-      server.listen(staticServer.port, staticServer.ip, err => {
+      server.listen(staticServer.port, err => {
         if (err) return reject(err)
         logger.info(`Server running at http://${staticServer.ip}:${staticServer.port}/`)
         logger.info(`API available at http://${staticServer.ip}:${staticServer.port}/api/v1/`)

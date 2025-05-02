@@ -36,6 +36,43 @@ const copyFolder = async (from, to) => {
     throw error
   }
 }
+
+const collectIndexData = async (knex) => {
+  const { getAllProjects, getAllChecklists, getAllComplianceChecks } = initializeStore(knex)
+  const projects = await getAllProjects()
+  const checklists = await getAllChecklists()
+  const checks = await getAllComplianceChecks()
+  return { projects, checklists, checks, getLink: internalLinkBuilder('server') }
+}
+
+// @TODO: use new store functions to collect project data individually more accurately and avoid loops
+const collectProjectData = async (knex, projectId) => {
+  const { getAllComplianceChecks, getProjectById, getAllGithubRepositories, getAllOSSFResults, getAllAlerts, getAllResults, getAllTasks, getAllGithubOrganizationsByProjectsId } = initializeStore(knex)
+  const checks = await getAllComplianceChecks()
+  const project = await getProjectById(projectId)
+  const ossfScorecardResults = await getAllOSSFResults()
+  const alerts = await getAllAlerts()
+  const results = await getAllResults()
+  const tasks = await getAllTasks()
+  const githubRepos = await getAllGithubRepositories()
+  const githubOrgs = await getAllGithubOrganizationsByProjectsId([projectId])
+  const githubOrgsIds = githubOrgs.map(org => org.id)
+  const githubReposInScope = githubRepos.filter(repo => githubOrgsIds.includes(repo.github_organization_id))
+  const githubReposInScopeIds = githubReposInScope.map(repo => repo.id)
+
+  return {
+    project,
+    checks,
+    alerts: alerts.filter(alert => alert.project_id === project.id),
+    results: results.filter(result => result.project_id === project.id),
+    tasks: tasks.filter(task => task.project_id === project.id),
+    githubOrgs,
+    githubRepos: githubReposInScope,
+    ossfScorecardResults: ossfScorecardResults.filter(ossfResult => githubReposInScopeIds.includes(ossfResult.github_repository_id)),
+    getLink: internalLinkBuilder('server', project)
+  }
+}
+
 const internalLinkBuilder = (mode = 'static') => (ref, project) => {
   let finalRef = ref
   // remove leading slash
@@ -141,5 +178,7 @@ const generateStaticReports = async (knex, options = { clearPreviousReports: fal
 
 module.exports = {
   generateStaticReports,
+  collectIndexData,
+  collectProjectData,
   internalLinkBuilder
 }

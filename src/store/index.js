@@ -11,6 +11,11 @@ const addFn = knex => (table, record) => {
   return knex(table).insert(record).returning('*').then(results => results[0])
 }
 
+const getFn = knex => (table, id) => {
+  debug(`Fetching record ${id} from ${table}...`)
+  return knex(table).where({ id }).first()
+}
+
 const upsertRecord = async ({ knex, table, uniqueCriteria, data }) => {
   const existingRecord = await knex(table).where(uniqueCriteria).first()
   if (existingRecord) {
@@ -199,6 +204,7 @@ const initializeStore = (knex) => {
   debug('Initializing store...')
   const getAll = getAllFn(knex)
   const addTo = addFn(knex)
+  const getOne = getFn(knex)
   return {
     addProject: addProject(knex),
     addGithubOrganization: addGithubOrganization(knex),
@@ -234,7 +240,8 @@ const initializeStore = (knex) => {
     upsertSoftwareDesignTraining: upsertSoftwareDesignTraining(knex),
     upsertProjectPolicies: upsertProjectPolicies(knex),
     upsertOwaspTop10Training: upsertOwaspTop10Training(knex),
-    getAllOSSFResults: () => getAll('ossf_scorecard_results')
+    getAllOSSFResults: () => getAll('ossf_scorecard_results'),
+    getProjectById: (id) => getOne('projects', id)
   }
 }
 

@@ -116,7 +116,7 @@
         "required": ["id"],
         "properties": {
           "id": { "type": "integer" },
-          "repository_id": { "type": "integer" },
+          "github_repository_id": { "type": "integer" },
           "score": { "type": "number" },
           "created_at": { "type": ["string", "object"], "format": "date-time" },
           "updated_at": { "type": ["string", "object"], "format": "date-time" }

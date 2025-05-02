@@ -83,7 +83,7 @@ const collectProjectData = async (knex, projectId) => {
     const githubOrgsIds = githubOrgs.map(org => org.id)
     const githubReposInScope = githubRepos.filter(repo => githubOrgsIds.includes(repo.github_organization_id))
     const githubReposInScopeIds = githubReposInScope.map(repo => repo.id)
-    const getLink = internalLinkBuilder('server', project)
+    const getLink = internalLinkBuilder('server')
 
     // Create the data object
     const data = {
@@ -201,7 +201,8 @@ const generateStaticReports = async (knex, options = { clearPreviousReports: fal
     })
     // @TODO: Prevent overwriting (edge case) at creation level
     if (project.name !== 'index') {
-      const projectFilename = join(destinationFolder, `${project.name}.html`)
+      const safeName = encodeURIComponent(project.name)
+      const projectFilename = join(destinationFolder, `${safeName}.html`)
       await writeFile(projectFilename, projectHtml)
     }
   }

@@ -1,3 +1,4 @@
+<% function resolveLink(path, data) { return typeof getLink !== 'function' ? path : getLink(path, data); } %> 
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,7 +21,7 @@
             <ul class="list-disc list-inside mb-6">
                 <% projects.forEach(project=> { %>
                     <li>
-                        <a href="<%= getLink('', project) %>" class="text-blue-500 underline font-bold">
+                        <a href="<%= resolveLink('', project) %>" class="text-blue-500 underline font-bold">
                             <%= project.name %>
                         </a>
                     </li>

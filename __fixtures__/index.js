@@ -920,10 +920,121 @@ const sampleBulkImportFileContent = [{
   is_subscribed: true
 }]
 
+// Sample project data for testing validateProjectData
+const sampleProjectData = {
+  project: {
+    id: 1,
+    name: 'Test Project',
+    description: 'A test project',
+    created_at: '2023-01-01T00:00:00Z',
+    updated_at: '2023-01-02T00:00:00Z'
+  },
+  checks: [
+    {
+      id: 1,
+      checklist_id: 1,
+      description: 'Test check',
+      created_at: '2023-01-01T00:00:00Z',
+      updated_at: '2023-01-02T00:00:00Z'
+    }
+  ],
+  results: [
+    {
+      id: 1,
+      project_id: 1,
+      name: 'Test result',
+      score: 8.5,
+      created_at: '2023-01-01T00:00:00Z',
+      updated_at: '2023-01-02T00:00:00Z'
+    }
+  ],
+  tasks: [
+    {
+      id: 1,
+      project_id: 1,
+      description: 'Test task',
+      implementation_status: 'pending',
+      created_at: '2023-01-01T00:00:00Z',
+      updated_at: '2023-01-02T00:00:00Z'
+    }
+  ],
+  alerts: [
+    {
+      id: 1,
+      project_id: 1,
+      title: 'Test alert',
+      description: 'This is a test alert',
+      severity: 'medium',
+      created_at: '2023-01-01T00:00:00Z',
+      updated_at: '2023-01-02T00:00:00Z'
+    }
+  ],
+  githubOrgs: [
+    {
+      id: 1,
+      login: 'test-org',
+      name: 'Test Organization',
+      created_at: '2023-01-01T00:00:00Z',
+      updated_at: '2023-01-02T00:00:00Z'
+    }
+  ],
+  githubRepos: [
+    {
+      id: 1,
+      name: 'test-repo',
+      full_name: 'test-org/test-repo',
+      created_at: '2023-01-01T00:00:00Z',
+      updated_at: '2023-01-02T00:00:00Z'
+    }
+  ],
+  ossfScorecardResults: [
+    {
+      id: 1,
+      repository_id: 1,
+      score: 8.5,
+      created_at: '2023-01-01T00:00:00Z',
+      updated_at: '2023-01-02T00:00:00Z'
+    }
+  ]
+}
+
+// Sample index data for testing validateIndexData
+const sampleIndexData = {
+  projects: [
+    {
+      id: 1,
+      name: 'Test Project',
+      description: 'A test project',
+      created_at: '2023-01-01T00:00:00Z',
+      updated_at: '2023-01-02T00:00:00Z'
+    }
+  ],
+  checklists: [
+    {
+      id: 1,
+      name: 'Test Checklist',
+      type: 'security',
+      created_at: '2023-01-01T00:00:00Z',
+      updated_at: '2023-01-02T00:00:00Z'
+    }
+  ],
+  checks: [
+    {
+      id: 1,
+      checklist_id: 1,
+      description: 'Test check',
+      created_at: '2023-01-01T00:00:00Z',
+      updated_at: '2023-01-02T00:00:00Z'
+    }
+  ]
+}
+
 module.exports = {
   sampleGithubOrg,
   sampleGithubListOrgRepos,
   sampleGithubRepository,
   sampleOSSFScorecardResult,
-  sampleBulkImportFileContent
+  sampleBulkImportFileContent,
+  sampleProjectData,
+  sampleIndexData
 }

@@ -36,6 +36,19 @@ const copyFolder = async (from, to) => {
     throw error
   }
 }
+const internalLinkBuilder = (mode = 'static') => (ref, project) => {
+  let finalRef = ref
+  // remove leading slash
+  if (mode === 'static') {
+    finalRef = finalRef.replace(/^\//, '')
+  }
+  // project specific paths
+  if (project) {
+    finalRef = mode === 'static' ? `${project.name}.html` : `/projects/${project.id}`
+  }
+
+  return finalRef.length > 0 ? finalRef : 'index.html'
+}
 
 const generateStaticReports = async (knex, options = { clearPreviousReports: false }) => {
   const { clearPreviousReports } = options
@@ -76,10 +89,11 @@ const generateStaticReports = async (knex, options = { clearPreviousReports: fal
   const indexData = {
     projects,
     checklists,
-    checks
+    checks,
+    getLink: internalLinkBuilder('static')
   }
 
-  const projectsData = {}
+  const projectsData = { }
 
   for (const project of projects) {
     const githubOrgs = await getAllGithubOrganizationsByProjectsId([project.id])
@@ -95,20 +109,24 @@ const generateStaticReports = async (knex, options = { clearPreviousReports: fal
       tasks: tasks.filter(task => task.project_id === project.id),
       githubOrgs,
       githubRepos: githubReposInScope,
-      ossfScorecardResults: ossfScorecardResults.filter(ossfResult => githubReposInScopeIds.includes(ossfResult.github_repository_id))
+      ossfScorecardResults: ossfScorecardResults.filter(ossfResult => githubReposInScopeIds.includes(ossfResult.github_repository_id)),
+      getLink: internalLinkBuilder('static')
     }
 
     // Populate the project HTML template
     const projectHtml = ejs.render(projectTemplate, projectsData[project.name])
-    const projectFilename = join(destinationFolder, 'projects', `${project.name}.html`)
-    await writeFile(projectFilename, projectHtml)
+    // @TODO: Prevent overwriting (edge case) at creation level
+    if (project.name !== 'index') {
+      const projectFilename = join(destinationFolder, `${project.name}.html`)
+      await writeFile(projectFilename, projectHtml)
+    }
   }
 
   // @TODO: Validate against JSON Schemas
 
   // @TODO: Save the files in parallel
   await writeFile('output/index_data.json', JSON.stringify(indexData, null, 2))
-  await writeFile('output/projects/projects_data.json', JSON.stringify(projectsData, null, 2))
+  await writeFile('output/projects_data.json', JSON.stringify(projectsData, null, 2))
 
   // copy assets folder
   await copyFolder(assetsFolder, join(destinationFolder, 'assets'))
@@ -122,5 +140,6 @@ const generateStaticReports = async (knex, options = { clearPreviousReports: fal
 }
 
 module.exports = {
-  generateStaticReports
+  generateStaticReports,
+  internalLinkBuilder
 }

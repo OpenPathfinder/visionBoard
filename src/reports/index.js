@@ -4,8 +4,8 @@ const { mkdir, readdir, copyFile, readFile, writeFile, rm } = require('node:fs')
 const { join } = require('path')
 const { initializeStore } = require('../store')
 
-const indexTemplatePath = join(process.cwd(), 'src', 'reports', 'templates', 'index.html.ejs')
-const projectTemplatePath = join(process.cwd(), 'src', 'reports', 'templates', 'project.html.ejs')
+const indexTemplatePath = join(process.cwd(), 'src', 'reports', 'templates', 'index.ejs')
+const projectTemplatePath = join(process.cwd(), 'src', 'reports', 'templates', 'project.ejs')
 const assetsFolder = join(process.cwd(), 'src', 'reports', 'assets')
 const destinationFolder = join(process.cwd(), 'output')
 const copyFolder = async (from, to) => {

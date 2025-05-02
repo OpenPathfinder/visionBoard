@@ -57,7 +57,7 @@ describe('HTTP Server API', () => {
       const finishedAt = new Date(response.body.finishedAt)
       expect(startedAt.toISOString()).toBe(response.body.startedAt)
       expect(finishedAt.toISOString()).toBe(response.body.finishedAt)
-      expect(finishedAt >= startedAt).toBe(true)
+      expect(finishedAt.getTime()).toBeGreaterThanOrEqual(startedAt.getTime())
     })
 
     test('should return status failed when report generation fails', async () => {
@@ -75,7 +75,7 @@ describe('HTTP Server API', () => {
       const finishedAt = new Date(response.body.finishedAt)
       expect(startedAt.toISOString()).toBe(response.body.startedAt)
       expect(finishedAt.toISOString()).toBe(response.body.finishedAt)
-      expect(finishedAt >= startedAt).toBe(true)
+      expect(finishedAt.getTime()).toBeGreaterThanOrEqual(startedAt.getTime())
     })
   })
 })

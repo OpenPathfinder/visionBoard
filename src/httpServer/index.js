@@ -5,7 +5,7 @@ const serveIndex = require('serve-index')
 const { join } = require('path')
 const { getConfig } = require('../config')
 const { logger, checkDatabaseConnection } = require('../utils')
-const { createApiRouter } = require('./apiV1')
+const { createApiRouter } = require('./routers/apiV1')
 
 const publicPath = join(process.cwd(), 'output')
 const { staticServer, dbSettings } = getConfig()

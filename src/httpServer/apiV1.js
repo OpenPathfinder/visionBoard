@@ -1,6 +1,15 @@
 const { generateStaticReports } = require('../reports')
 const { logger } = require('../utils')
 
+/**
+ * Creates and returns an Express router with health check and report generation endpoints.
+ *
+ * The router provides:
+ * - `GET /__health`: Returns a JSON object indicating service health and the current timestamp.
+ * - `POST /generate-reports`: Initiates static report generation and responds with the operation status and timestamps.
+ *
+ * @returns {import('express').Router} An Express router with health check and report generation routes.
+ */
 function createApiRouter (knex, express) {
   const router = express.Router()
 

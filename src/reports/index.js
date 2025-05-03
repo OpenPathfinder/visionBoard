@@ -5,10 +5,11 @@ const { join } = require('path')
 const { initializeStore } = require('../store')
 const { validateProjectData, validateIndexData } = require('../schemas')
 
-const indexTemplatePath = join(process.cwd(), 'src', 'reports', 'templates', 'index.ejs')
-const projectTemplatePath = join(process.cwd(), 'src', 'reports', 'templates', 'project.ejs')
-const assetsFolder = join(process.cwd(), 'src', 'reports', 'assets')
-const destinationFolder = join(process.cwd(), 'output')
+const baseTemplatesPath = join(__dirname, 'templates')
+const indexTemplatePath = join(baseTemplatesPath, 'index.ejs')
+const projectTemplatePath = join(baseTemplatesPath, 'project.ejs')
+const assetsFolder = join(__dirname, 'assets')
+const destinationFolder = join(__dirname, '../../output')
 const copyFolder = async (from, to) => {
   try {
     // Ensure the target directory exists
@@ -108,7 +109,7 @@ const collectProjectData = async (knex, projectId) => {
   }
 }
 
-const internalLinkBuilder = (mode = 'static') => (ref, project) => {
+const internalLinkBuilder = (mode = 'static') => (ref = '', project) => {
   let finalRef = ref
   // remove leading slash
   if (mode === 'static') {
@@ -197,7 +198,7 @@ const generateStaticReports = async (knex, options = { clearPreviousReports: fal
     // Populate the project HTML template
     const projectHtml = ejs.render(projectTemplate, projectsData[project.name], {
       filename: projectTemplatePath,
-      views: [join(process.cwd(), 'src', 'reports', 'templates')]
+      views: [join(__dirname, 'templates')]
     })
     // @TODO: Prevent overwriting (edge case) at creation level
     if (project.name !== 'index') {
@@ -208,8 +209,8 @@ const generateStaticReports = async (knex, options = { clearPreviousReports: fal
   }
 
   await Promise.all([
-    writeFile('output/index_data.json', JSON.stringify(indexData, null, 2)),
-    writeFile('output/projects_data.json', JSON.stringify(projectsData, null, 2))
+    writeFile(join(destinationFolder, 'index_data.json'), JSON.stringify(indexData, null, 2)),
+    writeFile(join(destinationFolder, 'projects_data.json'), JSON.stringify(projectsData, null, 2))
   ])
 
   // copy assets folder
@@ -218,11 +219,11 @@ const generateStaticReports = async (knex, options = { clearPreviousReports: fal
   // Populate the index HTML template
   const indexHtml = ejs.render(indexTemplate, indexData, {
     filename: indexTemplatePath,
-    views: [join(process.cwd(), 'src', 'reports', 'templates')]
+    views: [join(__dirname, 'templates')]
   })
 
   // Save the index HTML file
-  await writeFile('output/index.html', indexHtml)
+  await writeFile(join(destinationFolder, 'index.html'), indexHtml)
   logger.info('Reports generated successfully')
 }
 

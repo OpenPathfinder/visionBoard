@@ -34,7 +34,7 @@ const { join } = require('path')
     return { ...check, resources }
   })
 
-  writeFileSync(join(process.cwd(), 'output', 'checks.json'), JSON.stringify(formattedChecks, null, 2))
+  writeFileSync(join(__dirname, '../output', 'checks.json'), JSON.stringify(formattedChecks, null, 2))
   console.log('Checks exported to checks.json')
   await knex.destroy()
 })()

@@ -43,6 +43,10 @@
           "id": { "type": "integer" },
           "checklist_id": { "type": "integer" },
           "description": { "type": "string" },
+          "implementation_status": {
+            "type": "string",
+            "enum": ["pending", "in_progress", "completed"]
+          },
           "created_at": { "type": ["string", "object"], "format": "date-time" },
           "updated_at": { "type": ["string", "object"], "format": "date-time" }
         }

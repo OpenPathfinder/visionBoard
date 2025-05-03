@@ -21,7 +21,7 @@ function createWebRouter (knex, express) {
   })
 
   router.get('/projects/:id', async (req, res) => {
-    const projectId = parseInt(req.params.id)
+    const projectId = Number(req.params.id)
     if (isNaN(projectId)) {
       logger.error(`Invalid project ID: ${req.params.id}`)
       return res.status(404).render(notFoundTemplate)

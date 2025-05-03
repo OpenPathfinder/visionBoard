@@ -26,28 +26,28 @@ test.describe('Website Router', () => {
     await expect(mainContent).toBeVisible()
 
     // Check for the Projects heading
-    const projectsHeading = page.locator('h2:has-text("Projects")')
+    const projectsHeading = page.locator('[data-testid="projects-heading"]')
     await expect(projectsHeading).toBeVisible()
 
     // Check for project links in the list
-    const projectLinks = page.locator('ul li a')
+    const projectLinks = page.locator('[data-testid="projects-list"] li a')
     const count = await projectLinks.count()
 
     // We should have at least one project link
     expect(count).toBeGreaterThan(0)
 
     // Check for the Checklists heading
-    const checklistsHeading = page.locator('h2:has-text("Checklists")')
+    const checklistsHeading = page.locator('[data-testid="checklists-heading"]')
     await expect(checklistsHeading).toBeVisible()
 
     // Check for the first table
-    const firstTable = page.locator('table').first()
-    await expect(firstTable).toBeVisible()
+    const checklistsTable = page.locator('[data-testid="checklists-table"]')
+    await expect(checklistsTable).toBeVisible()
     // Check that the table headers exist
-    const docHeader = firstTable.locator('thead tr th:has-text("Documentation")')
-    const titleHeader = firstTable.locator('thead tr th:has-text("Title")')
-    const descHeader = firstTable.locator('thead tr th:has-text("Description")')
-    const authorHeader = firstTable.locator('thead tr th:has-text("Author")')
+    const docHeader = checklistsTable.locator('thead tr th:has-text("Documentation")')
+    const titleHeader = checklistsTable.locator('thead tr th:has-text("Title")')
+    const descHeader = checklistsTable.locator('thead tr th:has-text("Description")')
+    const authorHeader = checklistsTable.locator('thead tr th:has-text("Author")')
 
     await expect(docHeader).toBeVisible()
     await expect(titleHeader).toBeVisible()
@@ -55,27 +55,31 @@ test.describe('Website Router', () => {
     await expect(authorHeader).toBeVisible()
 
     // Check for at least one row in the table
-    const rows = await firstTable.locator('tr')
+    const rows = await checklistsTable.locator('tr')
     expect(await rows.count()).toBeGreaterThan(0)
 
     // Check for the Compliance Checks heading
-    const complianceChecksHeading = page.locator('h2:has-text("Compliance Checks")')
+    const complianceChecksHeading = page.locator('[data-testid="compliance-checks-heading"]')
     await expect(complianceChecksHeading).toBeVisible()
 
+    // Check for Compliance Checks Description
+    const complianceChecksDescription = page.locator('[data-testid="compliance-checks-description"]')
+    await expect(complianceChecksDescription).toBeVisible()
+
     // Check for the second table
-    const secondTable = page.locator('table').last()
-    await expect(secondTable).toBeVisible()
+    const complianceChecksTable = page.locator('[data-testid="compliance-checks-table"]')
+    await expect(complianceChecksTable).toBeVisible()
     // Check that the table headers exist
-    const docHeader2 = secondTable.locator('thead tr th:has-text("Documentation")')
-    const nameHeader = secondTable.locator('thead tr th:has-text("Name")')
-    const descHeader2 = secondTable.locator('thead tr th:has-text("Description")')
+    const docHeader2 = complianceChecksTable.locator('thead tr th:has-text("Documentation")')
+    const nameHeader = complianceChecksTable.locator('thead tr th:has-text("Name")')
+    const descHeader2 = complianceChecksTable.locator('thead tr th:has-text("Description")')
 
     await expect(docHeader2).toBeVisible()
     await expect(nameHeader).toBeVisible()
     await expect(descHeader2).toBeVisible()
 
     // Check for at least one row in the table
-    const rows2 = await secondTable.locator('tr')
+    const rows2 = await complianceChecksTable.locator('tr')
     expect(await rows2.count()).toBeGreaterThan(0)
   })
 
@@ -87,7 +91,7 @@ test.describe('Website Router', () => {
     await expect(page).toHaveURL(`/projects/${testProjectId}`)
 
     // Check for the project name in the heading
-    const projectHeading = page.locator('h1')
+    const projectHeading = page.locator('[data-testid="project-heading"]')
     await expect(projectHeading).toBeVisible()
     await expect(projectHeading).toContainText('Report')
 
@@ -97,41 +101,32 @@ test.describe('Website Router', () => {
 
     // Check for section headings that should be present on project pages
     const sectionHeadings = [
-      'Alerts',
-      'Results',
-      'Tasks'
+      '[data-testid="alerts-heading"]',
+      '[data-testid="results-heading"]',
+      '[data-testid="tasks-heading"]',
+      '[data-testid="ossf-scorecard-heading"]',
+      '[data-testid="github-orgs-heading"]',
+      '[data-testid="github-repos-heading"]'
     ]
 
     for (const headingText of sectionHeadings) {
-      const heading = page.locator(`h2:has-text("${headingText}")`)
+      const heading = page.locator(headingText)
       await expect(heading).toBeVisible()
     }
 
-    // Check for OSSF scorecard section
-    const ossfHeading = page.locator('h2:has-text("OSSF Scorecard Analysis")')
-    await expect(ossfHeading).toBeVisible()
-
-    // Check for GitHub organizations section
-    const githubOrgsHeading = page.locator('h2:has-text("GitHub Organizations in scope")')
-    await expect(githubOrgsHeading).toBeVisible()
-
-    // Check for an organization list
-    const list = page.locator('ul li')
+    // Check for a GitHub organization list
+    const list = page.locator('[data-testid="github-orgs-list"] li')
     await expect(list).toBeVisible()
 
-    // Check for GitHub repositories section
-    const githubReposHeading = page.locator('h2:has-text("GitHub repositories in scope")')
-    await expect(githubReposHeading).toBeVisible()
-
-    // Check for the first table
-    const firstTable = page.locator('table').first()
-    await expect(firstTable).toBeVisible()
+    // Check for the GitHub repositories table
+    const githubReposTable = page.locator('[data-testid="github-repos-table"]')
+    await expect(githubReposTable).toBeVisible()
     // Check that the table headers exist
-    const repositoryHeader = firstTable.locator('thead tr th:has-text("Repository")')
-    const starsHeader = firstTable.locator('thead tr th:has-text("Stars")')
-    const forksHeader = firstTable.locator('thead tr th:has-text("Forks")')
-    const subscribersHeader = firstTable.locator('thead tr th:has-text("Subscribers")')
-    const issuesHeader = firstTable.locator('thead tr th:has-text("Open Issues")')
+    const repositoryHeader = githubReposTable.locator('thead tr th:has-text("Repository")')
+    const starsHeader = githubReposTable.locator('thead tr th:has-text("Stars")')
+    const forksHeader = githubReposTable.locator('thead tr th:has-text("Forks")')
+    const subscribersHeader = githubReposTable.locator('thead tr th:has-text("Subscribers")')
+    const issuesHeader = githubReposTable.locator('thead tr th:has-text("Open Issues")')
 
     await expect(repositoryHeader).toBeVisible()
     await expect(starsHeader).toBeVisible()
@@ -140,7 +135,7 @@ test.describe('Website Router', () => {
     await expect(issuesHeader).toBeVisible()
 
     // Check for at least one row in the table
-    const rows = await firstTable.locator('tr')
+    const rows = await githubReposTable.locator('tr')
     expect(await rows.count()).toBeGreaterThan(0)
   })
 
@@ -149,14 +144,14 @@ test.describe('Website Router', () => {
     await page.goto('/projects/invalid')
 
     // Check for the Not Found heading
-    const notFoundHeading = page.locator('h1:has-text("Not Found!")')
+    const notFoundHeading = page.locator('[data-testid="not-found-title"]')
     await expect(notFoundHeading).toBeVisible()
 
     // Test with non-existent numeric ID
     await page.goto('/projects/999999')
 
     // Check for the Not Found heading
-    const notFoundHeading2 = page.locator('h1:has-text("Not Found!")')
+    const notFoundHeading2 = page.locator('[data-testid="not-found-title"]')
     await expect(notFoundHeading2).toBeVisible()
   })
 

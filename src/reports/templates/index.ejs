@@ -16,9 +16,9 @@
                 registered. Every project listed includes additional reports with its own dashboard, tasks, and alerts.
             </p>
 
-            <h2 class="text-2xl font-bold mb-4">Projects</h2>
+            <h2 class="text-2xl font-bold mb-4" data-testid="projects-heading">Projects</h2>
             <p class="mb-4">Click on any project to get more details:</p>
-            <ul class="list-disc list-inside mb-6">
+            <ul class="list-disc list-inside mb-6" data-testid="projects-list">
                 <% projects.forEach(project=> { %>
                     <li>
                         <a href="<%= resolveLink('', project) %>" class="text-blue-500 underline font-bold">
@@ -28,8 +28,8 @@
                 <% }) %>
             </ul>
 
-            <h2 class="text-2xl font-bold mb-4">Checklists</h2>
-            <table class="w-full border border-gray-300 border-collapse mb-6">
+            <h2 class="text-2xl font-bold mb-4" data-testid="checklists-heading">Checklists</h2>
+            <table class="w-full border border-gray-300 border-collapse mb-6" data-testid="checklists-table">
                 <thead>
                     <tr class="bg-gray-200">
                         <th class="border border-gray-300 px-4 py-2 text-left">Documentation</th>
@@ -61,13 +61,13 @@
                 </tbody>
             </table>
 
-            <h2 class="text-2xl font-bold mb-4">Compliance Checks</h2>
-            <p class="mb-4">Currently <span class="font-bold">
+            <h2 class="text-2xl font-bold mb-4" data-testid="compliance-checks-heading">Compliance Checks</h2>
+            <p class="mb-4" data-testid="compliance-checks-description">Currently <span class="font-bold">
                     <%= checks.filter(i=> i.implementation_status === "completed").length %>/<%= checks.length %>
                 </span> are implemented. <a href="https://openpathfinder.com/contribute"
                     class="text-blue-500 underline font-bold">Help us</a> to implement more!</p>
 
-            <table class="w-full border border-gray-300 border-collapse">
+            <table class="w-full border border-gray-300 border-collapse" data-testid="compliance-checks-table">
                 <thead>
                     <tr class="bg-gray-200">
                         <th class="border border-gray-300 px-4 py-2 text-left">Documentation</th>

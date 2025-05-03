@@ -60,6 +60,9 @@ module.exports = defineConfig({
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
-    stderr: 'pipe'
+    stderr: 'pipe',
+    env: {
+      NODE_ENV: 'test'
+    }
   }
 })

@@ -21,11 +21,11 @@
     "db:seed": "knex seed:run",
     "prestart": "npm run db:migrate",
     "start": "node server.js",
-    "test:e2e": "playwright test",
-    "test:e2e-ci": "playwright test --reporter=list",
-    "test:e2e-ui": "playwright test --ui",
-    "test:e2e-debug": "playwright test --debug",
-    "test:e2e-report": "playwright show-report"
+    "test:e2e": "NODE_ENV=test playwright test",
+    "test:e2e-ci": "NODE_ENV=test playwright test --reporter=list",
+    "test:e2e-ui": "NODE_ENV=test playwright test --ui",
+    "test:e2e-debug": "NODE_ENV=test playwright test --debug",
+    "test:e2e-report": "NODE_ENV=test playwright show-report"
   },
   "keywords": [
     "security",

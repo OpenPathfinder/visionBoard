@@ -8,53 +8,76 @@ const { createApiRouter } = require('./routers/apiV1')
 const { createWebRouter } = require('./routers/website')
 const { staticServer, dbSettings } = getConfig()
 const knex = require('knex')(dbSettings)
-
-// Create Express app
-const app = express()
-const basePath = join(__dirname, '..', 'reports')
-const publicPath = join(basePath, 'assets')
-const templatePath = join(basePath, 'templates')
-
-// Middleware
-app.set('view engine', 'ejs')
-app.set('views', templatePath)
-
-// API Routes
-app.use('/api/v1', createApiRouter(knex, express))
-
-// Web Routes
-app.use('/', createWebRouter(knex, express))
-
-// Directory listing for static files
-app.use('/assets', serveStatic(publicPath, {
-  index: false,
-  dotfiles: 'deny',
-  icons: true
-}))
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  logger.error(`Server error: ${err.message}`, { stack: err.stack })
-  res.status(500).json({
-    error: 'Internal Server Error',
-    message: 'Check server logs for more details'
-  })
-})
-
-// Create HTTP server
-const server = http.createServer(app)
+const swaggerValidator = require('swagger-endpoint-validator')
 
 // Track all active connections
 const connections = new Set()
+let server = null
 
-// Set up connection tracking once (prevents listener leaks on multiple start/stop cycles)
-server.on('connection', connection => {
-  connections.add(connection)
-  connection.on('close', () => connections.delete(connection))
-})
+async function initializeServer () {
+// Create Express app
+  const app = express()
+  const basePath = join(__dirname, '..', 'reports')
+  const publicPath = join(basePath, 'assets')
+  const templatePath = join(basePath, 'templates')
+  const swaggerFile = join(__dirname, 'swagger/api-v1.yml')
+
+  // Middleware
+  app.set('view engine', 'ejs')
+  app.set('views', templatePath)
+
+  // Initialize Swagger
+  await swaggerValidator.init(app, {
+    apiDocEndpoint: '/api/docs',
+    format: 'yaml',
+    yaml: {
+      file: swaggerFile
+    },
+    beautifyErrors: true,
+    validateResponses: true,
+    validateRequests: true,
+    // Ignore paths that do not start with /api/
+    ignorePaths: /^(?!\/api\/)/
+  })
+  logger.info('Swagger validation initialized successfully')
+
+  // API Routes
+  app.use('/api/v1', createApiRouter(knex, express))
+
+  // Web Routes
+  app.use('/', createWebRouter(knex, express))
+
+  // Directory listing for static files
+  app.use('/assets', serveStatic(publicPath, {
+    index: false,
+    dotfiles: 'deny',
+    icons: true
+  }))
+
+  // Error handling middleware
+  app.use((err, req, res, next) => {
+    logger.error(`Server error: ${err.message}`, { stack: err.stack })
+    res.status(500).json({
+      error: 'Internal Server Error',
+      message: 'Check server logs for more details'
+    })
+  })
+
+  // Create HTTP server
+  const serverInstance = http.createServer(app)
+
+  // Set up connection tracking once (prevents listener leaks on multiple start/stop cycles)
+  serverInstance.on('connection', connection => {
+    connections.add(connection)
+    connection.on('close', () => connections.delete(connection))
+  })
+
+  return serverInstance
+}
 
 module.exports = () => ({
   start: async () => {
+    server = await initializeServer()
     const isDbConnected = await checkDatabaseConnection(knex)
     if (!isDbConnected) {
       const err = new Error('Failed to connect to database')
@@ -66,6 +89,7 @@ module.exports = () => ({
         if (err) return reject(err)
         logger.info(`Server running at http://${staticServer.ip}:${staticServer.port}/`)
         logger.info(`API available at http://${staticServer.ip}:${staticServer.port}/api/v1/`)
+        logger.info(`Swagger documentation available at http://${staticServer.ip}:${staticServer.port}/api/docs`)
         resolve()
       })
     })
@@ -75,6 +99,10 @@ module.exports = () => ({
   stop: async () => {
     logger.info('Starting server shutdown sequence')
     try {
+      if (!server) {
+        logger.info('Server was not initialized, skipping shutdown sequence')
+        return
+      }
       // Check if server is listening before attempting to close
       if (!server.listening) {
         logger.info('Server was not listening, skipping server.close()')

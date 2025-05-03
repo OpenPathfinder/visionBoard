@@ -1302,7 +1302,7 @@ ALTER TABLE ONLY public.owasp_top10_training
 --
 
 ALTER TABLE ONLY public.resources_for_compliance_checks
-    ADD CONSTRAINT resources_for_compliance_checks_compliance_check_id_foreign FOREIGN KEY (compliance_check_id) REFERENCES public.compliance_checks(id);
+    ADD CONSTRAINT resources_for_compliance_checks_compliance_check_id_foreign FOREIGN KEY (compliance_check_id) REFERENCES public.compliance_checks(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -1310,7 +1310,7 @@ ALTER TABLE ONLY public.resources_for_compliance_checks
 --
 
 ALTER TABLE ONLY public.resources_for_compliance_checks
-    ADD CONSTRAINT resources_for_compliance_checks_compliance_check_resource_id_fo FOREIGN KEY (compliance_check_resource_id) REFERENCES public.compliance_checks_resources(id);
+    ADD CONSTRAINT resources_for_compliance_checks_compliance_check_resource_id_fo FOREIGN KEY (compliance_check_resource_id) REFERENCES public.compliance_checks_resources(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:17.2
+    image: postgres:17.4
     restart: always
     environment:
       POSTGRES_DB: dashboard
@@ -33,7 +33,7 @@ services:
       start_period: 5s
 
   schema-dump:
-    image: postgres:17.2
+    image: postgres:17.4
     depends_on:
       - db
     environment:

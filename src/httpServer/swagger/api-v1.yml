@@ -1,0 +1,93 @@
+openapi: 3.0.0
+info:
+  title: VisionBoard API
+  description: API for VisionBoard - Transforming Data into Actionable insights
+  version: 1.0.0
+
+paths:
+  /api/v1/__health:
+    get:
+      summary: Health check endpoint
+      description: Returns the current health status of the API
+      operationId: getHealthStatus
+      tags:
+        - System
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: '2025-05-03T07:20:16.000Z'
+                required:
+                  - status
+                  - timestamp
+  
+  /api/v1/generate-reports:
+    post:
+      summary: Generate static reports
+      description: Triggers the generation of static reports
+      operationId: generateReports
+      tags:
+        - Reports
+      responses:
+        '202':
+          description: Report generation accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  status:
+                    type: string
+                    enum: [completed, failed]
+                    example: completed
+                  startedAt:
+                    type: string
+                    format: date-time
+                    example: '2025-05-03T07:20:16.000Z'
+                  finishedAt:
+                    type: string
+                    format: date-time
+                    example: '2025-05-03T07:20:20.000Z'
+                required:
+                  - status
+                  - startedAt
+                  - finishedAt
+        '500':
+          description: Report generation failed
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  status:
+                    type: string
+                    enum: [failed]
+                    example: failed
+                  startedAt:
+                    type: string
+                    format: date-time
+                    example: '2025-05-03T07:20:16.000Z'
+                  finishedAt:
+                    type: string
+                    format: date-time
+                    example: '2025-05-03T07:20:20.000Z'
+                required:
+                  - status
+                  - startedAt
+                  - finishedAt
+
+components:
+  schemas: {}

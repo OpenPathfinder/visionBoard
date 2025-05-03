@@ -47,6 +47,12 @@ const server = http.createServer(app)
 // Track all active connections
 const connections = new Set()
 
+// Set up connection tracking once (prevents listener leaks on multiple start/stop cycles)
+server.on('connection', connection => {
+  connections.add(connection)
+  connection.on('close', () => connections.delete(connection))
+})
+
 module.exports = () => ({
   start: async () => {
     const isDbConnected = await checkDatabaseConnection(knex)
@@ -64,13 +70,6 @@ module.exports = () => ({
       })
     })
 
-    // Track connections
-    server.on('connection', connection => {
-      connections.add(connection)
-      connection.on('close', () => {
-        connections.delete(connection)
-      })
-    })
     return server
   },
   stop: async () => {

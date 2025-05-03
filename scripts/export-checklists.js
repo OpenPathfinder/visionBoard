@@ -41,7 +41,7 @@ const { join } = require('path');
     const result = await knex.raw(query)
 
     // Write the result to a JSON file
-    const outputPath = join(process.cwd(), 'output', 'checklists.json')
+    const outputPath = join(__dirname, '../output', 'checklists.json')
     writeFileSync(outputPath, JSON.stringify(result.rows, null, 2))
 
     console.log(`Data exported to ${outputPath}`)

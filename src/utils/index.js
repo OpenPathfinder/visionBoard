@@ -55,7 +55,7 @@ const ensureGithubToken = () => {
 
 const getSeverityFromPriorityGroup = (priorityGroup) => {
   const priorityType = priorityGroup[0]
-  const priorityValue = parseInt(priorityGroup.slice(1), 10)
+  const priorityValue = Number(priorityGroup.slice(1))
   // Recommendations (Rxx)
   if (priorityType === 'R') {
     return 'info'
@@ -107,13 +107,13 @@ const isDateWithinPolicy = (targetDate, policy) => {
 
   // Handle expiration policy
   if (policy.endsWith('d')) {
-    const days = parseInt(policy.replace('d', ''), 10)
+    const days = Number(policy.replace('d', ''))
     expirationDate = add(targetDateObj, { days })
   } else if (policy.endsWith('m')) {
-    const months = parseInt(policy.replace('m', ''), 10)
+    const months = Number(policy.replace('m', ''))
     expirationDate = add(targetDateObj, { months })
   } else if (policy.endsWith('q')) {
-    const quarters = parseInt(policy.replace('q', ''), 10)
+    const quarters = Number(policy.replace('q', ''))
     expirationDate = add(targetDateObj, { months: quarters * 3 })
   } else {
     throw new Error('Unsupported policy format')

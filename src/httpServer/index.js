@@ -23,6 +23,8 @@ async function initializeServer () {
   const swaggerFile = join(__dirname, 'swagger/api-v1.yml')
 
   // Middleware
+  app.use(express.json())
+  app.use(express.urlencoded({ extended: false }))
   app.set('view engine', 'ejs')
   app.set('views', templatePath)
 
@@ -36,8 +38,8 @@ async function initializeServer () {
     beautifyErrors: true,
     validateResponses: true,
     validateRequests: true,
-    // Ignore paths that do not start with /api/
-    ignorePaths: /^(?!\/api\/)/
+    // Validate only real API calls (everything under /api/v1/**)
+    ignorePaths: /^\/(?!api\/v1\/).*/
   })
   logger.info('Swagger validation initialized successfully')
 
@@ -50,13 +52,13 @@ async function initializeServer () {
   // Directory listing for static files
   app.use('/assets', serveStatic(publicPath, {
     index: false,
-    dotfiles: 'deny',
-    icons: true
+    dotfiles: 'deny'
   }))
 
   // Error handling middleware
   app.use((err, req, res, next) => {
     logger.error(`Server error: ${err.message}`, { stack: err.stack })
+    if (res.headersSent) return next(err)
     res.status(500).json({
       error: 'Internal Server Error',
       message: 'Check server logs for more details'

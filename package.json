@@ -19,6 +19,7 @@
     "db:export-checks": "node scripts/export-checks.js",
     "db:export-checklists": "node scripts/export-checklists.js",
     "db:seed": "knex seed:run",
+    "prestart": "npm run db:migrate",
     "start": "node server.js",
     "test:e2e": "playwright test",
     "test:e2e-ci": "playwright test --reporter=list",

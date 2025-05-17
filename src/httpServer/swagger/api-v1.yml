@@ -31,6 +31,71 @@ paths:
                 required:
                   - status
                   - timestamp
+
+  /api/v1/checks:
+    get:
+      summary: List all available checks
+      description: Returns the all available checks
+      operationId: getChecks
+      tags:
+        - System
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+                schema:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      id:
+                        type: number
+                        example: 9
+                      title:
+                        type: string
+                        example: Check title
+                      description:
+                        type: string
+                        example: Check description
+                      default_section_number:
+                        type: string
+                        example: "1"
+                      default_section_name:
+                        type: string
+                        example: Check section name
+                      code_name:
+                        type: string
+                        example: check_code_name
+                      default_priority_group:
+                        type: string
+                        example: R6
+                      is_c_scrm:
+                        type: boolean
+                        example: true
+                      implementation_status:
+                        type: string
+                        example: completed
+                      implementation_type:
+                        nullable: true
+                        type: string
+                        example: manual
+                      implementation_details_reference:
+                        type: string
+                        nullable: true
+                        example: https://example.com/implementation-details
+                      details_url:
+                        type: string
+                        example: https://openpathfinder.com/docs/checks/annualDependencyRefresh
+                      created_at:
+                        type: string
+                        format: date-time
+                        example: '2025-05-03T07:20:16.000Z'
+                      updated_at:
+                        type: string
+                        format: date-time
+                        example: '2025-05-03T07:20:16.000Z'
   
   /api/v1/generate-reports:
     post:

@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 17.2 (Debian 17.2-1.pgdg120+1)
--- Dumped by pg_dump version 17.2 (Debian 17.2-1.pgdg120+1)
+-- Dumped from database version 17.4 (Debian 17.4-1.pgdg120+2)
+-- Dumped by pg_dump version 17.4 (Debian 17.4-1.pgdg120+2)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -1302,7 +1302,7 @@ ALTER TABLE ONLY public.owasp_top10_training
 --
 
 ALTER TABLE ONLY public.resources_for_compliance_checks
-    ADD CONSTRAINT resources_for_compliance_checks_compliance_check_id_foreign FOREIGN KEY (compliance_check_id) REFERENCES public.compliance_checks(id);
+    ADD CONSTRAINT resources_for_compliance_checks_compliance_check_id_foreign FOREIGN KEY (compliance_check_id) REFERENCES public.compliance_checks(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -1310,7 +1310,7 @@ ALTER TABLE ONLY public.resources_for_compliance_checks
 --
 
 ALTER TABLE ONLY public.resources_for_compliance_checks
-    ADD CONSTRAINT resources_for_compliance_checks_compliance_check_resource_id_fo FOREIGN KEY (compliance_check_resource_id) REFERENCES public.compliance_checks_resources(id);
+    ADD CONSTRAINT resources_for_compliance_checks_compliance_check_resource_id_fo FOREIGN KEY (compliance_check_resource_id) REFERENCES public.compliance_checks_resources(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

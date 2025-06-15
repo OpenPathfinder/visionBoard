@@ -1,4 +1,3 @@
-const { generateStaticReports } = require('../../reports')
 const pkg = require('../../../package.json')
 const { logger } = require('../../utils')
 const { initializeStore } = require('../../store')
@@ -8,7 +7,7 @@ const { getWorkflowsDetails } = require('../../cli/workflows')
 
 const HTTP_DEFAULT_TIMEOUT = 30 * 1000 // 30 seconds
 
-const runWorkflow = (workflowName, data) => new Promise((resolve, reject) => {
+const runWorkflow = ({ workflowName, knex, data } = {}) => new Promise((resolve, reject) => {
   const { workflows } = getWorkflowsDetails()
   const workflow = workflows[workflowName]
   if (!workflow || typeof workflow.workflow !== 'function') {
@@ -21,7 +20,7 @@ const runWorkflow = (workflowName, data) => new Promise((resolve, reject) => {
   }, HTTP_DEFAULT_TIMEOUT)
 
   Promise.resolve()
-    .then(() => workflow.workflow(data))
+    .then(() => workflow.workflow(knex, data))
     .then(() => resolve(workflow))
     .catch(err => reject(new Error(`Failed to run workflow: ${err.message}`)))
     .finally(() => clearTimeout(timeout))
@@ -91,7 +90,7 @@ function createApiRouter (knex, express) {
       // @TODO: We need to delegate the workflow execution to a worker and provide and endpoint to check the status
       // This is a temporary solution to run the workflow within the HTTP timeout
       // data validation is done in the workflow itself
-      const wf = await runWorkflow(id, data)
+      const wf = await runWorkflow({ workflowName: id, knex, data })
       res.status(202).json({ status: 'completed', workflow: { id, description: wf.description } })
     } catch (error) {
       logger.error(error)
@@ -105,24 +104,6 @@ function createApiRouter (knex, express) {
     }
   })
 
-  router.post('/generate-reports', async (req, res) => {
-    const startTs = new Date().toISOString()
-    try {
-      await generateStaticReports(knex, { clearPreviousReports: true })
-      res.status(202).json({
-        status: 'completed',
-        startedAt: startTs,
-        finishedAt: new Date().toISOString()
-      })
-    } catch (error) {
-      logger.error(error)
-      res.status(500).json({
-        status: 'failed',
-        startedAt: startTs,
-        finishedAt: new Date().toISOString()
-      })
-    }
-  })
   return router
 }
 

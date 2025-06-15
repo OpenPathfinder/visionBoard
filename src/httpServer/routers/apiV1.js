@@ -4,6 +4,7 @@ const { logger } = require('../../utils')
 const { initializeStore } = require('../../store')
 const _ = require('lodash')
 const { isSlug } = require('validator')
+const { getAllWorkflows } = require('../../cli/workflows')
 
 function createApiRouter (knex, express) {
   const { addProject, getProjectByName } = initializeStore(knex)
@@ -39,6 +40,16 @@ function createApiRouter (knex, express) {
     } catch (err) {
       logger.error(err)
       return res.status(500).json({ errors: [{ message: 'Internal server error' }] })
+    }
+  })
+
+  router.get('/workflow', (req, res) => {
+    try {
+      const workflows = getAllWorkflows()
+      res.json(workflows)
+    } catch (error) {
+      logger.error(error)
+      res.status(500).json({ errors: [{ message: 'Failed to retrieve workflows' }] })
     }
   })
 

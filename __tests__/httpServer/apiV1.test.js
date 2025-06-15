@@ -6,6 +6,7 @@ const { resetDatabase, initializeStore } = require('../../__utils__')
 const pkg = require('../../package.json')
 const serverModule = require('../../src/httpServer')
 const { dbSettings } = getConfig('test')
+const { getAllWorkflows } = require('../../src/cli/workflows')
 let server
 let serverStop
 let app
@@ -110,6 +111,17 @@ describe('HTTP Server API V1', () => {
       // Response details
       expect(response.status).toBe(409)
       expect(response.body).toStrictEqual({ errors: [{ message: 'Project already exists.' }] })
+    })
+
+    test.todo('should return 500 for internal server error')
+  })
+
+  describe('GET /api/v1/workflow', () => {
+    test('should return 200 and a list of workflows', async () => {
+      const response = await app.get('/api/v1/workflow')
+
+      expect(response.status).toBe(200)
+      expect(response.body).toStrictEqual(getAllWorkflows())
     })
 
     test.todo('should return 500 for internal server error')

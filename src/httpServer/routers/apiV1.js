@@ -1,5 +1,5 @@
 const pkg = require('../../../package.json')
-const { logger } = require('../../utils')
+const { logger, validateGithubUrl } = require('../../utils')
 const { initializeStore } = require('../../store')
 const _ = require('lodash')
 const { isSlug } = require('validator')
@@ -27,12 +27,47 @@ const runWorkflow = ({ workflowName, knex, data } = {}) => new Promise((resolve,
 })
 
 function createApiRouter (knex, express) {
-  const { addProject, getProjectByName } = initializeStore(knex)
+  const { addProject, getProjectByName, addGithubOrganization, getProjectById, getAllGithubOrganizationsByProjectsId } = initializeStore(knex)
 
   const router = express.Router()
 
   router.get('/__health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString(), version: pkg.version, name: pkg.name })
+  })
+
+  router.post('/project/:projectId/gh-org', async (req, res) => {
+    const projectId = parseInt(req.params.projectId)
+    const { githubOrgUrl } = req.body
+
+    if (!projectId || !Number.isInteger(projectId)) {
+      return res.status(400).json({ errors: [{ message: 'Invalid project ID' }] })
+    }
+    if (!githubOrgUrl || !validateGithubUrl(githubOrgUrl)) {
+      return res.status(400).json({ errors: [{ message: 'Invalid GitHub organization name' }] })
+    }
+
+    const project = await getProjectById(projectId)
+    if (!project) {
+      return res.status(404).json({ errors: [{ message: 'Project not found' }] })
+    }
+
+    const existingGhOrg = await getAllGithubOrganizationsByProjectsId([projectId])
+    if (existingGhOrg.some(org => org.html_url === githubOrgUrl)) {
+      return res.status(409).json({ errors: [{ message: 'GitHub organization already exists for this project' }] })
+    }
+
+    try {
+      const org = await addGithubOrganization({
+        html_url: githubOrgUrl,
+        login: githubOrgUrl.split('https://github.com/')[1],
+        project_id: project.id
+      })
+
+      return res.status(201).json(org)
+    } catch (err) {
+      logger.error(err)
+      return res.status(500).json({ errors: [{ message: 'Internal server error' }] })
+    }
   })
 
   router.post('/project', async (req, res) => {

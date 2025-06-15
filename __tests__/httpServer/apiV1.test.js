@@ -34,6 +34,8 @@ let serverStop
 let app
 let knex
 let getAllProjects
+let addProject
+let getAllGithubOrganizationsByProjectsId
 
 beforeAll(async () => {
   // Initialize server asynchronously
@@ -43,7 +45,9 @@ beforeAll(async () => {
   app = request(server)
   knex = knexInit(dbSettings);
   ({
-    getAllProjects
+    getAllProjects,
+    addProject,
+    getAllGithubOrganizationsByProjectsId
   } = initializeStore(knex))
 })
 
@@ -221,5 +225,86 @@ describe('HTTP Server API V1', () => {
     })
 
     test.todo('should return 500 when workflow execution times out')
+  })
+
+  describe('POST /api/v1/project/:projectId/gh-org', () => {
+    let projectId
+
+    beforeEach(async () => {
+      // Create a test project for each test
+      const project = await addProject({ name: 'test-project' })
+      projectId = project.id
+    })
+
+    test('should return 201 and add a new GitHub organization', async () => {
+      const githubOrgUrl = 'https://github.com/expressjs'
+
+      const response = await app
+        .post(`/api/v1/project/${projectId}/gh-org`)
+        .send({ githubOrgUrl })
+
+      expect(response.status).toBe(201)
+      expect(response.body).toHaveProperty('id')
+      expect(response.body).toHaveProperty('login', 'expressjs')
+      expect(response.body).toHaveProperty('html_url', githubOrgUrl)
+      expect(response.body).toHaveProperty('project_id', projectId)
+
+      // Verify organization was added to the database
+      const orgs = await getAllGithubOrganizationsByProjectsId([projectId])
+      expect(orgs.length).toBe(1)
+      expect(orgs[0].html_url).toBe(githubOrgUrl)
+    })
+
+    test('should return 400 for invalid project ID', async () => {
+      const response = await app
+        .post('/api/v1/project/invalid/gh-org')
+        .send({ githubOrgUrl: 'https://github.com/expressjs' })
+
+      expect(response.status).toBe(400)
+      expect(response.body).toHaveProperty('errors')
+      expect(response.body.errors[0]).toHaveProperty('message', 'Invalid project ID')
+    })
+
+    test('should return 400 for invalid GitHub organization URL', async () => {
+      const response = await app
+        .post(`/api/v1/project/${projectId}/gh-org`)
+        .send({ githubOrgUrl: 'https://invalid-url.com/org' })
+
+      expect(response.status).toBe(400)
+      expect(response.body).toHaveProperty('errors')
+      expect(response.body.errors[0]).toHaveProperty('message', 'must match pattern "https://github.com/[^/]+"')
+    })
+
+    test('should return 404 for project not found', async () => {
+      const nonExistentProjectId = 9999999
+
+      const response = await app
+        .post(`/api/v1/project/${nonExistentProjectId}/gh-org`)
+        .send({ githubOrgUrl: 'https://github.com/expressjs' })
+
+      expect(response.status).toBe(404)
+      expect(response.body).toHaveProperty('errors')
+      expect(response.body.errors[0]).toHaveProperty('message', 'Project not found')
+    })
+
+    test('should return 409 for duplicate GitHub organization', async () => {
+      const githubOrgUrl = 'https://github.com/expressjs'
+
+      // First add the organization
+      await app
+        .post(`/api/v1/project/${projectId}/gh-org`)
+        .send({ githubOrgUrl })
+
+      // Try to add it again
+      const response = await app
+        .post(`/api/v1/project/${projectId}/gh-org`)
+        .send({ githubOrgUrl })
+
+      expect(response.status).toBe(409)
+      expect(response.body).toHaveProperty('errors')
+      expect(response.body.errors[0]).toHaveProperty('message', 'GitHub organization already exists for this project')
+    })
+
+    test.todo('should return 500 for internal server error')
   })
 })

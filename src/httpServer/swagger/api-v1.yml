@@ -39,7 +39,37 @@ paths:
                   - timestamp
                   - name
                   - version
-  
+  /api/v1/workflows:
+    get:
+      summary: List all workflows
+      description: Returns a list of all workflows in the system
+      operationId: listWorkflows
+      tags:
+        - Workflows
+      responses:
+        '200':
+          description: A list of workflows
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    name:
+                      type: string
+                      example: example-workflow
+                    description:
+                      type: string
+                      example: This is an example workflow
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   /api/v1/project:
     post:
       summary: Create a new project

@@ -39,7 +39,7 @@ paths:
                   - timestamp
                   - name
                   - version
-  /api/v1/workflows:
+  /api/v1/workflow:
     get:
       summary: List all workflows
       description: Returns a list of all workflows in the system

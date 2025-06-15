@@ -115,9 +115,9 @@ describe('HTTP Server API V1', () => {
     test.todo('should return 500 for internal server error')
   })
 
-  describe('GET /api/v1/workflows', () => {
+  describe('GET /api/v1/workflow', () => {
     test('should return 200 and a list of workflows', async () => {
-      const response = await app.get('/api/v1/workflows')
+      const response = await app.get('/api/v1/workflow')
 
       expect(response.status).toBe(200)
       expect(response.body).toBeInstanceOf(Array)

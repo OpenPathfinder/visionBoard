@@ -43,7 +43,7 @@ function createApiRouter (knex, express) {
     }
   })
 
-  router.get('/workflows', (req, res) => {
+  router.get('/workflow', (req, res) => {
     try {
       const workflows = getAllWorkflows()
       res.json(workflows)

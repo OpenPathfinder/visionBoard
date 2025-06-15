@@ -1,3 +1,24 @@
+// Mocks
+jest.mock('../../src/reports', () => ({
+  generateStaticReports: jest.fn()
+}))
+
+const mockWorkflowFn = jest.fn()
+jest.mock('../../src/cli/workflows', () => ({
+  getWorkflowsDetails: jest.fn(() => ({
+    workflows: {
+      'test-workflow': {
+        name: 'test-workflow',
+        description: 'Test workflow',
+        workflow: mockWorkflowFn
+      }
+    },
+    workflowsList: [
+      { id: 'test-workflow', description: 'Test workflow' }
+    ]
+  }))
+}))
+
 const request = require('supertest')
 const { generateStaticReports } = require('../../src/reports')
 const knexInit = require('knex')
@@ -6,17 +27,14 @@ const { resetDatabase, initializeStore } = require('../../__utils__')
 const pkg = require('../../package.json')
 const serverModule = require('../../src/httpServer')
 const { dbSettings } = getConfig('test')
-const { getAllWorkflows } = require('../../src/cli/workflows')
+const { getWorkflowsDetails } = require('../../src/cli/workflows')
+const { workflowsList } = getWorkflowsDetails()
+
 let server
 let serverStop
 let app
 let knex
 let getAllProjects
-
-// Mocks
-jest.mock('../../src/reports', () => ({
-  generateStaticReports: jest.fn()
-}))
 
 beforeAll(async () => {
   // Initialize server asynchronously
@@ -121,10 +139,87 @@ describe('HTTP Server API V1', () => {
       const response = await app.get('/api/v1/workflow')
 
       expect(response.status).toBe(200)
-      expect(response.body).toStrictEqual(getAllWorkflows())
+      expect(response.body).toStrictEqual(workflowsList)
     })
 
     test.todo('should return 500 for internal server error')
+  })
+
+  describe('POST /api/v1/workflow/:id/run', () => {
+    let workflowSpy
+    let mockWorkflowFn
+
+    beforeEach(() => {
+      mockWorkflowFn = jest.fn()
+      workflowSpy = jest.spyOn(require('../../src/cli/workflows'), 'getWorkflowsDetails').mockReturnValue({
+        workflows: {
+          'test-workflow': {
+            name: 'test-workflow',
+            description: 'Test workflow',
+            workflow: mockWorkflowFn
+          }
+        },
+        workflowsList: [
+          { id: 'test-workflow', description: 'Test workflow' }
+        ]
+      })
+    })
+
+    afterEach(() => {
+      workflowSpy.mockRestore()
+      jest.clearAllMocks()
+    })
+
+    test('should return 202 and run the specified workflow', async () => {
+      mockWorkflowFn.mockResolvedValueOnce()
+      const response = await app
+        .post('/api/v1/workflow/test-workflow/run')
+        .set('Content-Type', 'application/json')
+        .send({ some: 'data' })
+
+      expect(response.status).toBe(202)
+      expect(response.body).toHaveProperty('status', 'completed')
+      expect(response.body.workflow).toMatchObject({
+        id: 'test-workflow',
+        description: 'Test workflow'
+      })
+      expect(mockWorkflowFn).toHaveBeenCalledWith({ some: 'data' })
+    })
+
+    test('should return 404 for invalid workflow ID', async () => {
+    // Overwrite the spy to return no workflows
+      workflowSpy.mockReturnValueOnce({
+        workflows: {},
+        workflowsList: []
+      })
+      const response = await app
+        .post('/api/v1/workflow/invalid-workflow/run')
+        .set('Content-Type', 'application/json')
+        .send({})
+
+      expect(response.status).toBe(404)
+      expect(response.body).toStrictEqual({ errors: [{ message: 'Workflow not found' }] })
+    })
+
+    test('should return 500 for internal server error', async () => {
+      mockWorkflowFn.mockRejectedValueOnce(new Error('Something went wrong'))
+
+      const response = await app
+        .post('/api/v1/workflow/test-workflow/run')
+        .set('Content-Type', 'application/json')
+        .send({ some: 'data' })
+
+      expect(response.status).toBe(500)
+      expect(response.body.status).toBe('failed')
+      expect(response.body.workflow).toMatchObject({
+        id: 'test-workflow',
+        description: 'Test workflow'
+      })
+      expect(response.body.errors[0].message).toMatch(/Failed to run workflow: Something went wrong/)
+      expect(mockWorkflowFn).toHaveBeenCalledWith({ some: 'data' })
+    })
+
+    test.todo('should return 500 when workflow execution times out')
   })
 
   describe('POST /api/v1/generate-reports', () => {

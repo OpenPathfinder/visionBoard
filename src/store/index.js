@@ -43,7 +43,13 @@ const addGithubOrganization = knex => async (organization) => {
   return knex('github_organizations').insert(organization).returning('*').then(results => results[0])
 }
 
+const getProjectByName = knex => (name) => {
+  debug(`Getting project by name (${name})...`)
+  return knex('projects').where({ name }).first()
+}
+
 const addProject = knex => async (project) => {
+  // @TODO: Check if the validation is needed after the CLI Migration
   const { name } = project
   const projectExists = await knex('projects').where({ name }).first()
   debug(`Checking if project (${name}) exists...`)
@@ -241,7 +247,8 @@ const initializeStore = (knex) => {
     upsertProjectPolicies: upsertProjectPolicies(knex),
     upsertOwaspTop10Training: upsertOwaspTop10Training(knex),
     getAllOSSFResults: () => getAll('ossf_scorecard_results'),
-    getProjectById: (id) => getOne('projects', id)
+    getProjectById: (id) => getOne('projects', id),
+    getProjectByName: getProjectByName(knex)
   }
 }
 

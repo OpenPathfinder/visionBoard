@@ -1,11 +1,12 @@
 const { generateStaticReports } = require('../../reports')
+const pkg = require('../../../package.json')
 const { logger } = require('../../utils')
 
 function createApiRouter (knex, express) {
   const router = express.Router()
 
   router.get('/__health', (req, res) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString() })
+    res.json({ status: 'ok', timestamp: new Date().toISOString(), version: pkg.version, name: pkg.name })
   })
 
   router.post('/generate-reports', async (req, res) => {

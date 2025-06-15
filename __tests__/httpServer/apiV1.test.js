@@ -1,10 +1,16 @@
 const request = require('supertest')
 const { generateStaticReports } = require('../../src/reports')
+const knexInit = require('knex')
+const { getConfig } = require('../../src/config')
+const { resetDatabase, initializeStore } = require('../../__utils__')
 const pkg = require('../../package.json')
 const serverModule = require('../../src/httpServer')
+const { dbSettings } = getConfig('test')
 let server
 let serverStop
 let app
+let knex
+let getAllProjects
 
 // Mocks
 jest.mock('../../src/reports', () => ({
@@ -17,16 +23,25 @@ beforeAll(async () => {
   server = await serverInstance.start()
   serverStop = serverInstance.stop
   app = request(server)
+  knex = knexInit(dbSettings);
+  ({
+    getAllProjects
+  } = initializeStore(knex))
 })
 
 afterAll(async () => {
   // Cleanup after all tests
   await serverStop?.()
+  await resetDatabase(knex)
+  await knex.destroy()
 })
 
-beforeEach(() => {
+beforeEach(async () => {
+  await resetDatabase(knex)
   jest.clearAllMocks()
 })
+
+afterEach(jest.clearAllMocks)
 
 describe('HTTP Server API V1', () => {
   describe('GET /api/v1/__health', () => {
@@ -42,6 +57,62 @@ describe('HTTP Server API V1', () => {
       const timestamp = new Date(response.body.timestamp)
       expect(timestamp.toISOString()).toBe(response.body.timestamp)
     })
+  })
+
+  describe('POST /api/v1/project', () => {
+    test('should create a new project', async () => {
+      // Initial state
+      let projects = await getAllProjects()
+      expect(projects.length).toBe(0)
+      // Request
+      const newProject = { name: 'eslint' }
+      const response = await app.post('/api/v1/project').send(newProject)
+      // Database changes
+      projects = await getAllProjects()
+      expect(projects.length).toBe(1)
+      expect(projects[0].name).toBe('eslint')
+      // Response details
+      expect(response.status).toBe(201)
+      expect(response.headers).toHaveProperty('location', `/api/v1/project/${projects[0].id}`)
+      expect(response.body).toHaveProperty('id')
+      expect(response.body).toHaveProperty('name', newProject.name)
+      expect(response.body).toHaveProperty('created_at')
+      expect(response.body).toHaveProperty('updated_at')
+    })
+    test('should return 400 for invalid project name', async () => {
+      // Initial state
+      let projects = await getAllProjects()
+      expect(projects.length).toBe(0)
+      // Request
+      const invalidProject = { name: 'Invalid Name!' }
+      const response = await app.post('/api/v1/project').send(invalidProject)
+      // Database changes
+      projects = await getAllProjects()
+      expect(projects.length).toBe(0)
+      // Response details
+      expect(response.status).toBe(400)
+      expect(response.body).toStrictEqual({ errors: [{ errorCode: 'pattern.openapi.validation', message: 'must match pattern "^[a-zA-Z0-9_-]+$"', path: '/body/name' }], name: 'Bad Request', path: '/api/v1/project', status: 400 })
+    })
+    test('should return 409 if the project already exists', async () => {
+      // Initial state
+      let projects = await getAllProjects()
+      expect(projects.length).toBe(0)
+      // Create the project first
+      const existingProject = { name: 'eslint' }
+      await app.post('/api/v1/project').send(existingProject)
+      projects = await getAllProjects()
+      expect(projects.length).toBe(1)
+      // Request to create the same project again
+      const response = await app.post('/api/v1/project').send(existingProject)
+      // Database changes
+      projects = await getAllProjects()
+      expect(projects.length).toBe(1) // Still only one project
+      // Response details
+      expect(response.status).toBe(409)
+      expect(response.body).toStrictEqual({ error: 'Project already exists.' })
+    })
+
+    test.todo('should return 500 for internal server error')
   })
 
   describe('POST /api/v1/generate-reports', () => {

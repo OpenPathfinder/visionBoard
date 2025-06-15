@@ -28,9 +28,17 @@ paths:
                     type: string
                     format: date-time
                     example: '2025-05-03T07:20:16.000Z'
+                  name:
+                    type: string
+                    example: visionboard
+                  version:
+                    type: string
+                    example: 1.0.0
                 required:
                   - status
                   - timestamp
+                  - name
+                  - version
   
   /api/v1/generate-reports:
     post:

@@ -1,5 +1,6 @@
 const request = require('supertest')
 const { generateStaticReports } = require('../../src/reports')
+const pkg = require('../../package.json')
 const serverModule = require('../../src/httpServer')
 let server
 let serverStop
@@ -35,6 +36,8 @@ describe('HTTP Server API V1', () => {
       expect(response.status).toBe(200)
       expect(response.body).toHaveProperty('status', 'ok')
       expect(response.body).toHaveProperty('timestamp')
+      expect(response.body).toHaveProperty('version', pkg.version)
+      expect(response.body).toHaveProperty('name', pkg.name)
 
       const timestamp = new Date(response.body.timestamp)
       expect(timestamp.toISOString()).toBe(response.body.timestamp)

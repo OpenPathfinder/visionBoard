@@ -183,7 +183,8 @@ describe('HTTP Server API V1', () => {
         id: 'test-workflow',
         description: 'Test workflow'
       })
-      expect(mockWorkflowFn).toHaveBeenCalledWith({ some: 'data' })
+      // The first argument (...calls[0][0]) is Knex and we ignore it due framework limitations
+      expect(mockWorkflowFn.mock.calls[0][1]).toEqual({ some: 'data' })
     })
 
     test('should return 404 for invalid workflow ID', async () => {
@@ -216,7 +217,8 @@ describe('HTTP Server API V1', () => {
         description: 'Test workflow'
       })
       expect(response.body.errors[0].message).toMatch(/Failed to run workflow: Something went wrong/)
-      expect(mockWorkflowFn).toHaveBeenCalledWith({ some: 'data' })
+      // The first argument (...calls[0][0]) is Knex and we ignore it due framework limitations
+      expect(mockWorkflowFn.mock.calls[0][1]).toEqual({ some: 'data' })
     })
 
     test.todo('should return 500 when workflow execution times out')

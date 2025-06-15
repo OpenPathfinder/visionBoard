@@ -115,6 +115,22 @@ describe('HTTP Server API V1', () => {
     test.todo('should return 500 for internal server error')
   })
 
+  describe('GET /api/v1/workflows', () => {
+    test('should return 200 and a list of workflows', async () => {
+      const response = await app.get('/api/v1/workflows')
+
+      expect(response.status).toBe(200)
+      expect(response.body).toBeInstanceOf(Array)
+      expect(response.body.length).toBeGreaterThan(0)
+
+      const workflow = response.body[0]
+      expect(workflow).toHaveProperty('name')
+      expect(workflow).toHaveProperty('description')
+    })
+
+    test.todo('should return 500 for internal server error')
+  })
+
   describe('POST /api/v1/generate-reports', () => {
     test('should return status completed when report generation succeeds', async () => {
       generateStaticReports.mockResolvedValueOnce()

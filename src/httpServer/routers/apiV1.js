@@ -4,7 +4,27 @@ const { logger } = require('../../utils')
 const { initializeStore } = require('../../store')
 const _ = require('lodash')
 const { isSlug } = require('validator')
-const { getAllWorkflows } = require('../../cli/workflows')
+const { getWorkflowsDetails } = require('../../cli/workflows')
+
+const HTTP_DEFAULT_TIMEOUT = 30 * 1000 // 30 seconds
+
+const runWorkflow = (workflowName, data) => new Promise((resolve, reject) => {
+  const { workflows } = getWorkflowsDetails()
+  const workflow = workflows[workflowName]
+  if (!workflow || typeof workflow.workflow !== 'function') {
+    return reject(new Error('Invalid Workflow'))
+  }
+  // @TODO: This is temporary and ideally we should move this to a queue system
+  // to avoid blocking the HTTP server and allow long-running workflows
+  const timeout = setTimeout(() => {
+    reject(new Error('Workflow default timeout reached'))
+  }, HTTP_DEFAULT_TIMEOUT)
+
+  workflow.workflow(data)
+    .then(() => resolve(workflow))
+    .catch(err => reject(new Error(`Failed to run workflow: ${err.message}`)))
+    .finally(() => clearTimeout(timeout))
+})
 
 function createApiRouter (knex, express) {
   const { addProject, getProjectByName } = initializeStore(knex)
@@ -45,11 +65,42 @@ function createApiRouter (knex, express) {
 
   router.get('/workflow', (req, res) => {
     try {
-      const workflows = getAllWorkflows()
-      res.json(workflows)
+      const { workflowsList } = getWorkflowsDetails()
+      res.json(workflowsList)
     } catch (error) {
       logger.error(error)
       res.status(500).json({ errors: [{ message: 'Failed to retrieve workflows' }] })
+    }
+  })
+
+  router.post('/workflow/:id/run', async (req, res) => {
+    const { id } = req.params
+    const data = req.body
+    const { workflows } = getWorkflowsDetails()
+
+    if (!id || !isSlug(id)) {
+      return res.status(400).json({ errors: [{ message: 'Invalid workflow ID' }] })
+    }
+    const workflow = workflows[id]
+
+    if (!workflow) {
+      return res.status(404).json({ errors: [{ message: 'Workflow not found' }] })
+    }
+    try {
+      // @TODO: We need to delegate the workflow execution to a worker and provide and endpoint to check the status
+      // This is a temporary solution to run the workflow within the HTTP timeout
+      // data validation is done in the workflow itself
+      const wf = await runWorkflow(id, data)
+      res.status(202).json({ status: 'completed', workflow: { id, description: wf.description } })
+    } catch (error) {
+      logger.error(error)
+      res.status(500).json({
+        status: 'failed',
+        workflow: workflow
+          ? { id, description: workflow.description }
+          : undefined,
+        errors: [{ message: `Failed to run workflow: ${error.message}` }]
+      })
     }
   })
 

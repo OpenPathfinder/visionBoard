@@ -1,4 +1,5 @@
 const inquirer = require('inquirer').default
+const _ = require('lodash')
 const debug = require('debug')('cli:workflows')
 const { updateGithubOrgs, upsertGithubRepositories, runAllTheComplianceChecks, upsertOSSFScorecardAnalysis } = require('../workflows')
 const { generateStaticReports } = require('../reports')
@@ -31,9 +32,23 @@ const commandList = [{
   workflow: bulkImport
 }]
 
-const workflows = commandList.map(({ name, description }) => ({ id: name, description }))
-
 const validCommandNames = commandList.map(({ name }) => name)
+
+const getWorkflowsDetails = () => {
+  const workflows = {}
+  const workflowsList = []
+
+  commandList.forEach((workflow) => {
+    const workflowName = _.kebabCase(workflow.name)
+    workflowsList.push({ id: workflowName, description: workflow.description })
+    workflows[workflowName] = {
+      description: workflow.description,
+      workflow: workflow.workflow
+    }
+  })
+
+  return { workflows, workflowsList }
+}
 
 function listWorkflowCommand (options = {}) {
   logger.info('Available workflows:')
@@ -72,6 +87,6 @@ async function runWorkflowCommand (knex, options = {}) {
 
 module.exports = {
   listWorkflowCommand,
-  getAllWorkflows: () => workflows,
+  getWorkflowsDetails,
   runWorkflowCommand
 }

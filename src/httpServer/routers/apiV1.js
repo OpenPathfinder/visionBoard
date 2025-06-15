@@ -22,11 +22,11 @@ function createApiRouter (knex, express) {
 
       // Check data and database
       if (!projectName || !isSlug(projectName)) {
-        return res.status(400).json({ error: 'Invalid project name. Must be a slug.' })
+        return res.status(400).json({ errors: [{ message: 'Invalid project name. Must be a slug.' }] })
       }
       const existingProject = await getProjectByName(projectName)
       if (existingProject) {
-        return res.status(409).json({ error: 'Project already exists.' })
+        return res.status(409).json({ errors: [{ message: 'Project already exists.' }] })
       }
 
       // Modify database
@@ -38,7 +38,7 @@ function createApiRouter (knex, express) {
         .json(project)
     } catch (err) {
       logger.error(err)
-      return res.status(500).json({ error: 'Internal server error' })
+      return res.status(500).json({ errors: [{ message: 'Internal server error' }] })
     }
   })
 

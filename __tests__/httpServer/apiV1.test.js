@@ -60,7 +60,7 @@ describe('HTTP Server API V1', () => {
   })
 
   describe('POST /api/v1/project', () => {
-    test('should create a new project', async () => {
+    test('should return 200 and create a new project', async () => {
       // Initial state
       let projects = await getAllProjects()
       expect(projects.length).toBe(0)
@@ -109,7 +109,7 @@ describe('HTTP Server API V1', () => {
       expect(projects.length).toBe(1) // Still only one project
       // Response details
       expect(response.status).toBe(409)
-      expect(response.body).toStrictEqual({ error: 'Project already exists.' })
+      expect(response.body).toStrictEqual({ errors: [{ message: 'Project already exists.' }] })
     })
 
     test.todo('should return 500 for internal server error')

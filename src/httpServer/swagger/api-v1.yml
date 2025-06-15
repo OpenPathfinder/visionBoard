@@ -73,39 +73,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Project'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: false
-                properties:
-                  error:
-                    type: string
-                    example: Internal server error
         '409':
           description: Project already exists
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties: false
-                properties:
-                  error:
-                    type: string
-                    example: Project already exists
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '400':
           description: Bad request, invalid input data
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties: false
-                properties:
-                  error:
-                    type: string
-                    example: Invalid project data
+                $ref: '#/components/schemas/ErrorResponse'
   /api/v1/generate-reports:
     post:
       summary: Generate static reports
@@ -288,3 +273,45 @@ components:
         - name
         - created_at
         - updated_at
+    ErrorObject:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: Optional machine-readable error code
+          example: some.error.code
+        message:
+          type: string
+          description: Human-readable error message
+          example: Something went wrong
+        path:
+          type: string
+          description: Optional path to the field or resource
+          example: /body/field
+      required:
+        - message
+      additionalProperties: true
+
+    ErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorObject'
+          minItems: 1
+        name:
+          type: string
+          description: Optional error name
+          example: Error
+        path:
+          type: string
+          description: Optional API path
+          example: /api/v1/resource
+        status:
+          type: integer
+          description: Optional HTTP status code
+          example: 400
+      required:
+        - errors
+      additionalProperties: true

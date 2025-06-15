@@ -36,11 +36,13 @@ function createApiRouter (knex, express) {
   })
 
   router.post('/project/:projectId/gh-org', async (req, res) => {
-    const projectId = parseInt(req.params.projectId)
+    // Parse projectId with explicit radix 10 to avoid issues with leading zeros
+    const projectId = parseInt(req.params.projectId, 10)
     const { githubOrgUrl } = req.body
 
-    if (!projectId || !Number.isInteger(projectId)) {
-      return res.status(400).json({ errors: [{ message: 'Invalid project ID' }] })
+    // Stricter validation: check for NaN, non-integers, and non-positive values
+    if (isNaN(projectId) || !Number.isInteger(projectId) || projectId <= 0) {
+      return res.status(400).json({ errors: [{ message: 'Invalid project ID. Must be a positive integer.' }] })
     }
     if (!githubOrgUrl || !validateGithubUrl(githubOrgUrl)) {
       return res.status(400).json({ errors: [{ message: 'Invalid GitHub organization name' }] })
@@ -51,19 +53,40 @@ function createApiRouter (knex, express) {
       return res.status(404).json({ errors: [{ message: 'Project not found' }] })
     }
 
+    // Normalize the input URL by parsing it with URL object
+    // This allows us to handle different protocols, query parameters, and trailing slashes
+    const urlObj = new URL(githubOrgUrl)
+    // Create a normalized URL: lowercase, no trailing slash, no query parameters
+    const normalizedGithubOrgUrl = `${urlObj.protocol}//${urlObj.host}${urlObj.pathname.replace(/\/$/, '')}`.toLowerCase()
+
     const existingGhOrg = await getAllGithubOrganizationsByProjectsId([projectId])
-    if (existingGhOrg.some(org => org.html_url === githubOrgUrl)) {
+    if (existingGhOrg.some(org => {
+      try {
+        // Apply the same normalization to stored URLs for consistent comparison
+        const storedUrl = new URL(org.html_url)
+        const normalizedStoredUrl = `${storedUrl.protocol}//${storedUrl.host}${storedUrl.pathname.replace(/\/$/, '')}`.toLowerCase()
+        return normalizedStoredUrl === normalizedGithubOrgUrl
+      } catch (e) {
+        // Fallback to simple comparison if URL parsing fails
+        return org.html_url.toLowerCase().replace(/\/$/, '') === normalizedGithubOrgUrl
+      }
+    })) {
       return res.status(409).json({ errors: [{ message: 'GitHub organization already exists for this project' }] })
     }
 
     try {
+      // Get the pathname from the already created URL object, remove leading/trailing slashes, and take the first segment
+      const login = urlObj.pathname.replace(/^\/|\/$/, '').split('/')[0]
+
       const org = await addGithubOrganization({
-        html_url: githubOrgUrl,
-        login: githubOrgUrl.split('https://github.com/')[1],
+        html_url: normalizedGithubOrgUrl,
+        login,
         project_id: project.id
       })
 
-      return res.status(201).json(org)
+      return res.status(201)
+        .header('Location', `/api/v1/project/${projectId}/gh-org/${org.id}`)
+        .json(org)
     } catch (err) {
       logger.error(err)
       return res.status(500).json({ errors: [{ message: 'Internal server error' }] })

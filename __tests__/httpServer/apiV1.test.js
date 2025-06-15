@@ -246,13 +246,41 @@ describe('HTTP Server API V1', () => {
       expect(response.status).toBe(201)
       expect(response.body).toHaveProperty('id')
       expect(response.body).toHaveProperty('login', 'expressjs')
-      expect(response.body).toHaveProperty('html_url', githubOrgUrl)
+      expect(response.body).toHaveProperty('html_url', githubOrgUrl.toLowerCase())
       expect(response.body).toHaveProperty('project_id', projectId)
+
+      // Verify the Location header is set correctly
+      expect(response.headers).toHaveProperty('location', `/api/v1/project/${projectId}/gh-org/${response.body.id}`)
 
       // Verify organization was added to the database
       const orgs = await getAllGithubOrganizationsByProjectsId([projectId])
       expect(orgs.length).toBe(1)
-      expect(orgs[0].html_url).toBe(githubOrgUrl)
+      expect(orgs[0].html_url).toBe(githubOrgUrl.toLowerCase())
+    })
+
+    test('should correctly extract organization login from URL with trailing slash', async () => {
+      const githubOrgUrl = 'https://github.com/expressjs/'
+
+      const response = await app
+        .post(`/api/v1/project/${projectId}/gh-org`)
+        .send({ githubOrgUrl })
+
+      expect(response.status).toBe(201)
+      expect(response.body).toHaveProperty('login', 'expressjs')
+      expect(response.body).toHaveProperty('html_url', githubOrgUrl.toLowerCase().replace(/\/$/, ''))
+    })
+
+    test('should correctly extract organization login from URL with query parameters', async () => {
+      const githubOrgUrl = 'https://github.com/expressjs?tab=repositories'
+
+      const response = await app
+        .post(`/api/v1/project/${projectId}/gh-org`)
+        .send({ githubOrgUrl })
+
+      expect(response.status).toBe(201)
+      expect(response.body).toHaveProperty('login', 'expressjs')
+      // The stored URL should be normalized without query parameters
+      expect(response.body.html_url).not.toContain('?')
     })
 
     test('should return 400 for invalid project ID', async () => {
@@ -262,7 +290,27 @@ describe('HTTP Server API V1', () => {
 
       expect(response.status).toBe(400)
       expect(response.body).toHaveProperty('errors')
-      expect(response.body.errors[0]).toHaveProperty('message', 'Invalid project ID')
+      expect(response.body.errors[0]).toHaveProperty('message', 'must be integer')
+    })
+
+    test('should return 400 for zero project ID', async () => {
+      const response = await app
+        .post('/api/v1/project/0/gh-org')
+        .send({ githubOrgUrl: 'https://github.com/expressjs' })
+
+      expect(response.status).toBe(400)
+      expect(response.body).toHaveProperty('errors')
+      expect(response.body.errors[0]).toHaveProperty('message', 'Invalid project ID. Must be a positive integer.')
+    })
+
+    test('should return 400 for negative project ID', async () => {
+      const response = await app
+        .post('/api/v1/project/-1/gh-org')
+        .send({ githubOrgUrl: 'https://github.com/expressjs' })
+
+      expect(response.status).toBe(400)
+      expect(response.body).toHaveProperty('errors')
+      expect(response.body.errors[0]).toHaveProperty('message', 'Invalid project ID. Must be a positive integer.')
     })
 
     test('should return 400 for invalid GitHub organization URL', async () => {
@@ -272,7 +320,7 @@ describe('HTTP Server API V1', () => {
 
       expect(response.status).toBe(400)
       expect(response.body).toHaveProperty('errors')
-      expect(response.body.errors[0]).toHaveProperty('message', 'must match pattern "https://github.com/[^/]+"')
+      expect(response.body.errors[0]).toHaveProperty('message', 'must match pattern "^https://github.com/[^/]+"')
     })
 
     test('should return 404 for project not found', async () => {
@@ -299,6 +347,38 @@ describe('HTTP Server API V1', () => {
       const response = await app
         .post(`/api/v1/project/${projectId}/gh-org`)
         .send({ githubOrgUrl })
+
+      expect(response.status).toBe(409)
+      expect(response.body).toHaveProperty('errors')
+      expect(response.body.errors[0]).toHaveProperty('message', 'GitHub organization already exists for this project')
+    })
+
+    test('should return 409 for duplicate GitHub organization with different case', async () => {
+      // First add the organization with lowercase
+      await app
+        .post(`/api/v1/project/${projectId}/gh-org`)
+        .send({ githubOrgUrl: 'https://github.com/expressjs' })
+
+      // Try to add it again with uppercase
+      const response = await app
+        .post(`/api/v1/project/${projectId}/gh-org`)
+        .send({ githubOrgUrl: 'https://github.com/ExpressJS' })
+
+      expect(response.status).toBe(409)
+      expect(response.body).toHaveProperty('errors')
+      expect(response.body.errors[0]).toHaveProperty('message', 'GitHub organization already exists for this project')
+    })
+
+    test('should return 409 for duplicate GitHub organization with trailing slash', async () => {
+      // First add the organization without trailing slash
+      await app
+        .post(`/api/v1/project/${projectId}/gh-org`)
+        .send({ githubOrgUrl: 'https://github.com/expressjs' })
+
+      // Try to add it again with trailing slash
+      const response = await app
+        .post(`/api/v1/project/${projectId}/gh-org`)
+        .send({ githubOrgUrl: 'https://github.com/expressjs/' })
 
       expect(response.status).toBe(409)
       expect(response.body).toHaveProperty('errors')

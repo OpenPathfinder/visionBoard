@@ -1,4 +1,3 @@
-const { generateStaticReports } = require('../../reports')
 const pkg = require('../../../package.json')
 const { logger } = require('../../utils')
 const { initializeStore } = require('../../store')
@@ -105,24 +104,6 @@ function createApiRouter (knex, express) {
     }
   })
 
-  router.post('/generate-reports', async (req, res) => {
-    const startTs = new Date().toISOString()
-    try {
-      await generateStaticReports(knex, { clearPreviousReports: true })
-      res.status(202).json({
-        status: 'completed',
-        startedAt: startTs,
-        finishedAt: new Date().toISOString()
-      })
-    } catch (error) {
-      logger.error(error)
-      res.status(500).json({
-        status: 'failed',
-        startedAt: startTs,
-        finishedAt: new Date().toISOString()
-      })
-    }
-  })
   return router
 }
 

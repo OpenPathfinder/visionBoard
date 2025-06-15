@@ -20,7 +20,6 @@ jest.mock('../../src/cli/workflows', () => ({
 }))
 
 const request = require('supertest')
-const { generateStaticReports } = require('../../src/reports')
 const knexInit = require('knex')
 const { getConfig } = require('../../src/config')
 const { resetDatabase, initializeStore } = require('../../__utils__')
@@ -222,43 +221,5 @@ describe('HTTP Server API V1', () => {
     })
 
     test.todo('should return 500 when workflow execution times out')
-  })
-
-  describe('POST /api/v1/generate-reports', () => {
-    test('should return status completed when report generation succeeds', async () => {
-      generateStaticReports.mockResolvedValueOnce()
-
-      const response = await app.post('/api/v1/generate-reports')
-
-      expect(generateStaticReports).toHaveBeenCalledWith(expect.anything(), { clearPreviousReports: true })
-      expect(response.status).toBe(202)
-      expect(response.body).toHaveProperty('status', 'completed')
-      expect(response.body).toHaveProperty('startedAt')
-      expect(response.body).toHaveProperty('finishedAt')
-
-      const startedAt = new Date(response.body.startedAt)
-      const finishedAt = new Date(response.body.finishedAt)
-      expect(startedAt.toISOString()).toBe(response.body.startedAt)
-      expect(finishedAt.toISOString()).toBe(response.body.finishedAt)
-      expect(finishedAt.getTime()).toBeGreaterThanOrEqual(startedAt.getTime())
-    })
-
-    test('should return status failed when report generation fails', async () => {
-      generateStaticReports.mockRejectedValueOnce(new Error('Report generation failed'))
-
-      const response = await app.post('/api/v1/generate-reports')
-
-      expect(generateStaticReports).toHaveBeenCalledWith(expect.anything(), { clearPreviousReports: true })
-      expect(response.status).toBe(500)
-      expect(response.body).toHaveProperty('status', 'failed')
-      expect(response.body).toHaveProperty('startedAt')
-      expect(response.body).toHaveProperty('finishedAt')
-
-      const startedAt = new Date(response.body.startedAt)
-      const finishedAt = new Date(response.body.finishedAt)
-      expect(startedAt.toISOString()).toBe(response.body.startedAt)
-      expect(finishedAt.toISOString()).toBe(response.body.finishedAt)
-      expect(finishedAt.getTime()).toBeGreaterThanOrEqual(startedAt.getTime())
-    })
   })
 })

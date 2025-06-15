@@ -197,62 +197,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /api/v1/generate-reports:
-    post:
-      summary: Generate static reports
-      description: Triggers the generation of static reports
-      operationId: generateReports
-      tags:
-        - Reports
-      responses:
-        '202':
-          description: Report generation accepted
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: false
-                properties:
-                  status:
-                    type: string
-                    enum: [completed, failed]
-                    example: completed
-                  startedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-05-03T07:20:16.000Z'
-                  finishedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-05-03T07:20:20.000Z'
-                required:
-                  - status
-                  - startedAt
-                  - finishedAt
-        '500':
-          description: Report generation failed
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: false
-                properties:
-                  status:
-                    type: string
-                    enum: [failed]
-                    example: failed
-                  startedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-05-03T07:20:16.000Z'
-                  finishedAt:
-                    type: string
-                    format: date-time
-                    example: '2025-05-03T07:20:20.000Z'
-                required:
-                  - status
-                  - startedAt
-                  - finishedAt
 
 components:
   schemas:

@@ -31,6 +31,8 @@ const commandList = [{
   workflow: bulkImport
 }]
 
+const workflows = commandList.map(({ name, description }) => ({ name, description }))
+
 const validCommandNames = commandList.map(({ name }) => name)
 
 function listWorkflowCommand (options = {}) {
@@ -70,5 +72,6 @@ async function runWorkflowCommand (knex, options = {}) {
 
 module.exports = {
   listWorkflowCommand,
+  getAllWorkflows: () => workflows,
   runWorkflowCommand
 }

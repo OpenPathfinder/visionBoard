@@ -57,7 +57,7 @@ paths:
                   type: object
                   additionalProperties: false
                   properties:
-                    name:
+                    id:
                       type: string
                       example: example-workflow
                     description:

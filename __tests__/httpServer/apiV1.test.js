@@ -6,6 +6,7 @@ const { resetDatabase, initializeStore } = require('../../__utils__')
 const pkg = require('../../package.json')
 const serverModule = require('../../src/httpServer')
 const { dbSettings } = getConfig('test')
+const { getAllWorkflows } = require('../../src/cli/workflows')
 let server
 let serverStop
 let app
@@ -120,12 +121,7 @@ describe('HTTP Server API V1', () => {
       const response = await app.get('/api/v1/workflow')
 
       expect(response.status).toBe(200)
-      expect(response.body).toBeInstanceOf(Array)
-      expect(response.body.length).toBeGreaterThan(0)
-
-      const workflow = response.body[0]
-      expect(workflow).toHaveProperty('name')
-      expect(workflow).toHaveProperty('description')
+      expect(response.body).toStrictEqual(getAllWorkflows())
     })
 
     test.todo('should return 500 for internal server error')

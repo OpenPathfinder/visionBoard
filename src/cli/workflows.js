@@ -31,7 +31,7 @@ const commandList = [{
   workflow: bulkImport
 }]
 
-const workflows = commandList.map(({ name, description }) => ({ name, description }))
+const workflows = commandList.map(({ name, description }) => ({ id: name, description }))
 
 const validCommandNames = commandList.map(({ name }) => name)
 

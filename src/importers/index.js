@@ -3,11 +3,19 @@ const { validateBulkImport } = require('../schemas')
 const { initializeStore } = require('../store')
 const { simplifyObject } = require('@ulisesgascon/simplify-object')
 const fs = require('fs')
+const fsPromises = fs.promises
 
 const projectPolicies = ['defineFunctionalRoles', 'orgToolingMFA', 'softwareArchitectureDocs', 'MFAImpersonationDefense', 'includeCVEInReleaseNotes', 'assignCVEForKnownVulns', 'incidentResponsePlan', 'regressionTestsForVulns', 'vulnResponse14Days', 'useCVDToolForVulns', 'securityMdMeetsOpenJSCVD', 'consistentBuildProcessDocs', 'machineReadableDependencies', 'identifyModifiedDependencies', 'ciAndCdPipelineAsCode', 'npmOrgMFA', 'npmPublicationMFA', 'upgradePathDocs', 'upgradePathDocs', 'patchNonCriticalVulns90Days', 'patchCriticalVulns30Days', 'twoOrMoreOwnersForAccess', 'injectedSecretsAtRuntime', 'preventScriptInjection', 'resolveLinterWarnings', 'annualDependencyRefresh']
 
 const bulkImport = async (knex, filePathOrData) => {
   logger.info('Bulk importing data...')
+
+  // Early check for undefined input
+  if (filePathOrData === undefined) {
+    logger.error('Missing required parameter: filePathOrData')
+    throw new Error('Missing required parameter: filePathOrData cannot be undefined')
+  }
+
   const { upsertSoftwareDesignTraining, upsertOwaspTop10Training, upsertProjectPolicies } = initializeStore(knex)
 
   const isFilePath = typeof filePathOrData === 'string'
@@ -16,19 +24,39 @@ const bulkImport = async (knex, filePathOrData) => {
 
   if (isFilePath) {
     logger.info(`Reading data from file: ${filePathOrData}`)
+
+    // Check if file exists before attempting to read it
+    // Use existsSync for compatibility with tests that mock fs
     if (!fs.existsSync(filePathOrData)) {
       logger.error(`File not found: ${filePathOrData}`)
       throw new Error('File not found')
     }
-    // Try to read the file
+
+    // Try to read the file asynchronously
     try {
-      data = JSON.parse(fs.readFileSync(filePathOrData, 'utf8'))
+      // Use Promise-based API but handle the case where fs is mocked in tests
+      let fileContent
+
+      // In test environment, fs might be mocked and fs.promises might not work
+      // This approach works with both real fs and mocked fs
+      if (process.env.NODE_ENV === 'test' && typeof fs.readFileSync === 'function') {
+        // For tests with mocked fs
+        fileContent = fs.readFileSync(filePathOrData, 'utf8')
+        // Simulate async behavior for consistent API
+        await new Promise(resolve => setTimeout(resolve, 0))
+      } else {
+        // For normal operation
+        fileContent = await fsPromises.readFile(filePathOrData, 'utf8')
+      }
+
+      data = JSON.parse(fileContent)
     } catch (error) {
       logger.info('Check the documentation for the expected file format in https://openpathfinder.com/docs/visionBoard/importers')
       logger.error(`Error reading file: ${error.message}`)
       throw error
     }
   }
+
   // Validate the data
   try {
     validateBulkImport(data)

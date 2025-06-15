@@ -20,7 +20,8 @@ const runWorkflow = (workflowName, data) => new Promise((resolve, reject) => {
     reject(new Error('Workflow default timeout reached'))
   }, HTTP_DEFAULT_TIMEOUT)
 
-  workflow.workflow(data)
+  Promise.resolve()
+    .then(() => workflow.workflow(data))
     .then(() => resolve(workflow))
     .catch(err => reject(new Error(`Failed to run workflow: ${err.message}`)))
     .finally(() => clearTimeout(timeout))

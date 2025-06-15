@@ -6,24 +6,29 @@ const fs = require('fs')
 
 const projectPolicies = ['defineFunctionalRoles', 'orgToolingMFA', 'softwareArchitectureDocs', 'MFAImpersonationDefense', 'includeCVEInReleaseNotes', 'assignCVEForKnownVulns', 'incidentResponsePlan', 'regressionTestsForVulns', 'vulnResponse14Days', 'useCVDToolForVulns', 'securityMdMeetsOpenJSCVD', 'consistentBuildProcessDocs', 'machineReadableDependencies', 'identifyModifiedDependencies', 'ciAndCdPipelineAsCode', 'npmOrgMFA', 'npmPublicationMFA', 'upgradePathDocs', 'upgradePathDocs', 'patchNonCriticalVulns90Days', 'patchCriticalVulns30Days', 'twoOrMoreOwnersForAccess', 'injectedSecretsAtRuntime', 'preventScriptInjection', 'resolveLinterWarnings', 'annualDependencyRefresh']
 
-const bulkImport = async (knex, filePath) => {
+const bulkImport = async (knex, filePathOrData) => {
   logger.info('Bulk importing data...')
   const { upsertSoftwareDesignTraining, upsertOwaspTop10Training, upsertProjectPolicies } = initializeStore(knex)
 
-  if (!fs.existsSync(filePath)) {
-    logger.error(`File not found: ${filePath}`)
-    throw new Error('File not found')
-  }
-  // Try to read the file
-  let data
-  try {
-    data = JSON.parse(fs.readFileSync(filePath, 'utf8'))
-  } catch (error) {
-    logger.info('Check the documentation for the expected file format in https://openpathfinder.com/docs/visionBoard/importers')
-    logger.error(`Error reading file: ${error.message}`)
-    throw error
-  }
+  const isFilePath = typeof filePathOrData === 'string'
+  // If it's a string, we assume it's a file path otherwise it's the data itself
+  let data = isFilePath ? undefined : filePathOrData
 
+  if (isFilePath) {
+    logger.info(`Reading data from file: ${filePathOrData}`)
+    if (!fs.existsSync(filePathOrData)) {
+      logger.error(`File not found: ${filePathOrData}`)
+      throw new Error('File not found')
+    }
+    // Try to read the file
+    try {
+      data = JSON.parse(fs.readFileSync(filePathOrData, 'utf8'))
+    } catch (error) {
+      logger.info('Check the documentation for the expected file format in https://openpathfinder.com/docs/visionBoard/importers')
+      logger.error(`Error reading file: ${error.message}`)
+      throw error
+    }
+  }
   // Validate the data
   try {
     validateBulkImport(data)

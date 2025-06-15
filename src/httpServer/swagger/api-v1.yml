@@ -40,6 +40,57 @@ paths:
                   - name
                   - version
   
+  /api/v1/project:
+    post:
+      summary: Create a new project
+      description: Creates a new project with the provided details
+      operationId: createProject
+      tags:
+        - Projects
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                name:
+                  type: string
+                  pattern: '^[a-zA-Z0-9_-]+$'
+                  example: express
+              required:
+                - name
+      responses:
+        '201':
+          description: Project created successfully
+          headers:
+            Location:
+              description: URL of the newly created project
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '409':
+          description: Project already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Bad request, invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /api/v1/generate-reports:
     post:
       summary: Generate static reports
@@ -98,4 +149,169 @@ paths:
                   - finishedAt
 
 components:
-  schemas: {}
+  schemas:
+    Project:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: invalid
+        created_at:
+          type: string
+          format: date-time
+          example: '2025-06-15T13:53:40.103Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2025-06-15T13:53:40.103Z'
+        has_defineFunctionalRoles_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_orgToolingMFA_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_softwareArchitectureDocs_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_MFAImpersonationDefense_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_includeCVEInReleaseNotes_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_assignCVEForKnownVulns_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_incidentResponsePlan_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_regressionTestsForVulns_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_vulnResponse14Days_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_useCVDToolForVulns_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_securityMdMeetsOpenJSCVD_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_consistentBuildProcessDocs_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_machineReadableDependencies_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_identifyModifiedDependencies_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_ciAndCdPipelineAsCode_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_npmOrgMFA_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_npmPublicationMFA_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_upgradePathDocs_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_patchNonCriticalVulns90Days_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_patchCriticalVulns30Days_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_twoOrMoreOwnersForAccess_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_injectedSecretsAtRuntime_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_preventScriptInjection_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_resolveLinterWarnings_policy:
+          type: boolean
+          nullable: true
+          example: null
+        has_annualDependencyRefresh_policy:
+          type: boolean
+          nullable: true
+          example: null
+      required:
+        - id
+        - name
+        - created_at
+        - updated_at
+    ErrorObject:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          description: Optional machine-readable error code
+          example: some.error.code
+        message:
+          type: string
+          description: Human-readable error message
+          example: Something went wrong
+        path:
+          type: string
+          description: Optional path to the field or resource
+          example: /body/field
+      required:
+        - message
+      additionalProperties: true
+
+    ErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorObject'
+          minItems: 1
+        name:
+          type: string
+          description: Optional error name
+          example: Error
+        path:
+          type: string
+          description: Optional API path
+          example: /api/v1/resource
+        status:
+          type: integer
+          description: Optional HTTP status code
+          example: 400
+      required:
+        - errors
+      additionalProperties: true

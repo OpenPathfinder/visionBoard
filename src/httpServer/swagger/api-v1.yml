@@ -69,7 +69,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
   /api/v1/workflow/{workflowId}/run:
     post:
       summary: Execute a workflow
@@ -325,9 +324,73 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/compliance-checklist:
+    get:
+      summary: List all compliance checklists
+      description: Returns a list of all compliance checklists
+      operationId: listComplianceChecklists
+      tags:
+        - Compliance Checklists
+      responses:
+        '200':
+          description: A list of compliance checklists
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ComplianceChecklist'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
 components:
   schemas:
+    ComplianceChecklist:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          example: 1
+        author:
+          type: string
+          example: "OpenJS Foundation"
+        title:
+          type: string
+          maxLength: 255
+          example: "Security Compliance Guide v1.0 - Incubating"
+        description:
+          type: string
+          example: "This checklist is for projects that are in the incubating phase and have multiple maintainers."
+        code_name:
+          type: string
+          maxLength: 255
+          example: "OpenJS-SCGv1.0-incubating"
+        url:
+          type: string
+          example: "https://openpathfinder.com/docs/checklists/OpenJS-SCGv1.0-incubating"
+        created_at:
+          type: string
+          format: date-time
+          example: "2025-02-21T18:53:00.485Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2025-02-21T18:53:00.485Z"
+      required:
+        - id
+        - author
+        - title
+        - description
+        - code_name
+        - url
+        - created_at
+        - updated_at
+
     ComplianceCheck:
       type: object
       additionalProperties: false
@@ -400,7 +463,7 @@ components:
         - details_url
         - created_at
         - updated_at
-      
+
     GithubOrganization:
       type: object
       additionalProperties: false
@@ -618,6 +681,7 @@ components:
         - html_url
         - created_at
         - updated_at
+
     Project:
       type: object
       additionalProperties: false
@@ -741,6 +805,7 @@ components:
         - name
         - created_at
         - updated_at
+
     ErrorObject:
       type: object
       properties:

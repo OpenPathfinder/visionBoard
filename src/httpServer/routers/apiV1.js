@@ -27,7 +27,7 @@ const runWorkflow = ({ workflowName, knex, data } = {}) => new Promise((resolve,
 })
 
 function createApiRouter (knex, express) {
-  const { addProject, getProjectByName, addGithubOrganization, getProjectById, getAllGithubOrganizationsByProjectsId, getAllChecks, getCheckById } = initializeStore(knex)
+  const { addProject, getProjectByName, addGithubOrganization, getProjectById, getAllGithubOrganizationsByProjectsId, getAllChecks, getCheckById, getAllChecklists } = initializeStore(knex)
 
   const router = express.Router()
 
@@ -143,6 +143,16 @@ function createApiRouter (knex, express) {
     } catch (error) {
       logger.error(error)
       res.status(500).json({ errors: [{ message: 'Failed to retrieve Compliance Checks' }] })
+    }
+  })
+
+  router.get('/compliance-checklist', async (req, res) => {
+    try {
+      const checklists = await getAllChecklists()
+      res.json(checklists)
+    } catch (error) {
+      logger.error(error)
+      res.status(500).json({ errors: [{ message: 'Failed to retrieve Compliance Checklists' }] })
     }
   })
 

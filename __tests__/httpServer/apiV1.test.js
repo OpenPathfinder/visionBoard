@@ -38,6 +38,7 @@ let addProject
 let getAllGithubOrganizationsByProjectsId
 let getAllChecks
 let getCheckById
+let getAllChecklists
 
 beforeAll(async () => {
   // Initialize server asynchronously
@@ -51,7 +52,8 @@ beforeAll(async () => {
     addProject,
     getAllGithubOrganizationsByProjectsId,
     getAllChecks,
-    getCheckById
+    getCheckById,
+    getAllChecklists
   } = initializeStore(knex))
 })
 
@@ -398,8 +400,12 @@ describe('HTTP Server API V1', () => {
       const storedChecks = await getAllChecks()
 
       expect(response.status).toBe(200)
-      // @TODO: find a more elegant way to solve the issue with the date format
-      expect(response.body).toStrictEqual(JSON.parse(JSON.stringify(storedChecks)))
+      const expected = storedChecks.map(c => ({
+        ...c,
+        created_at: c.created_at.toISOString(),
+        updated_at: c.updated_at.toISOString()
+      }))
+      expect(response.body).toStrictEqual(expected)
     })
 
     test.todo('should return 500 for internal server error')
@@ -411,8 +417,12 @@ describe('HTTP Server API V1', () => {
       const storedCheck = await getCheckById(1)
 
       expect(response.status).toBe(200)
-      // @TODO: find a more elegant way to solve the issue with the date format
-      expect(response.body).toStrictEqual(JSON.parse(JSON.stringify(storedCheck)))
+      const expected = {
+        ...storedCheck,
+        created_at: storedCheck.created_at.toISOString(),
+        updated_at: storedCheck.updated_at.toISOString()
+      }
+      expect(response.body).toStrictEqual(expected)
     })
 
     test('should return 400 for invalid check ID', async () => {
@@ -429,6 +439,23 @@ describe('HTTP Server API V1', () => {
       expect(response.status).toBe(404)
       expect(response.body).toHaveProperty('errors')
       expect(response.body.errors[0]).toHaveProperty('message', 'Compliance Check not found')
+    })
+
+    test.todo('should return 500 for internal server error')
+  })
+
+  describe('GET /api/v1/compliance-checklist', () => {
+    test('should return 200 and a list of checklists', async () => {
+      const response = await app.get('/api/v1/compliance-checklist')
+      const storedChecklists = await getAllChecklists()
+
+      expect(response.status).toBe(200)
+      const expected = storedChecklists.map(c => ({
+        ...c,
+        created_at: c.created_at.toISOString(),
+        updated_at: c.updated_at.toISOString()
+      }))
+      expect(response.body).toStrictEqual(expected)
     })
 
     test.todo('should return 500 for internal server error')

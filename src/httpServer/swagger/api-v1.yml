@@ -211,7 +211,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
+  /api/v1/check:
+    get:
+      summary: List all checks
+      description: Returns a list of all checks
+      operationId: listChecks
+      tags:
+        - Checks
+      responses:
+        '200':
+          description: A list of checks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Check'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /api/v1/project:
     post:
       summary: Create a new project
@@ -266,6 +287,79 @@ paths:
 
 components:
   schemas:
+    Check:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          example: 53
+        title:
+          type: string
+          maxLength: 255
+          example: "Refresh dependencies with annual releases"
+        description:
+          type: string
+          example: "Ensure dependencies are refreshed through a new release at least once annually"
+        default_section_number:
+          type: string
+          maxLength: 255
+          example: "5"
+        default_section_name:
+          type: string
+          maxLength: 255
+          example: "vulnerability management"
+        code_name:
+          type: string
+          maxLength: 255
+          example: "annualDependencyRefresh"
+        default_priority_group:
+          type: string
+          enum: ["P0", "P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P10", "P11", "P12", "P13", "P14", "R0", "R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10", "R11", "R12", "R13", "R14"]
+          example: "P14"
+        is_c_scrm:
+          type: boolean
+          default: false
+          example: true
+        implementation_status:
+          type: string
+          enum: ["pending", "completed"]
+          default: "pending"
+          example: "completed"
+        # @TODO: Convert to enum when nullable values are removed
+        implementation_type:
+          type: string
+          nullable: true
+          example: "manual"
+        implementation_details_reference:
+          type: string
+          nullable: true
+          example: "https://github.com/OpenPathfinder/visionBoard/issues/112"
+        details_url:
+          type: string
+          example: "https://openpathfinder.com/docs/checks/annualDependencyRefresh"
+        created_at:
+          type: string
+          format: date-time
+          example: "2025-02-21T18:53:00.485Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2025-02-21T18:53:00.485Z"
+      required:
+        - id
+        - title
+        - description
+        - default_section_number
+        - default_section_name
+        - code_name
+        - default_priority_group
+        - is_c_scrm
+        - implementation_status
+        - details_url
+        - created_at
+        - updated_at
+      
     GithubOrganization:
       type: object
       additionalProperties: false

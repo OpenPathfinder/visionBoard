@@ -248,7 +248,8 @@ const initializeStore = (knex) => {
     upsertOwaspTop10Training: upsertOwaspTop10Training(knex),
     getAllOSSFResults: () => getAll('ossf_scorecard_results'),
     getProjectById: (id) => getOne('projects', id),
-    getProjectByName: getProjectByName(knex)
+    getProjectByName: getProjectByName(knex),
+    getAllChecks: () => getAll('compliance_checks')
   }
 }
 

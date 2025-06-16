@@ -392,9 +392,9 @@ describe('HTTP Server API V1', () => {
     test.todo('should return 500 for internal server error')
   })
 
-  describe('GET /api/v1/check', () => {
+  describe('GET /api/v1/compliance-check', () => {
     test('should return 200 and a list of checks', async () => {
-      const response = await app.get('/api/v1/check')
+      const response = await app.get('/api/v1/compliance-check')
       const storedChecks = await getAllChecks()
 
       expect(response.status).toBe(200)
@@ -405,9 +405,9 @@ describe('HTTP Server API V1', () => {
     test.todo('should return 500 for internal server error')
   })
 
-  describe('GET /api/v1/check/:checkId', () => {
+  describe('GET /api/v1/compliance-check/:checkId', () => {
     test('should return 200 and a check by ID', async () => {
-      const response = await app.get('/api/v1/check/1')
+      const response = await app.get('/api/v1/compliance-check/1')
       const storedCheck = await getCheckById(1)
 
       expect(response.status).toBe(200)
@@ -416,7 +416,7 @@ describe('HTTP Server API V1', () => {
     })
 
     test('should return 400 for invalid check ID', async () => {
-      const response = await app.get('/api/v1/check/invalid')
+      const response = await app.get('/api/v1/compliance-check/invalid')
 
       expect(response.status).toBe(400)
       expect(response.body).toHaveProperty('errors')
@@ -424,7 +424,7 @@ describe('HTTP Server API V1', () => {
     })
 
     test('should return 404 for check not found', async () => {
-      const response = await app.get('/api/v1/check/9999999')
+      const response = await app.get('/api/v1/compliance-check/9999999')
 
       expect(response.status).toBe(404)
       expect(response.body).toHaveProperty('errors')

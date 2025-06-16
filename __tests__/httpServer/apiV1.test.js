@@ -400,8 +400,12 @@ describe('HTTP Server API V1', () => {
       const storedChecks = await getAllChecks()
 
       expect(response.status).toBe(200)
-      // @TODO: find a more elegant way to solve the issue with the date format
-      expect(response.body).toStrictEqual(JSON.parse(JSON.stringify(storedChecks)))
+      const expected = storedChecks.map(c => ({
+        ...c,
+        created_at: c.created_at.toISOString(),
+        updated_at: c.updated_at.toISOString()
+      }))
+      expect(response.body).toStrictEqual(expected)
     })
 
     test.todo('should return 500 for internal server error')
@@ -413,8 +417,12 @@ describe('HTTP Server API V1', () => {
       const storedCheck = await getCheckById(1)
 
       expect(response.status).toBe(200)
-      // @TODO: find a more elegant way to solve the issue with the date format
-      expect(response.body).toStrictEqual(JSON.parse(JSON.stringify(storedCheck)))
+      const expected = {
+        ...storedCheck,
+        created_at: storedCheck.created_at.toISOString(),
+        updated_at: storedCheck.updated_at.toISOString()
+      }
+      expect(response.body).toStrictEqual(expected)
     })
 
     test('should return 400 for invalid check ID', async () => {
@@ -442,8 +450,12 @@ describe('HTTP Server API V1', () => {
       const storedChecklists = await getAllChecklists()
 
       expect(response.status).toBe(200)
-      // @TODO: find a more elegant way to solve the issue with the date format
-      expect(response.body).toStrictEqual(JSON.parse(JSON.stringify(storedChecklists)))
+      const expected = storedChecklists.map(c => ({
+        ...c,
+        created_at: c.created_at.toISOString(),
+        updated_at: c.updated_at.toISOString()
+      }))
+      expect(response.body).toStrictEqual(expected)
     })
 
     test.todo('should return 500 for internal server error')

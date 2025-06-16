@@ -37,6 +37,7 @@ let getAllProjects
 let addProject
 let getAllGithubOrganizationsByProjectsId
 let getAllChecks
+let getCheckById
 
 beforeAll(async () => {
   // Initialize server asynchronously
@@ -49,7 +50,8 @@ beforeAll(async () => {
     getAllProjects,
     addProject,
     getAllGithubOrganizationsByProjectsId,
-    getAllChecks
+    getAllChecks,
+    getCheckById
   } = initializeStore(knex))
 })
 
@@ -398,6 +400,35 @@ describe('HTTP Server API V1', () => {
       expect(response.status).toBe(200)
       // @TODO: find a more elegant way to solve the issue with the date format
       expect(response.body).toStrictEqual(JSON.parse(JSON.stringify(storedChecks)))
+    })
+
+    test.todo('should return 500 for internal server error')
+  })
+
+  describe('GET /api/v1/check/:checkId', () => {
+    test('should return 200 and a check by ID', async () => {
+      const response = await app.get('/api/v1/check/1')
+      const storedCheck = await getCheckById(1)
+
+      expect(response.status).toBe(200)
+      // @TODO: find a more elegant way to solve the issue with the date format
+      expect(response.body).toStrictEqual(JSON.parse(JSON.stringify(storedCheck)))
+    })
+
+    test('should return 400 for invalid check ID', async () => {
+      const response = await app.get('/api/v1/check/invalid')
+
+      expect(response.status).toBe(400)
+      expect(response.body).toHaveProperty('errors')
+      expect(response.body.errors[0]).toHaveProperty('message', 'must be integer')
+    })
+
+    test('should return 404 for check not found', async () => {
+      const response = await app.get('/api/v1/check/9999999')
+
+      expect(response.status).toBe(404)
+      expect(response.body).toHaveProperty('errors')
+      expect(response.body.errors[0]).toHaveProperty('message', 'Compliance Check not found')
     })
 
     test.todo('should return 500 for internal server error')

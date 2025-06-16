@@ -225,6 +225,7 @@ paths:
           description: The ID of the check
           schema:
             type: integer
+            minimum: 1
             example: 53
       responses:
         '200':
@@ -233,6 +234,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Check'
+        '400':
+          description: Bad request, invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Check not found
           content:

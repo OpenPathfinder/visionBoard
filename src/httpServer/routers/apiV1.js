@@ -27,7 +27,7 @@ const runWorkflow = ({ workflowName, knex, data } = {}) => new Promise((resolve,
 })
 
 function createApiRouter (knex, express) {
-  const { addProject, getProjectByName, addGithubOrganization, getProjectById, getAllGithubOrganizationsByProjectsId, getAllChecks } = initializeStore(knex)
+  const { addProject, getProjectByName, addGithubOrganization, getProjectById, getAllGithubOrganizationsByProjectsId, getAllChecks, getCheckById } = initializeStore(knex)
 
   const router = express.Router()
 
@@ -121,13 +121,28 @@ function createApiRouter (knex, express) {
     }
   })
 
+  router.get('/check/:checkId', async (req, res) => {
+    try {
+      // Params validation done in swagger
+      const checkId = parseInt(req.params.checkId, 10)
+      const check = await getCheckById(checkId)
+      if (!check) {
+        return res.status(404).json({ errors: [{ message: 'Compliance Check not found' }] })
+      }
+      res.json(check)
+    } catch (error) {
+      logger.error(error)
+      res.status(500).json({ errors: [{ message: 'Failed to retrieve Compliance Check' }] })
+    }
+  })
+
   router.get('/check', async (req, res) => {
     try {
       const checks = await getAllChecks()
       res.json(checks)
     } catch (error) {
       logger.error(error)
-      res.status(500).json({ errors: [{ message: 'Failed to retrieve checks' }] })
+      res.status(500).json({ errors: [{ message: 'Failed to retrieve Compliance Checks' }] })
     }
   })
 

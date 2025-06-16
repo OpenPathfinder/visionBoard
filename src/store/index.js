@@ -250,7 +250,8 @@ const initializeStore = (knex) => {
     getProjectById: (id) => getOne('projects', id),
     getProjectByName: getProjectByName(knex),
     getAllChecks: () => getAll('compliance_checks'),
-    getCheckById: (id) => getOne('compliance_checks', id)
+    getCheckById: (id) => getOne('compliance_checks', id),
+    getChecklistById: (id) => getOne('compliance_checklists', id)
   }
 }
 

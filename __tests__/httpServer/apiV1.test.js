@@ -36,6 +36,7 @@ let knex
 let getAllProjects
 let addProject
 let getAllGithubOrganizationsByProjectsId
+let getAllChecks
 
 beforeAll(async () => {
   // Initialize server asynchronously
@@ -47,7 +48,8 @@ beforeAll(async () => {
   ({
     getAllProjects,
     addProject,
-    getAllGithubOrganizationsByProjectsId
+    getAllGithubOrganizationsByProjectsId,
+    getAllChecks
   } = initializeStore(knex))
 })
 
@@ -383,6 +385,19 @@ describe('HTTP Server API V1', () => {
       expect(response.status).toBe(409)
       expect(response.body).toHaveProperty('errors')
       expect(response.body.errors[0]).toHaveProperty('message', 'GitHub organization already exists for this project')
+    })
+
+    test.todo('should return 500 for internal server error')
+  })
+
+  describe('GET /api/v1/check', () => {
+    test('should return 200 and a list of checks', async () => {
+      const response = await app.get('/api/v1/check')
+      const storedChecks = await getAllChecks()
+
+      expect(response.status).toBe(200)
+      // @TODO: find a more elegant way to solve the issue with the date format
+      expect(response.body).toStrictEqual(JSON.parse(JSON.stringify(storedChecks)))
     })
 
     test.todo('should return 500 for internal server error')

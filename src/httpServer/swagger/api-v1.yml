@@ -146,6 +146,72 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/project/{projectId}/gh-org:
+    post:
+      summary: Add a GitHub organization to a project
+      description: Adds a GitHub organization to a project
+      operationId: addGithubOrganization
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          description: The ID of the project
+          schema:
+            type: integer
+            example: 42
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                githubOrgUrl:
+                  type: string
+                  pattern: '^https://github.com/[^/]+'
+                  example: 'https://github.com/expressjs'
+              required:
+                - githubOrgUrl
+      responses:
+        '201':
+          description: GitHub organization added successfully
+          headers:
+            Location:
+              description: URL of the newly added GitHub organization
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GithubOrganization'
+        '400':
+          description: Bad request, invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Project not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: GitHub organization already exists for this project
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   /api/v1/project:
     post:
       summary: Create a new project
@@ -200,6 +266,223 @@ paths:
 
 components:
   schemas:
+    GithubOrganization:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: integer
+          example: 1
+        login:
+          type: string
+          example: expressjs
+        github_org_id:
+          type: integer
+          nullable: true
+          example: null
+        node_id:
+          type: string
+          nullable: true
+          example: null
+        url:
+          type: string
+          nullable: true
+          example: null
+        avatar_url:
+          type: string
+          nullable: true
+          example: null
+        description:
+          type: string
+          nullable: true
+          example: null
+        name:
+          type: string
+          nullable: true
+          example: null
+        company:
+          type: string
+          nullable: true
+          example: null
+        blog:
+          type: string
+          nullable: true
+          example: null
+        location:
+          type: string
+          nullable: true
+          example: null
+        twitter_username:
+          type: string
+          nullable: true
+          example: null
+        is_verified:
+          type: boolean
+          nullable: true
+          example: null
+        has_organization_projects:
+          type: boolean
+          nullable: true
+          example: null
+        has_repository_projects:
+          type: boolean
+          nullable: true
+          example: null
+        public_repos:
+          type: integer
+          nullable: true
+          example: null
+        public_gists:
+          type: integer
+          nullable: true
+          example: null
+        followers:
+          type: integer
+          nullable: true
+          example: null
+        following:
+          type: integer
+          nullable: true
+          example: null
+        html_url:
+          type: string
+          example: 'https://github.com/expressjs'
+        total_private_repos:
+          type: integer
+          nullable: true
+          example: null
+        owned_private_repos:
+          type: integer
+          nullable: true
+          example: null
+        private_gists:
+          type: integer
+          nullable: true
+          example: null
+        disk_usage:
+          type: integer
+          nullable: true
+          example: null
+        collaborators:
+          type: integer
+          nullable: true
+          example: null
+        default_repository_permission:
+          type: string
+          nullable: true
+          example: null
+        members_can_create_repositories:
+          type: boolean
+          nullable: true
+          example: null
+        two_factor_requirement_enabled:
+          type: boolean
+          nullable: true
+          example: null
+        members_allowed_repository_creation_type:
+          type: string
+          nullable: true
+          example: null
+        members_can_create_public_repositories:
+          type: boolean
+          nullable: true
+          example: null
+        members_can_create_private_repositories:
+          type: boolean
+          nullable: true
+          example: null
+        members_can_create_internal_repositories:
+          type: boolean
+          nullable: true
+          example: null
+        members_can_create_pages:
+          type: boolean
+          nullable: true
+          example: null
+        members_can_create_public_pages:
+          type: boolean
+          nullable: true
+          example: null
+        members_can_create_private_pages:
+          type: boolean
+          nullable: true
+          example: null
+        members_can_fork_private_repositories:
+          type: boolean
+          nullable: true
+          example: null
+        web_commit_signoff_required:
+          type: boolean
+          nullable: true
+          example: null
+        deploy_keys_enabled_for_repositories:
+          type: boolean
+          nullable: true
+          example: null
+        dependency_graph_enabled_for_new_repositories:
+          type: boolean
+          nullable: true
+          example: null
+        dependabot_alerts_enabled_for_new_repositories:
+          type: boolean
+          nullable: true
+          example: null
+        dependabot_security_updates_enabled_for_new_repositories:
+          type: boolean
+          nullable: true
+          example: null
+        advanced_security_enabled_for_new_repositories:
+          type: boolean
+          nullable: true
+          example: null
+        secret_scanning_enabled_for_new_repositories:
+          type: boolean
+          nullable: true
+          example: null
+        secret_scanning_push_protection_enabled_for_new_repositories:
+          type: boolean
+          nullable: true
+          example: null
+        secret_scanning_push_protection_custom_link:
+          type: string
+          nullable: true
+          example: null
+        secret_scanning_push_protection_custom_link_enabled:
+          type: boolean
+          nullable: true
+          example: null
+        github_created_at:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+        github_updated_at:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+        github_archived_at:
+          type: string
+          format: date-time
+          nullable: true
+          example: null
+        created_at:
+          type: string
+          format: date-time
+          example: '2025-06-15T18:15:43.352Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2025-06-15T18:15:43.352Z'
+        project_id:
+          type: integer
+          example: 1
+      required:
+        - id
+        - login
+        - html_url
+        - created_at
+        - updated_at
     Project:
       type: object
       additionalProperties: false

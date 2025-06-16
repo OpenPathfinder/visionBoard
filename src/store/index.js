@@ -249,7 +249,8 @@ const initializeStore = (knex) => {
     getAllOSSFResults: () => getAll('ossf_scorecard_results'),
     getProjectById: (id) => getOne('projects', id),
     getProjectByName: getProjectByName(knex),
-    getAllChecks: () => getAll('compliance_checks')
+    getAllChecks: () => getAll('compliance_checks'),
+    getCheckById: (id) => getOne('compliance_checks', id)
   }
 }
 

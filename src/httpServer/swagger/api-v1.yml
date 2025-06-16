@@ -211,6 +211,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/check/{checkId}:
+    get:
+      summary: Get a check by ID
+      description: Returns a check by ID
+      operationId: getCheckById
+      tags:
+        - Checks
+      parameters:
+        - name: checkId
+          in: path
+          required: true
+          description: The ID of the check
+          schema:
+            type: integer
+            minimum: 1
+            example: 53
+      responses:
+        '200':
+          description: A check
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Check'
+        '400':
+          description: Bad request, invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Check not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /api/v1/check:
     get:
       summary: List all checks

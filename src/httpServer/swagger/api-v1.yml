@@ -211,13 +211,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /api/v1/check/{checkId}:
+  /api/v1/compliance-check/{checkId}:
     get:
-      summary: Get a check by ID
-      description: Returns a check by ID
-      operationId: getCheckById
+      summary: Get a compliance check by ID
+      description: Returns a compliance check by ID
+      operationId: getComplianceCheckById
       tags:
-        - Checks
+        - Compliance Checks
       parameters:
         - name: checkId
           in: path
@@ -229,11 +229,11 @@ paths:
             example: 53
       responses:
         '200':
-          description: A check
+          description: A compliance check
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Check'
+                $ref: '#/components/schemas/ComplianceCheck'
         '400':
           description: Bad request, invalid input data
           content:
@@ -241,7 +241,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
-          description: Check not found
+          description: Compliance check not found
           content:
             application/json:
               schema:
@@ -252,22 +252,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /api/v1/check:
+  /api/v1/compliance-check:
     get:
-      summary: List all checks
-      description: Returns a list of all checks
-      operationId: listChecks
+      summary: List all compliance checks
+      description: Returns a list of all compliance checks
+      operationId: listComplianceChecks
       tags:
-        - Checks
+        - Compliance Checks
       responses:
         '200':
-          description: A list of checks
+          description: A list of compliance checks
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Check'
+                  $ref: '#/components/schemas/ComplianceCheck'
         '500':
           description: Internal server error
           content:
@@ -328,7 +328,7 @@ paths:
 
 components:
   schemas:
-    Check:
+    ComplianceCheck:
       type: object
       additionalProperties: false
       properties:

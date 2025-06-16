@@ -121,7 +121,7 @@ function createApiRouter (knex, express) {
     }
   })
 
-  router.get('/check/:checkId', async (req, res) => {
+  router.get('/compliance-check/:checkId', async (req, res) => {
     try {
       // Params validation done in swagger
       const checkId = parseInt(req.params.checkId, 10)
@@ -136,7 +136,7 @@ function createApiRouter (knex, express) {
     }
   })
 
-  router.get('/check', async (req, res) => {
+  router.get('/compliance-check', async (req, res) => {
     try {
       const checks = await getAllChecks()
       res.json(checks)

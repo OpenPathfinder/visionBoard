@@ -39,6 +39,7 @@ let getAllGithubOrganizationsByProjectsId
 let getAllChecks
 let getCheckById
 let getAllChecklists
+let getChecklistById
 
 beforeAll(async () => {
   // Initialize server asynchronously
@@ -53,7 +54,8 @@ beforeAll(async () => {
     getAllGithubOrganizationsByProjectsId,
     getAllChecks,
     getCheckById,
-    getAllChecklists
+    getAllChecklists,
+    getChecklistById
   } = initializeStore(knex))
 })
 
@@ -456,6 +458,39 @@ describe('HTTP Server API V1', () => {
         updated_at: c.updated_at.toISOString()
       }))
       expect(response.body).toStrictEqual(expected)
+    })
+
+    test.todo('should return 500 for internal server error')
+  })
+
+  describe('GET /api/v1/compliance-checklist/{checklistId}', () => {
+    test('should return 200 and a specific checklist', async () => {
+      const response = await app.get('/api/v1/compliance-checklist/1')
+      const storedChecklist = await getChecklistById(1)
+
+      expect(response.status).toBe(200)
+      const expected = {
+        ...storedChecklist,
+        created_at: storedChecklist.created_at.toISOString(),
+        updated_at: storedChecklist.updated_at.toISOString()
+      }
+      expect(response.body).toStrictEqual(expected)
+    })
+
+    test('should return 400 for invalid checklist ID', async () => {
+      const response = await app.get('/api/v1/compliance-checklist/invalid')
+
+      expect(response.status).toBe(400)
+      expect(response.body).toHaveProperty('errors')
+      expect(response.body.errors[0]).toHaveProperty('message', 'must be integer')
+    })
+
+    test('should return 404 for invalid checklist ID', async () => {
+      const response = await app.get('/api/v1/compliance-checklist/9999999')
+
+      expect(response.status).toBe(404)
+      expect(response.body).toHaveProperty('errors')
+      expect(response.body.errors[0]).toHaveProperty('message', 'Compliance Checklist not found')
     })
 
     test.todo('should return 500 for internal server error')

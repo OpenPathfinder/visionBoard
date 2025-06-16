@@ -346,7 +346,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
+  /api/v1/compliance-checklist/{checklistId}:
+    get:
+      summary: Get a compliance checklist by ID
+      description: Returns a compliance checklist by ID
+      operationId: getComplianceChecklistById
+      tags:
+        - Compliance Checklists
+      parameters:
+        - name: checklistId
+          in: path
+          required: true
+          description: The ID of the checklist
+          schema:
+            type: integer
+            minimum: 1
+            example: 1
+      responses:
+        '200':
+          description: A compliance checklist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplianceChecklist'
+        '400':
+          description: Bad request, invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Compliance checklist not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     ComplianceChecklist:

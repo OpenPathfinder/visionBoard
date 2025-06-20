@@ -54,15 +54,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: object
-                  additionalProperties: false
-                  properties:
-                    id:
-                      type: string
-                      example: example-workflow
-                    description:
-                      type: string
-                      example: This is an example workflow
+                  $ref: '#/components/schemas/Workflow'
         '500':
           description: Internal server error
           content:
@@ -106,29 +98,15 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties: false
-                properties:
-                  status:
-                    type: string
-                    example: completed
-                  workflow:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        example: example-workflow
-                      description:
-                        type: string
-                        example: This is an example workflow
-                    required:
-                      - id
-                      - description
-                required:
-                  - status
-                  - workflow
+                $ref: '#/components/schemas/WorkflowCompleted'
         '400':
           description: Bad request, invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Workflow is disabled
           content:
             application/json:
               schema:
@@ -389,6 +367,70 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    WorkflowCompleted:
+      type: object
+      additionalProperties: false
+      properties:
+        status:
+          type: string
+          example: completed
+        result:
+          type: string
+          example: execution details
+        started:
+          type: string
+          format: date-time
+          example: "2025-02-21T18:53:00.485Z"
+        finished:
+          type: string
+          format: date-time
+          example: "2025-02-21T18:53:00.485Z"
+      required:
+        - status
+        - result
+        - started
+        - finished
+
+    Workflow:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          example: example-workflow
+        description:
+          type: string
+          example: This is an example workflow
+        isEnabled:
+          type: boolean
+          example: true
+        isRequiredAdditionalData:
+          type: boolean
+          example: true
+        schema:
+          type: string
+          description: JSO Schema for the data required for the workflow
+        operations:
+          type: array
+          nullable: true
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              id:
+                type: string
+                example: example-operation
+              description:
+                type: string
+                example: This is an example operation
+              schema:
+                type: string
+                description: JSON Schema for the operation
+      required:
+        - id
+        - description
+        - isEnabled
+        - isRequiredAdditionalData
     ComplianceChecklist:
       type: object
       additionalProperties: false

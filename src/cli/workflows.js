@@ -5,30 +5,54 @@ const { updateGithubOrgs, upsertGithubRepositories, runAllTheComplianceChecks, u
 const { generateStaticReports } = require('../reports')
 const { bulkImport } = require('../importers')
 const { logger } = require('../utils')
+const bulkImportSchema = require('../schemas/bulkImport.json')
 
 const commandList = [{
   name: 'update-github-orgs',
+  isRequiredAdditionalData: false,
+  isEnabled: true,
   description: 'Check the organizations stored and update the information with the GitHub API.',
+  operations: null,
   workflow: updateGithubOrgs
 }, {
   name: 'upsert-github-repositories',
+  isRequiredAdditionalData: false,
+  isEnabled: true,
   description: 'Check the organizations stored and update/create the information related to the repositories with the GitHub API.',
+  operations: null,
   workflow: upsertGithubRepositories
 }, {
   name: 'run-all-checks',
+  isRequiredAdditionalData: false,
+  isEnabled: true,
   description: 'Run all the compliance checks for the stored data.',
+  operations: null,
   workflow: runAllTheComplianceChecks
 }, {
   name: 'upsert-ossf-scorecard',
+  isRequiredAdditionalData: false,
+  isEnabled: false,
   description: 'Upsert the OSSF Scorecard scoring by running and checking every repository in the database.',
+  operations: null,
   workflow: upsertOSSFScorecardAnalysis
 }, {
   name: 'generate-reports',
+  isRequiredAdditionalData: false,
+  isEnabled: true,
   description: 'Generate the reports for the stored data.',
+  operations: null,
   workflow: generateStaticReports
 }, {
+  // @TODO: Move this workflow to a separate endpoint
   name: 'bulk-import',
-  description: 'Bulk import data from a CSV file.',
+  isRequiredAdditionalData: true,
+  isEnabled: false,
+  operations: [{
+    id: 'load-manual-checks',
+    description: 'Load manual checks from project policies',
+    schema: JSON.stringify(bulkImportSchema)
+  }],
+  description: 'Bulk import data into visionBoard',
   workflow: bulkImport
 }]
 
@@ -40,10 +64,13 @@ const getWorkflowsDetails = () => {
 
   commandList.forEach((workflow) => {
     const workflowName = _.kebabCase(workflow.name)
-    workflowsList.push({ id: workflowName, description: workflow.description })
+    workflowsList.push({ id: workflowName, description: workflow.description, isEnabled: workflow.isEnabled, isRequiredAdditionalData: workflow.isRequiredAdditionalData, operations: workflow.operations })
     workflows[workflowName] = {
       description: workflow.description,
-      workflow: workflow.workflow
+      workflow: workflow.workflow,
+      isEnabled: workflow.isEnabled,
+      isRequiredAdditionalData: workflow.isRequiredAdditionalData,
+      operations: workflow.operations
     }
   })
 

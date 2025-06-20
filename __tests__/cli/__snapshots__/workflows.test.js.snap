@@ -4,32 +4,56 @@ exports[`list - Non-Interactive Mode Should provide a list of available workflow
 [
   {
     "description": "Check the organizations stored and update the information with the GitHub API.",
+    "isEnabled": true,
+    "isRequiredAdditionalData": false,
     "name": "update-github-orgs",
+    "operations": null,
     "workflow": [Function],
   },
   {
     "description": "Check the organizations stored and update/create the information related to the repositories with the GitHub API.",
+    "isEnabled": true,
+    "isRequiredAdditionalData": false,
     "name": "upsert-github-repositories",
+    "operations": null,
     "workflow": [Function],
   },
   {
     "description": "Run all the compliance checks for the stored data.",
+    "isEnabled": true,
+    "isRequiredAdditionalData": false,
     "name": "run-all-checks",
+    "operations": null,
     "workflow": [Function],
   },
   {
     "description": "Upsert the OSSF Scorecard scoring by running and checking every repository in the database.",
+    "isEnabled": false,
+    "isRequiredAdditionalData": false,
     "name": "upsert-ossf-scorecard",
+    "operations": null,
     "workflow": [Function],
   },
   {
     "description": "Generate the reports for the stored data.",
+    "isEnabled": true,
+    "isRequiredAdditionalData": false,
     "name": "generate-reports",
+    "operations": null,
     "workflow": [Function],
   },
   {
-    "description": "Bulk import data from a CSV file.",
+    "description": "Bulk import data into visionBoard",
+    "isEnabled": false,
+    "isRequiredAdditionalData": true,
     "name": "bulk-import",
+    "operations": [
+      {
+        "description": "Load manual checks from project policies",
+        "id": "load-manual-checks",
+        "schema": "{"$schema":"http://json-schema.org/draft-07/schema#","title":"Bulk Import","description":"Schema for the bulk import of projects","type":"array","minItems":1,"items":{"type":"object","properties":{"type":{"type":"string","enum":["softwareDesignTraining","owaspTop10Training","defineFunctionalRoles","orgToolingMFA","softwareArchitectureDocs","MFAImpersonationDefense","includeCVEInReleaseNotes","assignCVEForKnownVulns","incidentResponsePlan","regressionTestsForVulns","vulnResponse14Days","useCVDToolForVulns","securityMdMeetsOpenJSCVD","consistentBuildProcessDocs","machineReadableDependencies","identifyModifiedDependencies","ciAndCdPipelineAsCode","npmOrgMFA","npmPublicationMFA","upgradePathDocs","patchNonCriticalVulns90Days","patchCriticalVulns30Days","twoOrMoreOwnersForAccess","injectedSecretsAtRuntime","preventScriptInjection","resolveLinterWarnings","annualDependencyRefresh"],"examples":["softwareDesignTraining"]},"project_id":{"description":"The project id","type":"integer","minimum":1,"examples":[123]},"is_subscribed":{"description":"Flag to indicate if the project is already subscribed to the policy","type":"boolean"},"description":{"description":"Project's description","type":"string","examples":["Course on software design principles done by the team"]},"implementation_status":{"description":"Implementation status of the project","type":"string","enum":["unknown","pending","completed"],"examples":["completed"]},"training_date":{"description":"Date of the training in ISO 8601 format","type":"string","format":"date-time","nullable":true,"examples":["2021-01-01T00:00:00Z"]}},"oneOf":[{"required":["type","project_id","is_subscribed"]},{"required":["type","project_id","description","implementation_status"]}],"additionalProperties":false}}",
+      },
+    ],
     "workflow": [Function],
   },
 ]

@@ -10,11 +10,13 @@ jest.mock('../../src/cli/workflows', () => ({
       'test-workflow': {
         name: 'test-workflow',
         description: 'Test workflow',
+        isEnabled: true,
+        isRequiredAdditionalData: false,
         workflow: mockWorkflowFn
       }
     },
     workflowsList: [
-      { id: 'test-workflow', description: 'Test workflow' }
+      { id: 'test-workflow', description: 'Test workflow', isEnabled: true, isRequiredAdditionalData: false }
     ]
   }))
 }))
@@ -167,12 +169,17 @@ describe('HTTP Server API V1', () => {
           'test-workflow': {
             name: 'test-workflow',
             description: 'Test workflow',
+            isEnabled: true,
+            isRequiredAdditionalData: false,
             workflow: mockWorkflowFn
           }
         },
-        workflowsList: [
-          { id: 'test-workflow', description: 'Test workflow' }
-        ]
+        workflowsList: [{
+          id: 'test-workflow',
+          description: 'Test workflow',
+          isEnabled: true,
+          isRequiredAdditionalData: false
+        }]
       })
     })
 
@@ -186,15 +193,11 @@ describe('HTTP Server API V1', () => {
       const response = await app
         .post('/api/v1/workflow/test-workflow/run')
         .set('Content-Type', 'application/json')
-        .send({ some: 'data' })
+        .send({ data: { some: 'data' } })
 
       expect(response.status).toBe(202)
       expect(response.body).toHaveProperty('status', 'completed')
-      expect(response.body.workflow).toMatchObject({
-        id: 'test-workflow',
-        description: 'Test workflow'
-      })
-      // The first argument (...calls[0][0]) is Knex and we ignore it due framework limitations
+      // The first argument (...calls[0][0]) is Knex and we ignore it due test framework limitations
       expect(mockWorkflowFn.mock.calls[0][1]).toEqual({ some: 'data' })
     })
 
@@ -213,13 +216,59 @@ describe('HTTP Server API V1', () => {
       expect(response.body).toStrictEqual({ errors: [{ message: 'Workflow not found' }] })
     })
 
+    test('should return 403 for disabled workflow', async () => {
+      // Overwrite the spy to return a disabled workflow
+      workflowSpy.mockReturnValueOnce({
+        workflows: {
+          'test-workflow': {
+            name: 'test-workflow',
+            description: 'Test workflow',
+            isEnabled: false,
+            isRequiredAdditionalData: false,
+            workflow: mockWorkflowFn
+          }
+        },
+        workflowsList: [{ id: 'test-workflow', description: 'Test workflow', isEnabled: false, isRequiredAdditionalData: false }]
+      })
+      const response = await app
+        .post('/api/v1/workflow/test-workflow/run')
+        .set('Content-Type', 'application/json')
+        .send({})
+
+      expect(response.status).toBe(403)
+      expect(response.body).toStrictEqual({ errors: [{ message: 'Workflow is disabled' }] })
+    })
+
+    test('should return 400 for missing required additional data', async () => {
+      // Overwrite the spy to return a workflow that requires additional data
+      workflowSpy.mockReturnValueOnce({
+        workflows: {
+          'test-workflow': {
+            name: 'test-workflow',
+            description: 'Test workflow',
+            isEnabled: true,
+            isRequiredAdditionalData: true,
+            workflow: mockWorkflowFn
+          }
+        },
+        workflowsList: [{ id: 'test-workflow', description: 'Test workflow', isEnabled: true, isRequiredAdditionalData: true }]
+      })
+      const response = await app
+        .post('/api/v1/workflow/test-workflow/run')
+        .set('Content-Type', 'application/json')
+        .send({})
+
+      expect(response.status).toBe(400)
+      expect(response.body).toStrictEqual({ errors: [{ message: 'Additional data is required' }] })
+    })
+
     test('should return 500 for internal server error', async () => {
       mockWorkflowFn.mockRejectedValueOnce(new Error('Something went wrong'))
 
       const response = await app
         .post('/api/v1/workflow/test-workflow/run')
         .set('Content-Type', 'application/json')
-        .send({ some: 'data' })
+        .send({ data: { some: 'data' } })
 
       expect(response.status).toBe(500)
       expect(response.body.status).toBe('failed')

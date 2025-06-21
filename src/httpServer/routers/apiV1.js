@@ -183,7 +183,7 @@ function createApiRouter (knex, express) {
 
   router.post('/workflow/:id/run', async (req, res) => {
     const { id } = req.params
-    const data = req.body
+    const { data } = req.body
     const { workflows } = getWorkflowsDetails()
 
     if (!id || !isSlug(id)) {
@@ -194,12 +194,24 @@ function createApiRouter (knex, express) {
     if (!workflow) {
       return res.status(404).json({ errors: [{ message: 'Workflow not found' }] })
     }
+
+    if (!workflow.isEnabled) {
+      return res.status(403).json({ errors: [{ message: 'Workflow is disabled' }] })
+    }
+
+    if (workflow.isRequiredAdditionalData && !data) {
+      return res.status(400).json({ errors: [{ message: 'Additional data is required' }] })
+    }
+
     try {
       // @TODO: We need to delegate the workflow execution to a worker and provide and endpoint to check the status
       // This is a temporary solution to run the workflow within the HTTP timeout
       // data validation is done in the workflow itself
-      const wf = await runWorkflow({ workflowName: id, knex, data })
-      res.status(202).json({ status: 'completed', workflow: { id, description: wf.description } })
+      const started = new Date().toISOString()
+      // @TODO: Improve errors handling
+      await runWorkflow({ workflowName: id, knex, data })
+      const finished = new Date().toISOString()
+      res.status(202).json({ status: 'completed', started, finished, result: { message: 'Workflow completed successfully', success: true } })
     } catch (error) {
       logger.error(error)
       res.status(500).json({

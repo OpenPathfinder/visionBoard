@@ -211,7 +211,7 @@ function createApiRouter (knex, express) {
       // @TODO: Improve errors handling
       await runWorkflow({ workflowName: id, knex, data })
       const finished = new Date().toISOString()
-      res.status(202).json({ status: 'completed', started, finished, result: 'Workflow completed successfully' })
+      res.status(202).json({ status: 'completed', started, finished, result: { message: 'Workflow completed successfully', success: true } })
     } catch (error) {
       logger.error(error)
       res.status(500).json({

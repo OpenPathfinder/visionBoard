@@ -375,8 +375,15 @@ components:
           type: string
           example: completed
         result:
-          type: string
-          example: execution details
+          type: object
+          additionalProperties: false
+          properties:
+            message:
+              type: string
+              example: Workflow completed successfully
+            success:
+              type: boolean
+              example: true
         started:
           type: string
           format: date-time

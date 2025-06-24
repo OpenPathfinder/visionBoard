@@ -29,6 +29,7 @@ const pkg = require('../../package.json')
 const serverModule = require('../../src/httpServer')
 const { dbSettings } = getConfig('test')
 const { getWorkflowsDetails } = require('../../src/cli/workflows')
+const { getAllBulkImportOperations } = require('../../src/importers')
 const { workflowsList } = getWorkflowsDetails()
 
 let server
@@ -540,6 +541,18 @@ describe('HTTP Server API V1', () => {
       expect(response.status).toBe(404)
       expect(response.body).toHaveProperty('errors')
       expect(response.body.errors[0]).toHaveProperty('message', 'Compliance Checklist not found')
+    })
+
+    test.todo('should return 500 for internal server error')
+  })
+
+  describe('GET /api/v1/bulk-import', () => {
+    test('should return 200 and a list of bulk import operations', async () => {
+      const response = await app.get('/api/v1/bulk-import')
+      const operations = getAllBulkImportOperations()
+
+      expect(response.status).toBe(200)
+      expect(response.body).toStrictEqual(operations)
     })
 
     test.todo('should return 500 for internal server error')

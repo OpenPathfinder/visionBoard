@@ -158,7 +158,7 @@ describe('HTTP Server API V1', () => {
     test.todo('should return 500 for internal server error')
   })
 
-  describe('POST /api/v1/workflow/:id/run', () => {
+  describe('POST /api/v1/workflow/:id/execute', () => {
     let workflowSpy
     let mockWorkflowFn
 
@@ -191,7 +191,7 @@ describe('HTTP Server API V1', () => {
     test('should return 202 and run the specified workflow', async () => {
       mockWorkflowFn.mockResolvedValueOnce()
       const response = await app
-        .post('/api/v1/workflow/test-workflow/run')
+        .post('/api/v1/workflow/test-workflow/execute')
         .set('Content-Type', 'application/json')
         .send({ data: { some: 'data' } })
 
@@ -208,7 +208,7 @@ describe('HTTP Server API V1', () => {
         workflowsList: []
       })
       const response = await app
-        .post('/api/v1/workflow/invalid-workflow/run')
+        .post('/api/v1/workflow/invalid-workflow/execute')
         .set('Content-Type', 'application/json')
         .send({})
 
@@ -231,7 +231,7 @@ describe('HTTP Server API V1', () => {
         workflowsList: [{ id: 'test-workflow', description: 'Test workflow', isEnabled: false, isRequiredAdditionalData: false }]
       })
       const response = await app
-        .post('/api/v1/workflow/test-workflow/run')
+        .post('/api/v1/workflow/test-workflow/execute')
         .set('Content-Type', 'application/json')
         .send({})
 
@@ -254,7 +254,7 @@ describe('HTTP Server API V1', () => {
         workflowsList: [{ id: 'test-workflow', description: 'Test workflow', isEnabled: true, isRequiredAdditionalData: true }]
       })
       const response = await app
-        .post('/api/v1/workflow/test-workflow/run')
+        .post('/api/v1/workflow/test-workflow/execute')
         .set('Content-Type', 'application/json')
         .send({})
 
@@ -266,7 +266,7 @@ describe('HTTP Server API V1', () => {
       mockWorkflowFn.mockRejectedValueOnce(new Error('Something went wrong'))
 
       const response = await app
-        .post('/api/v1/workflow/test-workflow/run')
+        .post('/api/v1/workflow/test-workflow/execute')
         .set('Content-Type', 'application/json')
         .send({ data: { some: 'data' } })
 

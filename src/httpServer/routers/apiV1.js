@@ -181,7 +181,7 @@ function createApiRouter (knex, express) {
     }
   })
 
-  router.post('/workflow/:id/run', async (req, res) => {
+  router.post('/workflow/:id/execute', async (req, res) => {
     const { id } = req.params
     const { data } = req.body
     const { workflows } = getWorkflowsDetails()

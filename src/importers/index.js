@@ -4,6 +4,7 @@ const { initializeStore } = require('../store')
 const { simplifyObject } = require('@ulisesgascon/simplify-object')
 const fs = require('fs')
 const fsPromises = fs.promises
+const { bulkImportSchema } = require('../schemas')
 
 const projectPolicies = ['defineFunctionalRoles', 'orgToolingMFA', 'softwareArchitectureDocs', 'MFAImpersonationDefense', 'includeCVEInReleaseNotes', 'assignCVEForKnownVulns', 'incidentResponsePlan', 'regressionTestsForVulns', 'vulnResponse14Days', 'useCVDToolForVulns', 'securityMdMeetsOpenJSCVD', 'consistentBuildProcessDocs', 'machineReadableDependencies', 'identifyModifiedDependencies', 'ciAndCdPipelineAsCode', 'npmOrgMFA', 'npmPublicationMFA', 'upgradePathDocs', 'upgradePathDocs', 'patchNonCriticalVulns90Days', 'patchCriticalVulns30Days', 'twoOrMoreOwnersForAccess', 'injectedSecretsAtRuntime', 'preventScriptInjection', 'resolveLinterWarnings', 'annualDependencyRefresh']
 
@@ -93,6 +94,17 @@ const bulkImport = async (knex, filePathOrData) => {
   logger.info('Bulk importing completed')
 }
 
+const getAllBulkImportOperations = () => {
+  return [
+    {
+      id: 'load-manual-checks',
+      description: 'Load manual checks from project policies',
+      schema: JSON.stringify(bulkImportSchema)
+    }
+  ]
+}
+
 module.exports = {
-  bulkImport
+  bulkImport,
+  getAllBulkImportOperations
 }

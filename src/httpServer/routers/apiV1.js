@@ -4,6 +4,7 @@ const { initializeStore } = require('../../store')
 const _ = require('lodash')
 const { isSlug } = require('validator')
 const { getWorkflowsDetails } = require('../../cli/workflows')
+const { getAllBulkImportOperations } = require('../../importers')
 
 const HTTP_DEFAULT_TIMEOUT = 30 * 1000 // 30 seconds
 
@@ -221,6 +222,16 @@ function createApiRouter (knex, express) {
           : undefined,
         errors: [{ message: `Failed to run workflow: ${error.message}` }]
       })
+    }
+  })
+
+  router.get('/bulk-import', async (req, res) => {
+    try {
+      const operations = getAllBulkImportOperations()
+      res.json(operations)
+    } catch (error) {
+      logger.error(error)
+      res.status(500).json({ errors: [{ message: 'Failed to retrieve bulk import operations' }] })
     }
   })
 

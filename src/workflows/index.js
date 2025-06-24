@@ -2,7 +2,7 @@ const debug = require('debug')('workflows')
 const { github, ossf } = require('../providers')
 const { initializeStore } = require('../store')
 const { logger } = require('../utils')
-const { validateGithubOrg, validateGithubListOrgRepos, validateGithubRepository, validateOSSFResult } = require('../schemas')
+const { validateGithubOrg, validateGithubListOrgRepos, validateGithubRepository, validateOSSFResult, validateExecuteOneCheck } = require('../schemas')
 const checks = require('../checks')
 const { chunkArray } = require('@ulisesgascon/array-to-chunks')
 const { ossfScorecardSettings } = require('../config').getConfig()
@@ -109,9 +109,21 @@ const upsertOSSFScorecardAnalysis = async (knex) => {
   logger.info('The OSSF Scorecard ran successfully')
 }
 
+const runOneComplianceCheck = async (knex, data) => {
+  validateExecuteOneCheck(data)
+  const checkName = data.check_name
+  const check = checks[checkName]
+  if (!check) {
+    throw new Error('Check not found')
+  }
+  await check(knex)
+  logger.info(`${checkName} check completed successfully`)
+}
+
 module.exports = {
   updateGithubOrgs,
   upsertGithubRepositories,
   runAllTheComplianceChecks,
-  upsertOSSFScorecardAnalysis
+  upsertOSSFScorecardAnalysis,
+  runOneComplianceCheck
 }

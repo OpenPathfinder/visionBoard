@@ -365,8 +365,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/bulk-import:
+    get:
+      summary: Get operations for bulk import
+      description: Returns a list of operations for bulk import
+      operationId: getBulkImportOperations
+      tags:
+        - Bulk Import
+      responses:
+        '200':
+          description: A list of operations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Operation'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    Operation:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          example: load-manual-checks
+        description:
+          type: string
+          example: Load manual checks from project policies
+        schema:
+          type: string
+          description: JSON Schema for the operation
+      required:
+        - id
+        - description
+        - schema
     WorkflowCompleted:
       type: object
       additionalProperties: false

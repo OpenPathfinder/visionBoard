@@ -1,11 +1,11 @@
 const inquirer = require('inquirer').default
 const _ = require('lodash')
 const debug = require('debug')('cli:workflows')
-const { updateGithubOrgs, upsertGithubRepositories, runAllTheComplianceChecks, upsertOSSFScorecardAnalysis } = require('../workflows')
+const { updateGithubOrgs, upsertGithubRepositories, runAllTheComplianceChecks, runOneComplianceCheck, upsertOSSFScorecardAnalysis } = require('../workflows')
 const { generateStaticReports } = require('../reports')
 const { bulkImport } = require('../importers')
 const { logger } = require('../utils')
-const bulkImportSchema = require('../schemas/bulkImport.json')
+const { executeOneCheckSchema, executeOptionalProjectSchema, bulkImportSchema } = require('../schemas')
 
 const commandList = [{
   name: 'update-github-orgs',
@@ -29,8 +29,17 @@ const commandList = [{
   operations: null,
   workflow: runAllTheComplianceChecks
 }, {
+  name: 'run-one-check',
+  isRequiredAdditionalData: true,
+  isEnabled: true,
+  description: 'Run a specific compliance check for the stored data.',
+  operations: null,
+  schema: executeOneCheckSchema,
+  workflow: runOneComplianceCheck
+}, {
   name: 'upsert-ossf-scorecard',
   isRequiredAdditionalData: false,
+  schema: executeOptionalProjectSchema,
   isEnabled: false,
   description: 'Upsert the OSSF Scorecard scoring by running and checking every repository in the database.',
   operations: null,
@@ -64,13 +73,14 @@ const getWorkflowsDetails = () => {
 
   commandList.forEach((workflow) => {
     const workflowName = _.kebabCase(workflow.name)
-    workflowsList.push({ id: workflowName, description: workflow.description, isEnabled: workflow.isEnabled, isRequiredAdditionalData: workflow.isRequiredAdditionalData, operations: workflow.operations })
+    workflowsList.push({ id: workflowName, description: workflow.description, isEnabled: workflow.isEnabled, isRequiredAdditionalData: workflow.isRequiredAdditionalData, operations: workflow.operations, schema: JSON.stringify(workflow.schema) })
     workflows[workflowName] = {
       description: workflow.description,
       workflow: workflow.workflow,
       isEnabled: workflow.isEnabled,
       isRequiredAdditionalData: workflow.isRequiredAdditionalData,
-      operations: workflow.operations
+      operations: workflow.operations,
+      schema: JSON.stringify(workflow.schema)
     }
   })
 

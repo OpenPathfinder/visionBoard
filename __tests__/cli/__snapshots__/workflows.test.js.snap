@@ -27,11 +27,47 @@ exports[`list - Non-Interactive Mode Should provide a list of available workflow
     "workflow": [Function],
   },
   {
+    "description": "Run a specific compliance check for the stored data.",
+    "isEnabled": true,
+    "isRequiredAdditionalData": true,
+    "name": "run-one-check",
+    "operations": null,
+    "schema": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "additionalProperties": false,
+      "properties": {
+        "check_name": {
+          "description": "The name of the check to run",
+          "type": "string",
+        },
+      },
+      "required": [
+        "check_name",
+      ],
+      "type": "object",
+    },
+    "workflow": [Function],
+  },
+  {
     "description": "Upsert the OSSF Scorecard scoring by running and checking every repository in the database.",
     "isEnabled": false,
     "isRequiredAdditionalData": false,
     "name": "upsert-ossf-scorecard",
     "operations": null,
+    "schema": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "additionalProperties": false,
+      "properties": {
+        "project_id": {
+          "description": "The id of the project to run the check on",
+          "type": "integer",
+        },
+      },
+      "required": [
+        "check_name",
+      ],
+      "type": "object",
+    },
     "workflow": [Function],
   },
   {

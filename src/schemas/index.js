@@ -7,6 +7,8 @@ const ossfScorecardResultSchema = require('./ossfScorecardResult.json')
 const bulkImportSchema = require('./bulkImport.json')
 const projectDataSchema = require('./projectData.json')
 const indexDataSchema = require('./indexData.json')
+const executeOneCheckSchema = require('./execute-one-check.json')
+const executeOptionalProjectSchema = require('./execute-optional-project.json')
 
 const ajv = new Ajv({
   allowUnionTypes: true // Allow union types for fields like Date/string
@@ -21,6 +23,16 @@ const validateGithubOrg = (data) => {
   if (!valid) {
     const readableErrors = getReadableErrors(validate)
     throw new Error(`Error when validating the Github org response from API: ${readableErrors}`)
+  }
+  return null
+}
+
+const validateExecuteOneCheck = (data) => {
+  const validate = ajv.compile(executeOneCheckSchema)
+  const valid = validate(data)
+  if (!valid) {
+    const readableErrors = getReadableErrors(validate)
+    throw new Error(`Error when validating the execute one check request: ${readableErrors}`)
   }
   return null
 }
@@ -92,5 +104,9 @@ module.exports = {
   validateOSSFResult,
   validateBulkImport,
   validateProjectData,
-  validateIndexData
+  validateIndexData,
+  validateExecuteOneCheck,
+  executeOneCheckSchema,
+  executeOptionalProjectSchema,
+  bulkImportSchema
 }

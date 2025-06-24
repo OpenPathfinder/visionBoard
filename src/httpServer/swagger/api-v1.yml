@@ -61,7 +61,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /api/v1/workflow/{workflowId}/run:
+  /api/v1/workflow/{workflowId}/execute:
     post:
       summary: Execute a workflow
       description: Executes the specified workflow with the provided input data

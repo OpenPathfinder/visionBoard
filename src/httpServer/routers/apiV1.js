@@ -3,7 +3,7 @@ const { logger, validateGithubUrl } = require('../../utils')
 const { initializeStore } = require('../../store')
 const _ = require('lodash')
 const { isSlug } = require('validator')
-const { getWorkflowsDetails } = require('../../cli/workflows')
+const { getWorkflowsDetails } = require('../../workflows')
 const { getAllBulkImportOperations, bulkImport } = require('../../importers')
 const { validateBulkImport } = require('../../schemas')
 

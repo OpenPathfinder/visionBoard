@@ -5,7 +5,11 @@ const { logger } = require('../utils')
 const { validateGithubOrg, validateGithubListOrgRepos, validateGithubRepository, validateOSSFResult, validateExecuteOneCheck } = require('../schemas')
 const checks = require('../checks')
 const { chunkArray } = require('@ulisesgascon/array-to-chunks')
+const _ = require('lodash')
+
 const { ossfScorecardSettings } = require('../config').getConfig()
+const { generateStaticReports } = require('../reports')
+const { executeOneCheckSchema, executeOptionalProjectSchema } = require('../schemas')
 
 const updateGithubOrgs = async (knex) => {
   const { getAllGithubOrganizations, updateGithubOrganization } = initializeStore(knex)
@@ -120,10 +124,70 @@ const runOneComplianceCheck = async (knex, data) => {
   logger.info(`${checkName} check completed successfully`)
 }
 
+const commandList = [{
+  name: 'update-github-orgs',
+  isRequiredAdditionalData: false,
+  isEnabled: true,
+  description: 'Check the organizations stored and update the information with the GitHub API.',
+  workflow: updateGithubOrgs
+}, {
+  name: 'upsert-github-repositories',
+  isRequiredAdditionalData: false,
+  isEnabled: true,
+  description: 'Check the organizations stored and update/create the information related to the repositories with the GitHub API.',
+  workflow: upsertGithubRepositories
+}, {
+  name: 'run-all-checks',
+  isRequiredAdditionalData: false,
+  isEnabled: true,
+  description: 'Run all the compliance checks for the stored data.',
+  workflow: runAllTheComplianceChecks
+}, {
+  name: 'run-one-check',
+  isRequiredAdditionalData: true,
+  isEnabled: true,
+  description: 'Run a specific compliance check for the stored data.',
+  schema: executeOneCheckSchema,
+  workflow: runOneComplianceCheck
+}, {
+  name: 'upsert-ossf-scorecard',
+  isRequiredAdditionalData: false,
+  schema: executeOptionalProjectSchema,
+  isEnabled: false,
+  description: 'Upsert the OSSF Scorecard scoring by running and checking every repository in the database.',
+  workflow: upsertOSSFScorecardAnalysis
+}, {
+  name: 'generate-reports',
+  isRequiredAdditionalData: false,
+  isEnabled: true,
+  description: 'Generate the reports for the stored data.',
+  workflow: generateStaticReports
+}]
+
+const getWorkflowsDetails = () => {
+  const workflows = {}
+  const workflowsList = []
+
+  commandList.forEach((workflow) => {
+    const workflowName = _.kebabCase(workflow.name)
+    workflowsList.push({ id: workflowName, description: workflow.description, isEnabled: workflow.isEnabled, isRequiredAdditionalData: workflow.isRequiredAdditionalData, schema: JSON.stringify(workflow.schema) })
+    workflows[workflowName] = {
+      description: workflow.description,
+      workflow: workflow.workflow,
+      isEnabled: workflow.isEnabled,
+      isRequiredAdditionalData: workflow.isRequiredAdditionalData,
+      schema: JSON.stringify(workflow.schema)
+    }
+  })
+
+  return { workflows, workflowsList }
+}
+
 module.exports = {
   updateGithubOrgs,
   upsertGithubRepositories,
   runAllTheComplianceChecks,
   upsertOSSFScorecardAnalysis,
-  runOneComplianceCheck
+  runOneComplianceCheck,
+  getWorkflowsDetails
 }

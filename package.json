@@ -2,9 +2,6 @@
   "name": "visionboard",
   "version": "0.1.0-beta3",
   "description": "Transforming Data into Actionable insights",
-  "bin": {
-    "visionBoard": "visionboard.js"
-  },
   "scripts": {
     "lint": "standard",
     "lint:fix": "standard --fix",
@@ -49,12 +46,10 @@
     "@ulisesgascon/string-to-array": "2.0.0",
     "ajv": "8.17.1",
     "ajv-formats": "3.0.1",
-    "commander": "12.1.0",
     "date-fns": "4.1.0",
     "debug": "4.3.7",
     "ejs": "3.1.10",
     "express": "^5.1.0",
-    "inquirer": "12.1.0",
     "knex": "3.1.0",
     "lodash": "^4.17.21",
     "nock": "14.0.1",

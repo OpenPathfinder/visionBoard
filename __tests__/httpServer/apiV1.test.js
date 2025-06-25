@@ -4,7 +4,7 @@ jest.mock('../../src/reports', () => ({
 }))
 
 const mockWorkflowFn = jest.fn()
-jest.mock('../../src/cli/workflows', () => ({
+jest.mock('../../src/workflows', () => ({
   getWorkflowsDetails: jest.fn(() => ({
     workflows: {
       'test-workflow': {
@@ -28,7 +28,7 @@ const { resetDatabase, initializeStore } = require('../../__utils__')
 const pkg = require('../../package.json')
 const serverModule = require('../../src/httpServer')
 const { dbSettings } = getConfig('test')
-const { getWorkflowsDetails } = require('../../src/cli/workflows')
+const { getWorkflowsDetails } = require('../../src/workflows')
 const { getAllBulkImportOperations } = require('../../src/importers')
 const { workflowsList } = getWorkflowsDetails()
 
@@ -167,7 +167,7 @@ describe('HTTP Server API V1', () => {
 
     beforeEach(() => {
       mockWorkflowFn = jest.fn()
-      workflowSpy = jest.spyOn(require('../../src/cli/workflows'), 'getWorkflowsDetails').mockReturnValue({
+      workflowSpy = jest.spyOn(require('../../src/workflows'), 'getWorkflowsDetails').mockReturnValue({
         workflows: {
           'test-workflow': {
             name: 'test-workflow',
@@ -690,6 +690,6 @@ describe('HTTP Server API V1', () => {
       expect(response.body.errors[0]).toHaveProperty('message', 'Failed to run bulk import: Operation failed for item type: annualDependencyRefresh, project_id: 9999999')
     })
 
-    test.skip('should return 500 for internal server error', async () => {})
+    test.todo('should return 500 for internal server error')
   })
 })

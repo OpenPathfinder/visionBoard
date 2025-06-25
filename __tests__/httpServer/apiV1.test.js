@@ -43,6 +43,7 @@ let getAllChecks
 let getCheckById
 let getAllChecklists
 let getChecklistById
+let getProjectById
 
 beforeAll(async () => {
   // Initialize server asynchronously
@@ -58,7 +59,8 @@ beforeAll(async () => {
     getAllChecks,
     getCheckById,
     getAllChecklists,
-    getChecklistById
+    getChecklistById,
+    getProjectById
   } = initializeStore(knex))
 })
 
@@ -556,5 +558,138 @@ describe('HTTP Server API V1', () => {
     })
 
     test.todo('should return 500 for internal server error')
+  })
+
+  describe('POST /api/v1/bulk-import', () => {
+    const operationId = getAllBulkImportOperations()[0].id
+    let largePayload
+    let validPayload
+    let projectId
+
+    beforeEach(async () => {
+      // Create a test project for each test
+      const project = await addProject({ name: 'test-project' })
+      projectId = project.id
+      largePayload = [{
+        type: 'annualDependencyRefresh',
+        project_id: projectId,
+        is_subscribed: true
+      }, {
+        type: 'vulnResponse14Days',
+        project_id: projectId,
+        is_subscribed: true
+      }, {
+        type: 'incidentResponsePlan',
+        project_id: projectId,
+        is_subscribed: true
+      }, {
+        type: 'assignCVEForKnownVulns',
+        project_id: projectId,
+        is_subscribed: true
+      }, {
+        type: 'includeCVEInReleaseNotes',
+        project_id: projectId,
+        is_subscribed: true
+      }]
+      validPayload = [largePayload[0]]
+    })
+
+    test('should return 202 and a success message', async () => {
+      // Check initial state
+      let storedProject = await getProjectById(projectId)
+      expect(storedProject.has_annualDependencyRefresh_policy).toBe(null)
+
+      // Perform bulk import
+      const response = await app
+        .post('/api/v1/bulk-import')
+        .send({ id: operationId, payload: validPayload })
+
+      expect(response.status).toBe(202)
+      expect(response.body).toHaveProperty('status', 'completed')
+      expect(response.body).toHaveProperty('started')
+      expect(response.body).toHaveProperty('finished')
+      expect(response.body).toHaveProperty('result')
+      expect(response.body.result).toHaveProperty('message', 'Bulk import completed successfully')
+      expect(response.body.result).toHaveProperty('success', true)
+
+      // Check final state
+      storedProject = await getProjectById(projectId)
+      expect(storedProject.has_annualDependencyRefresh_policy).toBe(true)
+    })
+
+    test('should return 202 and a success message (case: multiple updates)', async () => {
+      // Check initial state
+      let storedProject = await getProjectById(projectId)
+      expect(storedProject.has_annualDependencyRefresh_policy).toBe(null)
+      expect(storedProject.has_vulnResponse14Days_policy).toBe(null)
+      expect(storedProject.has_incidentResponsePlan_policy).toBe(null)
+      expect(storedProject.has_assignCVEForKnownVulns_policy).toBe(null)
+      expect(storedProject.has_includeCVEInReleaseNotes_policy).toBe(null)
+
+      // Perform bulk import
+      const response = await app
+        .post('/api/v1/bulk-import')
+        .send({ id: operationId, payload: largePayload })
+
+      expect(response.status).toBe(202)
+      expect(response.body).toHaveProperty('status', 'completed')
+      expect(response.body).toHaveProperty('started')
+      expect(response.body).toHaveProperty('finished')
+      expect(response.body).toHaveProperty('result')
+      expect(response.body.result).toHaveProperty('message', 'Bulk import completed successfully')
+      expect(response.body.result).toHaveProperty('success', true)
+
+      // Check final state
+      storedProject = await getProjectById(projectId)
+      expect(storedProject.has_annualDependencyRefresh_policy).toBe(true)
+      expect(storedProject.has_vulnResponse14Days_policy).toBe(true)
+      expect(storedProject.has_incidentResponsePlan_policy).toBe(true)
+      expect(storedProject.has_assignCVEForKnownVulns_policy).toBe(true)
+      expect(storedProject.has_includeCVEInReleaseNotes_policy).toBe(true)
+    })
+
+    test('should return 400 for invalid payload (case: Swagger rejection)', async () => {
+      const response = await app
+        .post('/api/v1/bulk-import')
+        .send({ id: operationId, payload: 'invalid' })
+
+      expect(response.status).toBe(400)
+      expect(response.body).toHaveProperty('errors')
+      expect(response.body.errors[0]).toHaveProperty('message', 'must be object')
+    })
+
+    test('should return 400 for invalid payload (case: invalid payload against JSON Schema)', async () => {
+      const response = await app
+        .post('/api/v1/bulk-import')
+        .send({ id: operationId, payload: [{ invalid: 'payload' }] })
+
+      expect(response.status).toBe(400)
+      expect(response.body).toHaveProperty('errors')
+      expect(response.body.errors[0]).toHaveProperty('message', 'The data does not match the schema')
+    })
+
+    test('should return 404 for invalid operation ID', async () => {
+      const response = await app
+        .post('/api/v1/bulk-import')
+        .send({ id: 'invalid', payload: validPayload })
+
+      expect(response.status).toBe(404)
+      expect(response.body).toHaveProperty('errors')
+      expect(response.body.errors[0]).toHaveProperty('message', 'Bulk import operation not found')
+    })
+
+    test('should return 500 if the request is not completed (due project not found)', async () => {
+      const invalidPayload = validPayload.map(p => ({ ...p, project_id: 9999999 }))
+
+      const response = await app
+        .post('/api/v1/bulk-import')
+        .send({ id: operationId, payload: invalidPayload })
+
+      expect(response.status).toBe(500)
+      expect(response.body).toHaveProperty('errors')
+      expect(response.body.errors[0]).toHaveProperty('message', 'Failed to run bulk import: Operation failed for item type: annualDependencyRefresh, project_id: 9999999')
+    })
+
+    test.skip('should return 500 for internal server error', async () => {})
   })
 })

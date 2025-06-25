@@ -507,22 +507,6 @@ components:
         schema:
           type: string
           description: JSO Schema for the data required for the workflow
-        operations:
-          type: array
-          nullable: true
-          items:
-            type: object
-            additionalProperties: false
-            properties:
-              id:
-                type: string
-                example: example-operation
-              description:
-                type: string
-                example: This is an example operation
-              schema:
-                type: string
-                description: JSON Schema for the operation
       required:
         - id
         - description

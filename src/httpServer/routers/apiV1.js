@@ -4,7 +4,8 @@ const { initializeStore } = require('../../store')
 const _ = require('lodash')
 const { isSlug } = require('validator')
 const { getWorkflowsDetails } = require('../../cli/workflows')
-const { getAllBulkImportOperations } = require('../../importers')
+const { getAllBulkImportOperations, bulkImport } = require('../../importers')
+const { validateBulkImport } = require('../../schemas')
 
 const HTTP_DEFAULT_TIMEOUT = 30 * 1000 // 30 seconds
 
@@ -232,6 +233,35 @@ function createApiRouter (knex, express) {
     } catch (error) {
       logger.error(error)
       res.status(500).json({ errors: [{ message: 'Failed to retrieve bulk import operations' }] })
+    }
+  })
+
+  router.post('/bulk-import', async (req, res) => {
+    try {
+      const { id, payload } = req.body
+      const operation = getAllBulkImportOperations().find((op) => op.id === id)
+
+      if (!operation) {
+        return res.status(404).json({ errors: [{ message: 'Bulk import operation not found' }] })
+      }
+      const started = new Date().toISOString()
+
+      try {
+        validateBulkImport(payload)
+      } catch (error) {
+        logger.error('Error validating the user data against the schema')
+        return res.status(400).json({ errors: [{ message: 'The data does not match the schema' }] })
+      }
+
+      await bulkImport({ operationId: id, knex, data: payload })
+      const finished = new Date().toISOString()
+      res.status(202).json({ status: 'completed', started, finished, result: { message: 'Bulk import completed successfully', success: true } })
+    } catch (error) {
+      logger.error(error)
+      res.status(500).json({
+        status: 'failed',
+        errors: [{ message: `Failed to run bulk import: ${error.message}` }]
+      })
     }
   })
 

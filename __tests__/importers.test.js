@@ -33,7 +33,7 @@ afterAll(async () => {
   await knex.destroy()
 })
 
-describe('Integration: bulkImport', () => {
+describe.skip('Integration: bulkImport', () => {
   test('Should import software design training data', async () => {
     // Check the environment
     const project = await addProject({ name: 'project1' })

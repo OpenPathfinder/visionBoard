@@ -98,7 +98,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WorkflowCompleted'
+                $ref: '#/components/schemas/OperationCompleted'
         '400':
           description: Bad request, invalid input data
           content:
@@ -366,6 +366,57 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
   /api/v1/bulk-import:
+    post:
+      summary: Perform bulk import
+      description: Performs a bulk import of data
+      operationId: performBulkImport
+      tags:
+        - Bulk Import
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                id:
+                  type: string
+                  example: load-manual-checks
+                payload:
+                  # @TODO: Improve this schema to be more specific about the expected input
+                  oneOf:
+                    - type: object
+                    - type: array
+                      items:
+                        oneOf:
+                          - type: object
+                          - type: string
+      responses:
+        '202':
+          description: Bulk import completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationCompleted'
+        '400':
+          description: Bad request, invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Operation not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     get:
       summary: Get operations for bulk import
       description: Returns a list of operations for bulk import
@@ -406,7 +457,7 @@ components:
         - id
         - description
         - schema
-    WorkflowCompleted:
+    OperationCompleted:
       type: object
       additionalProperties: false
       properties:

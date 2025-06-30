@@ -6,7 +6,8 @@ const dbSettings = {
     host: process.env.DB_HOST || '0.0.0.0',
     user: process.env.DB_USER || 'visionBoard',
     password: process.env.DB_PASSWORD || 'password',
-    database: process.env.DB_NAME || 'dashboard'
+    database: process.env.DB_NAME || 'dashboard',
+    port: process.env.DB_PORT || 5432
   },
   ssl: normalizeBoolean(process.env.DB_SSL),
   pool: {

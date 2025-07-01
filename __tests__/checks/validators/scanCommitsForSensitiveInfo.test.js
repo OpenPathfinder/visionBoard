@@ -1,4 +1,3 @@
-const { se } = require('date-fns/locale')
 const { scanCommitsForSensitiveInfo } = require('../../../src/checks/validators')
 
 describe('scanCommitsForSensitiveInfo', () => {

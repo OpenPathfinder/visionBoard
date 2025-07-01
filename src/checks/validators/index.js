@@ -4,6 +4,7 @@ const owaspTop10Training = require('./owaspTop10Training')
 const adminRepoCreationOnly = require('./adminRepoCreationOnly')
 const noSensitiveInfoInRepositories = require('./noSensitiveInfoInRepositories')
 const genericProjectPolicyValidator = require('./genericProjectPolicyValidator')
+const scanCommitsForSensitiveInfo = require('./scanCommitsForSensitiveInfo')
 
 const validators = {
   githubOrgMFA,
@@ -11,6 +12,7 @@ const validators = {
   owaspTop10Training,
   adminRepoCreationOnly,
   noSensitiveInfoInRepositories,
+  scanCommitsForSensitiveInfo,
   // Generic Policies
   defineFunctionalRoles: genericProjectPolicyValidator('defineFunctionalRoles'),
   orgToolingMFA: genericProjectPolicyValidator('orgToolingMFA'),
